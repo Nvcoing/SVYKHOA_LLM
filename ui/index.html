@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chatbot Demo</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+    }
+
+    #chat-container {
+      position: fixed;
+      bottom: 0;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      background: #fff;
+      border-radius: 10px 10px 0 0;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #chat-header {
+      background: #0084ff;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    #chat-body {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 80%;
+    }
+
+    .user {
+      background: #0084ff;
+      color: white;
+      margin-left: auto;
+    }
+
+    .bot {
+      background: #e4e6eb;
+      margin-right: auto;
+    }
+
+    #chat-input {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    #chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+    }
+
+    #chat-input button {
+      background: #0084ff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 8px;
+    }
+
+    .card button {
+      margin-top: 6px;
+      background: #28a745;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .icd-code {
+      font-weight: bold;
+      color: #d63384;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <div id="chat-header">Chatbot Nha Khoa</div>
+    <div id="chat-body"></div>
+    <div id="chat-input">
+      <input id="user-input" placeholder="Nhập câu hỏi..." />
+      <button onclick="sendMessage()">Gửi</button>
+    </div>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const input = document.getElementById("user-input");
+      const message = input.value.trim();
+      if (!message) return;
+
+      appendMessage("user", message);
+      input.value = "";
+
+      // Giả lập gọi API LLM
+      setTimeout(() => {
+        const response = getMockLLMResponse(message);
+        renderBotResponse(response);
+      }, 500);
+    }
+
+    function appendMessage(sender, text) {
+      const body = document.getElementById("chat-body");
+      const msg = document.createElement("div");
+      msg.className = "message " + sender;
+      msg.innerText = text;
+      body.appendChild(msg);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function renderBotResponse(data) {
+      const body = document.getElementById("chat-body");
+
+      const container = document.createElement("div");
+      container.className = "message bot";
+
+      container.innerHTML = `
+        <div><span class="icd-code">${data.icd_10}</span></div>
+        <div><strong>Chẩn đoán:</strong> ${data.diagnosis}</div>
+        <div><strong>Triệu chứng:</strong> ${data.symptom}</div>
+        <div class="card">
+          <div><strong>${data.document.title}</strong></div>
+          <div>${data.document.summary}</div>
+          <button onclick="call_document('${data.document.summary}')">Xem tài liệu</button>
+        </div>
+        <div class="card">
+          <div><strong>${data.cme.title}</strong></div>
+          <div>${data.cme.summary}</div>
+          <button onclick="call_cme('${data.cme.summary}')">Xem khóa học</button>
+        </div>
+      `;
+      body.appendChild(container);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    // Hàm giả lập
+    function call_document(desc) {
+      alert("🔍 Mở tài liệu:\n" + desc);
+    }
+
+    function call_cme(desc) {
+      alert("📘 Mở khóa học CME:\n" + desc);
+    }
+
+    // Mock dữ liệu LLM trả về
+    function getMockLLMResponse(question) {
+      return {
+        "question": question,
+        "icd_10": "K04.7: Viêm quanh chóp răng cấp tính",
+        "symptom": "Đau răng, sưng nướu, hơi thở có mùi",
+        "diagnosis": "Viêm quanh chóp răng cấp tính",
+        "document": {
+          "title": "Điều trị viêm quanh chóp răng",
+          "tool": "call_document",
+          "summary": "Tổng quan về nguyên nhân và phác đồ điều trị viêm quanh chóp"
+        },
+        "cme": {
+          "title": "Cập nhật kiến thức về viêm tủy",
+          "tool": "call_cme",
+          "summary": "Khóa học CME cung cấp kiến thức mới nhất về điều trị tủy răng"
+        }
+      };
+    }
+  </script>
+</body>
+</html>

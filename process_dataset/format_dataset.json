@@ -1,0 +1,18 @@
+[
+    {
+    "icd_10": "K04.7 : Viêm quanh chóp răng cấp tính", 
+    "question": "Em bị đau răng và nướu bị sưng thì sao?",
+    "symptom": "Đau răng, sưng nướu, hơi thở có mùi",
+    "diagnosis": "Viêm quanh chóp răng cấp tính",
+    "document": {
+      "title": "Điều trị viêm quanh chóp răng",
+      "tool": "call_document",
+      "description": "Tổng quan về nguyên nhân và phác đồ điều trị viêm quanh chóp"
+    },
+    "cme": {
+      "title": "Cập nhật kiến thức về viêm tủy",
+      "tool": "call_cme",
+      "description": "Khóa học CME cung cấp kiến thức mới nhất về điều trị tủy răng"
+    }
+  }
+]
