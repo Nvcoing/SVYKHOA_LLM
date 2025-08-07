@@ -1,3 +1,5 @@
 rag/ChromaDB/chroma.sqlite3
 ChromaDB/chroma.sqlite3
 generate_dataset/.env
+document_dataset/document
+document_dataset/document_chunk_dataset.xlsx
