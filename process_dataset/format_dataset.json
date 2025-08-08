@@ -6,7 +6,7 @@
     "diagnosis": "Viêm quanh chóp răng cấp tính",
     "document": {
       "title": "Điều trị viêm quanh chóp răng",
-      "tool": "call_document",
+      "tool": "call_references",
       "description": "Tổng quan về nguyên nhân và phác đồ điều trị viêm quanh chóp"
     },
     "cme": {
