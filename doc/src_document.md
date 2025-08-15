@@ -15,7 +15,7 @@ Cung cấp:
 ---
 
 ## 2. [Tạp chí Y học Việt Nam](https://tapchiyhocvietnam.vn/)
-![Tạp chí Y học Việt Nam](https://tapchiyhocvietnam.vn/assets/img/logo.png)  
+![Tạp chí Y học Việt Nam](https://tapchiyhocvietnam.vn/public/journals/1/journalThumbnail_vi_VN.png)  
 Tạp chí chính thức của **Tổng hội Y học Việt Nam**.  
 Chuyên đăng tải:
 - Các nghiên cứu về bệnh học, y học lâm sàng, y học cơ sở
@@ -24,13 +24,13 @@ Chuyên đăng tải:
 ---
 
 ## 3. [Huemed – Đại học Y Dược, Đại học Huế](https://huemed-univ.edu.vn/)
-![Huemed](https://huemed-univ.edu.vn/upload/logodh.png)  
+![Huemed](https://jmp.huemed-univ.edu.vn/theme/img/logo_jmp.png)  
 Trang thông tin của Trường Đại học Y Dược – Đại học Huế, nơi công bố các hoạt động nghiên cứu khoa học, hội nghị, và hợp tác quốc tế.
 
 ---
 
 ## 4. [HueJMP – Journal of Medicine and Pharmacy](https://jmp.huemed-univ.edu.vn/)
-![HueJMP](https://jmp.huemed-univ.edu.vn/uploads/logo.png)  
+![HueJMP](https://huejmp.vn/public/journals/1/cover_issue_24_vi_VN.png)  
 Tạp chí Y Dược học Huế, phát hành các bài báo khoa học về:
 - Y học hiện đại
 - Dược học
@@ -40,7 +40,7 @@ Tạp chí Y Dược học Huế, phát hành các bài báo khoa học về:
 ---
 
 ## 5. [Tạp chí Y học Thành phố Hồ Chí Minh](https://tapchiyhoctphcm.vn/)
-![Tạp chí Y học TP.HCM](https://tapchiyhoctphcm.vn/images/logo.png)  
+![Tạp chí Y học TP.HCM](https://admin.ump.edu.vn/uploads/ckeditor/files/tcyh-giao-dien-website.jpg)  
 Xuất bản bởi **Đại học Y Dược TP.HCM**.  
 Đặc điểm:
 - Phản biện khoa học chặt chẽ
@@ -49,7 +49,7 @@ Xuất bản bởi **Đại học Y Dược TP.HCM**.
 ---
 
 ## 6. [VJMAP – Tạp chí Y Dược cổ truyền Việt Nam](https://vjmap.vn/)
-![VJMAP](https://vjmap.vn/public/site/images/logo.png)  
+![VJMAP](https://vjmap.vn/public/journals/1/pageHeaderLogoImage_vi_VN.png)  
 Tạp chí thuộc **Học viện Y – Dược học cổ truyền Việt Nam**.  
 Nội dung:
 - Y học cổ truyền
@@ -59,7 +59,7 @@ Nội dung:
 ---
 
 ## 7. [MDPI – Multidisciplinary Digital Publishing Institute](https://www.mdpi.com/)
-![MDPI](https://www.mdpi.com/img/logo-header.svg)  
+![MDPI](https://pub.mdpi-res.com/img/journals/jcm-logo.png?6922832c4f546280)  
 Nhà xuất bản khoa học quốc tế, truy cập mở.  
 Lĩnh vực liên quan y khoa:
 - **Pharmaceuticals**, **Medicines**, **Nutrients**
