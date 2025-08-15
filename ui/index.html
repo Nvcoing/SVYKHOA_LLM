@@ -95,16 +95,11 @@ function extractJSON(text){
 
 function processBotResponse(raw){
   const {normalText,jsonObj} = extractJSON(raw);
-  // Tạo 1 bubble duy nhất
   const bubble = addMessage("","bot");
-
-  // Thêm text vào bubble
   normalText.split(/\n+/).forEach(line=>{
     if(line.startsWith("### ")) bubble.innerHTML += `<strong>${line.slice(4)}</strong><br>`;
     else if(line.trim()) bubble.innerHTML += line + "<br>";
   });
-
-  // Thêm JSON card vào cùng bubble
   if(jsonObj){
     bubble.innerHTML += "<em>Dưới đây là tài liệu tham khảo:</em><br>";
     Object.values(jsonObj).forEach(item=>{
@@ -113,22 +108,14 @@ function processBotResponse(raw){
   }
 }
 
-// Khi người dùng gửi tin nhắn
-sendBtn.addEventListener("click",()=>{
-  const text = userInput.value.trim();
-  if(!text) return;
-  addMessage(text,"user");
-  userInput.value = "";
-  setTimeout(()=> processBotResponse(rawBotResponse), 500);
-});
+// Hàm phân loại câu hỏi
+function getBotResponse(userText){
+  const text = userText.toLowerCase();
 
-userInput.addEventListener("keypress",(e)=>{
-  if(e.key==="Enter") sendBtn.click();
-});
-
-const rawBotResponse = `
-### Chuẩn đoán: Đau răng, sưng nướu, hơi thở có mùi
-### Triệu chứng: Viêm quanh chóp răng cấp tính
+  // 1. Câu hỏi về bệnh
+  if(text.includes("đau răng") || text.includes("viêm") || text.includes("triệu chứng")){
+    return `
+### Chuẩn đoán: \nĐau răng, sưng nướu, hơi thở có mùi\n### Triệu chứng:\n Viêm quanh chóp răng cấp tính
 {
   "documpent": {
     "title": "Điều trị viêm quanh chóp răng",
@@ -142,7 +129,59 @@ const rawBotResponse = `
   }
 }
 `;
+  }
+
+  // 2. Chào hỏi
+  if(text.includes("xin chào") || text.includes("chào") || text.includes("hello")){
+    return "Xin chào bạn tôi là Chat SVY là một trợ lý ảo về y khoa để giúp đỡ các bác sỹ trẻ";
+  }
+
+  // 3. Xử lý lỗi
+  if(text.includes("???") || text.length < 5){
+    return "Xin lỗi câu hỏi của bạn không rõ ràng. Câu hỏi của bạn tôi vẫn chưa hiểu rõ.";
+  }
+
+  // 4. Tư vấn
+  if(text.includes("kinh nghiệm") ||text.includes("hướng dẫn") || text.includes("sử dụng") || text.includes("cách dùng")){
+    return `
+Bạn nên ôn tập, và thực hành nhiều để có thêm kinh nghiệm.
+Dưới đây là một số tài liệu và khóa học.
+{
+  "documpent": {
+    "title": "Tài liệu ôn tập bệnh lý",
+    "tool": "call_document",
+    "description": "Bộ tài liệu PDF tổng hợp bệnh lý phổ biến"
+  },
+  "cme": {
+    "title": "Khóa học y khoa online",
+    "tool": "call_cme",
+    "description": "Khóa học giúp bạn thực hành chẩn đoán và điều trị"
+  }
+}
+`;
+  }
+
+  // Mặc định: câu trả lời tự nhiên
+  return "Tôi đã nhận câu hỏi của bạn và sẽ phản hồi sớm.";
+}
+
+// Khi người dùng gửi tin nhắn
+sendBtn.addEventListener("click",()=>{
+  const text = userInput.value.trim();
+  if(!text) return;
+  addMessage(text,"user");
+  userInput.value = "";
+  setTimeout(()=> {
+    const rawBotResponse = getBotResponse(text);
+    processBotResponse(rawBotResponse);
+  }, 500);
+});
+
+userInput.addEventListener("keypress",(e)=>{
+  if(e.key==="Enter") sendBtn.click();
+});
 </script>
+
 
 </body>
 </html>
