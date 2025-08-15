@@ -1,10 +1,12 @@
-## Tiêu đề tài liệu: Điều trị viêm quanh chóp răng 
-## Tiêu đề CME: Cập nhật kiến thức về viêm tủy
-##Câu hỏi: Em bị đau răng và nướu bị sưng thì sao?
-## Xác định mã bệnh: K04.7 : Viêm quanh chóp răng cấp tính
-## Chuẩn đoán: Đau răng, sưng nướu, hơi thở có mùi
-## Triệu chứng: Viêm quanh chóp răng cấp tính
-Dưới đây là một số tìa liệu tham khảo:
+(Cho phản hồi chuyên sâu)
+## Câu hỏi
+### Tiêu đề tài liệu: Điều trị viêm quanh chóp răng 
+### Tiêu đề CME: Cập nhật kiến thức về viêm tủy
+### Xác định mã bệnh: K04.7 : Viêm quanh chóp răng cấp tính
+###Câu hỏi: Em bị đau răng và nướu bị sưng thì sao?
+## Trả lời
+### Chuẩn đoán: Đau răng, sưng nướu, hơi thở có mùi
+### Triệu chứng: Viêm quanh chóp răng cấp tính
 {
     "documpent": {
       "title": "Điều trị viêm quanh chóp răng",
@@ -17,3 +19,8 @@ Dưới đây là một số tìa liệu tham khảo:
       "description": "Khóa học CME cung cấp kiến thức mới nhất về điều trị tủy răng"
     }
 }
+(Cho phản hồi chung)
+##Câu hỏi
+Xin chào! 
+## Trả lời
+Chào bạn tôi là trợ lý về y khoa

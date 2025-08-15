@@ -1,194 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chatbot Demo</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
-    }
-
-    #chat-container {
-      position: fixed;
-      bottom: 0;
-      right: 20px;
-      width: 350px;
-      height: 500px;
-      background: #fff;
-      border-radius: 10px 10px 0 0;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    #chat-header {
-      background: #0084ff;
-      color: #fff;
-      padding: 10px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    #chat-body {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-    }
-
-    .message {
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 10px;
-      max-width: 80%;
-    }
-
-    .user {
-      background: #0084ff;
-      color: white;
-      margin-left: auto;
-    }
-
-    .bot {
-      background: #e4e6eb;
-      margin-right: auto;
-    }
-
-    #chat-input {
-      display: flex;
-      border-top: 1px solid #ccc;
-    }
-
-    #chat-input input {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      outline: none;
-    }
-
-    #chat-input button {
-      background: #0084ff;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      margin-top: 8px;
-    }
-
-    .card button {
-      margin-top: 6px;
-      background: #28a745;
-      border: none;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .icd-code {
-      font-weight: bold;
-      color: #d63384;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Chatbot Messenger Block</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; }
+#chatIcon { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: #0078FF; color: white; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 1000;}
+#chatPopup { position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3); display: none; flex-direction: column; overflow: hidden; z-index: 999; }
+.chatbox { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; }
+.message { display: flex; margin-bottom: 10px; }
+.message.bot { justify-content: flex-start; }
+.message.user { justify-content: flex-end; }
+.bubble { max-width: 75%; padding: 10px 15px; border-radius: 20px; word-wrap: break-word; }
+.bot .bubble { background: #f1f0f0; border: 1px solid #ccc; }
+.user .bubble { background: #0078FF; color: white; }
+.chat-input { display: flex; border-top: 1px solid #ccc; padding: 5px; }
+.chat-input input { flex: 1; padding: 10px; border-radius: 20px; border: 1px solid #ccc; }
+.chat-input button { margin-left: 5px; padding: 10px 15px; border-radius: 50%; border: none; background-color: #0078FF; color: white; cursor: pointer; }
+button:hover { background-color: #005FCC; }
+.card { border: 1px solid #ccc; border-radius: 10px; padding: 8px; margin: 5px 0 0 0; background: #fff; }
+.card strong { display: block; margin-bottom: 4px; }
+.card button { margin-top: 5px; padding: 6px 10px; border-radius: 5px; border: none; background-color: #0078FF; color: white; cursor: pointer; }
+.card button:hover { background-color: #005FCC; }
+</style>
 </head>
 <body>
-  <div id="chat-container">
-    <div id="chat-header">Chatbot Nha Khoa</div>
-    <div id="chat-body"></div>
-    <div id="chat-input">
-      <input id="user-input" placeholder="Nhập câu hỏi..." />
-      <button onclick="sendMessage()">Gửi</button>
-    </div>
+
+<div id="chatIcon">🩺</div>
+
+<div id="chatPopup">
+  <div class="chatbox" id="chatbox"></div>
+  <div class="chat-input">
+    <input type="text" id="userInput" placeholder="Nhập tin nhắn...">
+    <button id="sendBtn">➤</button>
   </div>
+</div>
 
-  <script>
-    function sendMessage() {
-      const input = document.getElementById("user-input");
-      const message = input.value.trim();
-      if (!message) return;
+<script>
+const chatIcon = document.getElementById("chatIcon");
+const chatPopup = document.getElementById("chatPopup");
+const chatbox = document.getElementById("chatbox");
+const userInput = document.getElementById("userInput");
+const sendBtn = document.getElementById("sendBtn");
 
-      appendMessage("user", message);
-      input.value = "";
+chatIcon.addEventListener("click", ()=>{
+  chatPopup.style.display = chatPopup.style.display==="flex" ? "none" : "flex";
+});
 
-      // Giả lập gọi API LLM
-      setTimeout(() => {
-        const response = getMockLLMResponse(message);
-        renderBotResponse(response);
-      }, 500);
+function addMessage(content, sender="bot", isHTML=false){
+  const msg = document.createElement("div");
+  msg.className = `message ${sender}`;
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  if(isHTML) bubble.innerHTML = content;
+  else bubble.textContent = content;
+  msg.appendChild(bubble);
+  chatbox.appendChild(msg);
+  chatbox.scrollTop = chatbox.scrollHeight;
+  return bubble;
+}
+
+function addCard(item){
+  const card = document.createElement("div");
+  card.className = "card";
+  const title = document.createElement("strong");
+  title.textContent = item.title;
+  const desc = document.createElement("span");
+  desc.textContent = item.description;
+  const btn = document.createElement("button");
+  btn.textContent = "Mở tài liệu";
+  btn.onclick = ()=> alert(`Gọi hàm ${item.tool} cho '${item.title}'`);
+  card.appendChild(title);
+  card.appendChild(desc);
+  card.appendChild(btn);
+  return card;
+}
+
+// Nhận diện JSON trong phản hồi
+function extractJSON(text){
+  const start = text.indexOf("{");
+  const end = text.lastIndexOf("}");
+  if(start!==-1 && end!==-1 && end>start){
+    const jsonStr = text.slice(start,end+1);
+    const normalText = text.slice(0,start).trim();
+    try{
+      const jsonObj = JSON.parse(jsonStr);
+      return {normalText,jsonObj};
+    }catch(e){
+      return {normalText,text};
     }
+  }
+  return {normalText:text,jsonObj:null};
+}
 
-    function appendMessage(sender, text) {
-      const body = document.getElementById("chat-body");
-      const msg = document.createElement("div");
-      msg.className = "message " + sender;
-      msg.innerText = text;
-      body.appendChild(msg);
-      body.scrollTop = body.scrollHeight;
-    }
+function processBotResponse(raw){
+  const {normalText,jsonObj} = extractJSON(raw);
+  // Tạo 1 bubble duy nhất
+  const bubble = addMessage("","bot");
 
-    function renderBotResponse(data) {
-      const body = document.getElementById("chat-body");
+  // Thêm text vào bubble
+  normalText.split(/\n+/).forEach(line=>{
+    if(line.startsWith("### ")) bubble.innerHTML += `<strong>${line.slice(4)}</strong><br>`;
+    else if(line.trim()) bubble.innerHTML += line + "<br>";
+  });
 
-      const container = document.createElement("div");
-      container.className = "message bot";
+  // Thêm JSON card vào cùng bubble
+  if(jsonObj){
+    bubble.innerHTML += "<em>Dưới đây là tài liệu tham khảo:</em><br>";
+    Object.values(jsonObj).forEach(item=>{
+      bubble.appendChild(addCard(item));
+    });
+  }
+}
 
-      container.innerHTML = `
-        <div><span class="icd-code">${data.icd_10}</span></div>
-        <div><strong>Chẩn đoán:</strong> ${data.diagnosis}</div>
-        <div><strong>Triệu chứng:</strong> ${data.symptom}</div>
-        <div class="card">
-          <div><strong>${data.document.title}</strong></div>
-          <div>${data.document.summary}</div>
-          <button onclick="call_document('${data.document.summary}')">Xem tài liệu</button>
-        </div>
-        <div class="card">
-          <div><strong>${data.cme.title}</strong></div>
-          <div>${data.cme.summary}</div>
-          <button onclick="call_cme('${data.cme.summary}')">Xem khóa học</button>
-        </div>
-      `;
-      body.appendChild(container);
-      body.scrollTop = body.scrollHeight;
-    }
+// Khi người dùng gửi tin nhắn
+sendBtn.addEventListener("click",()=>{
+  const text = userInput.value.trim();
+  if(!text) return;
+  addMessage(text,"user");
+  userInput.value = "";
+  setTimeout(()=> processBotResponse(rawBotResponse), 500);
+});
 
-    // Hàm giả lập
-    function call_document(desc) {
-      alert("🔍 Mở tài liệu:\n" + desc);
-    }
+userInput.addEventListener("keypress",(e)=>{
+  if(e.key==="Enter") sendBtn.click();
+});
 
-    function call_cme(desc) {
-      alert("📘 Mở khóa học CME:\n" + desc);
-    }
+const rawBotResponse = `
+### Chuẩn đoán: Đau răng, sưng nướu, hơi thở có mùi
+### Triệu chứng: Viêm quanh chóp răng cấp tính
+{
+  "documpent": {
+    "title": "Điều trị viêm quanh chóp răng",
+    "tool": "call_document",
+    "description": "Tổng quan về nguyên nhân và phác đồ điều trị viêm quanh chóp"
+  },
+  "cme": {
+    "title": "Cập nhật kiến thức về viêm tủy",
+    "tool": "call_cme",
+    "description": "Khóa học CME cung cấp kiến thức mới nhất về điều trị tủy răng"
+  }
+}
+`;
+</script>
 
-    // Mock dữ liệu LLM trả về
-    function getMockLLMResponse(question) {
-      return {
-        "question": question,
-        "icd_10": "K04.7: Viêm quanh chóp răng cấp tính",
-        "symptom": "Đau răng, sưng nướu, hơi thở có mùi",
-        "diagnosis": "Viêm quanh chóp răng cấp tính",
-        "document": {
-          "title": "Điều trị viêm quanh chóp răng",
-          "tool": "call_document",
-          "summary": "Tổng quan về nguyên nhân và phác đồ điều trị viêm quanh chóp"
-        },
-        "cme": {
-          "title": "Cập nhật kiến thức về viêm tủy",
-          "tool": "call_cme",
-          "summary": "Khóa học CME cung cấp kiến thức mới nhất về điều trị tủy răng"
-        }
-      };
-    }
-  </script>
 </body>
 </html>
