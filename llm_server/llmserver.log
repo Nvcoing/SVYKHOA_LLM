@@ -1,0 +1,27 @@
+INFO:     Will watch for changes in these directories: ['D:\\Job\\SVYKHOA\\SVYKHOA_LLM\\llm_server']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [19768] using WatchFiles
+2025-08-19 18:57:24.375630: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-08-19 18:57:30.282096: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+E:\Python\Lib\site-packages\huggingface_hub\file_download.py:142: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\PC\.cache\huggingface\hub\models--NV9523--CHAT_SVY. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+E:\Python\Lib\site-packages\peft\config.py:162: UserWarning: Unexpected keyword arguments ['alpha_pattern', 'bias', 'corda_config', 'eva_config', 'exclude_modules', 'fan_in_fan_out', 'init_lora_weights', 'layer_replication', 'layers_pattern', 'layers_to_transform', 'loftq_config', 'lora_alpha', 'lora_bias', 'lora_dropout', 'megatron_config', 'megatron_core', 'modules_to_save', 'qalora_group_size', 'r', 'rank_pattern', 'target_modules', 'target_parameters', 'trainable_token_indices', 'use_dora', 'use_qalora', 'use_rslora'] for class PeftConfig, these are ignored. This probably means that you're loading a configuration file that was saved using a higher version of the library and additional parameters have been introduced since. It is highly recommended to upgrade the PEFT version before continuing (e.g. by running `pip install -U peft`).
+  warnings.warn(
+E:\Python\Lib\site-packages\peft\config.py:162: UserWarning: Unexpected keyword arguments ['corda_config', 'qalora_group_size', 'target_parameters', 'trainable_token_indices', 'use_qalora'] for class LoraConfig, these are ignored. This probably means that you're loading a configuration file that was saved using a higher version of the library and additional parameters have been introduced since. It is highly recommended to upgrade the PEFT version before continuing (e.g. by running `pip install -U peft`).
+  warnings.warn(
+INFO:     Started server process [6048]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     42.1.70.128:0 - "GET /model/generate/ HTTP/1.1" 405 Method Not Allowed
+INFO:     42.1.70.128:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     42.1.70.128:0 - "POST /model/generate/ HTTP/1.1" 200 OK
+The attention mask is not set and cannot be inferred from input because pad token is same as eos token. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results.
+INFO:     15.235.162.57:0 - "GET /model/generate/ HTTP/1.1" 405 Method Not Allowed
+INFO:     2001:ee0:41c1:dd48:c85f:ed1f:c2ac:8f16:0 - "GET /model/generate/ HTTP/1.1" 405 Method Not Allowed
+INFO:     2001:ee0:41c1:dd48:c85f:ed1f:c2ac:8f16:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     14.248.97.107:0 - "POST /model/generate/ HTTP/1.1" 422 Unprocessable Entity
+INFO:     14.248.97.107:0 - "POST /model/generate/ HTTP/1.1" 200 OK
+INFO:     14.248.97.107:0 - "POST /model/generate/ HTTP/1.1" 200 OK
+INFO:     1.54.172.81:0 - "POST /model/generate/ HTTP/1.1" 200 OK
+INFO:     1.54.172.81:0 - "POST /model/generate/ HTTP/1.1" 200 OK
