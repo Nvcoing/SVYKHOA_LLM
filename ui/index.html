@@ -2,26 +2,299 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Chatbot Messenger Block</title>
+<title>Chatbot Y Khoa Streaming</title>
 <style>
-body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; }
-#chatIcon { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: #0078FF; color: white; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 1000;}
-#chatPopup { position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3); display: none; flex-direction: column; overflow: hidden; z-index: 999; }
-.chatbox { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; }
-.message { display: flex; margin-bottom: 10px; }
-.message.bot { justify-content: flex-start; }
-.message.user { justify-content: flex-end; }
-.bubble { max-width: 75%; padding: 10px 15px; border-radius: 20px; word-wrap: break-word; }
-.bot .bubble { background: #f1f0f0; border: 1px solid #ccc; }
-.user .bubble { background: #0078FF; color: white; }
-.chat-input { display: flex; border-top: 1px solid #ccc; padding: 5px; }
-.chat-input input { flex: 1; padding: 10px; border-radius: 20px; border: 1px solid #ccc; }
-.chat-input button { margin-left: 5px; padding: 10px 15px; border-radius: 50%; border: none; background-color: #0078FF; color: white; cursor: pointer; }
-button:hover { background-color: #005FCC; }
-.card { border: 1px solid #ccc; border-radius: 10px; padding: 8px; margin: 5px 0 0 0; background: #fff; }
-.card strong { display: block; margin-bottom: 4px; }
-.card button { margin-top: 5px; padding: 6px 10px; border-radius: 5px; border: none; background-color: #0078FF; color: white; cursor: pointer; }
-.card button:hover { background-color: #005FCC; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body { 
+  font-family: Arial, sans-serif; 
+  background: #f0f2f5; 
+  margin: 0; 
+  padding: 0; 
+}
+
+#chatIcon { 
+  position: fixed; 
+  bottom: 20px; 
+  right: 20px; 
+  width: 60px; 
+  height: 60px; 
+  border-radius: 50%; 
+  background: #0078FF; 
+  color: white; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 30px; 
+  cursor: pointer; 
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0,120,255,0.3);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#chatIcon:hover { 
+  background: #005FCC; 
+  transform: scale(1.05); 
+}
+
+#chatPopup { 
+  position: fixed; 
+  bottom: 90px; 
+  right: 20px; 
+  width: 360px; 
+  height: 520px; 
+  background: #fff; 
+  border-radius: 16px; 
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15); 
+  flex-direction: column; 
+  overflow: hidden; 
+  z-index: 1000;
+  /* Initially hidden */
+  display: none;
+}
+
+.chat-header { 
+  background: #0078FF; 
+  color: white; 
+  padding: 15px; 
+  text-align: center; 
+  font-weight: bold; 
+}
+
+.chatbox { 
+  flex: 1; 
+  padding: 15px; 
+  overflow-y: auto; 
+  display: flex; 
+  flex-direction: column; 
+  background: #f8f9fa; 
+}
+
+.message { 
+  display: flex; 
+  margin-bottom: 12px; 
+}
+
+.message.bot { 
+  justify-content: flex-start; 
+}
+
+.message.user { 
+  justify-content: flex-end; 
+}
+
+.bubble { 
+  max-width: 85%; 
+  padding: 12px 16px; 
+  border-radius: 18px; 
+  word-wrap: break-word; 
+  line-height: 1.4; 
+}
+
+.bot .bubble { 
+  background: #ffffff; 
+  border: 1px solid #e1e8ed; 
+  color: #333; 
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1); 
+}
+
+.user .bubble { 
+  background: linear-gradient(135deg, #0078FF, #00a8ff); 
+  color: white; 
+}
+
+.chat-input { 
+  display: flex; 
+  border-top: 1px solid #e1e8ed; 
+  padding: 10px; 
+  background: white; 
+}
+
+.chat-input input { 
+  flex: 1; 
+  padding: 12px 16px; 
+  border-radius: 24px; 
+  border: 1px solid #e1e8ed; 
+  font-size: 14px; 
+  outline: none; 
+}
+
+.chat-input input:focus { 
+  border-color: #0078FF; 
+  box-shadow: 0 0 0 3px rgba(0,120,255,0.1); 
+}
+
+.chat-input button { 
+  margin-left: 8px; 
+  padding: 12px 16px; 
+  border-radius: 50%; 
+  border: none; 
+  background: #0078FF; 
+  color: white; 
+  cursor: pointer; 
+  transition: all 0.2s; 
+}
+
+.chat-input button:hover { 
+  background: #005FCC; 
+  transform: scale(1.05); 
+}
+
+.chat-input button:disabled { 
+  background: #ccc; 
+  cursor: not-allowed; 
+  transform: none; 
+}
+
+/* Markdown Styles */
+.bubble h1, .bubble h2, .bubble h3 { 
+  margin: 8px 0 6px 0; 
+  color: #1a73e8; 
+  font-size: 16px; 
+  font-weight: 600; 
+}
+
+.bubble h3 { 
+  font-size: 15px; 
+}
+
+.bubble p { 
+  margin: 6px 0; 
+}
+
+.bubble strong { 
+  color: #1a73e8; 
+  font-weight: 600; 
+}
+
+.bubble em { 
+  color: #666; 
+  font-style: italic; 
+}
+
+.bubble ul, .bubble ol { 
+  margin: 8px 0; 
+  padding-left: 20px; 
+}
+
+.bubble li { 
+  margin: 3px 0; 
+}
+
+.bubble code { 
+  background: #f1f3f4; 
+  padding: 2px 4px; 
+  border-radius: 3px; 
+  font-family: monospace; 
+  font-size: 13px; 
+}
+
+/* Reference Cards */
+.reference-cards { 
+  margin-top: 10px; 
+}
+
+.card { 
+  border: 1px solid #e1e8ed; 
+  border-radius: 12px; 
+  padding: 12px; 
+  margin: 8px 0; 
+  background: #fff; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+  transition: all 0.2s; 
+}
+
+.card:hover { 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+  transform: translateY(-1px); 
+}
+
+.card-title { 
+  font-weight: 600; 
+  color: #1a73e8; 
+  margin-bottom: 6px; 
+  font-size: 14px; 
+}
+
+.card-description { 
+  color: #666; 
+  font-size: 13px; 
+  line-height: 1.4; 
+  margin-bottom: 10px; 
+}
+
+.card-button { 
+  padding: 8px 16px; 
+  border-radius: 20px; 
+  border: none; 
+  background: #0078FF; 
+  color: white; 
+  cursor: pointer; 
+  font-size: 12px; 
+  font-weight: 500; 
+  transition: all 0.2s; 
+}
+
+.card-button:hover { 
+  background: #005FCC; 
+  transform: scale(1.05); 
+}
+
+/* Loading Animation */
+.typing-indicator { 
+  display: flex; 
+  align-items: center; 
+  padding: 12px 16px; 
+}
+
+.typing-dots { 
+  display: flex; 
+  gap: 4px; 
+}
+
+.typing-dots div { 
+  width: 6px; 
+  height: 6px; 
+  background: #999; 
+  border-radius: 50%; 
+  animation: typing 1.4s infinite; 
+}
+
+.typing-dots div:nth-child(2) { 
+  animation-delay: 0.2s; 
+}
+
+.typing-dots div:nth-child(3) { 
+  animation-delay: 0.4s; 
+}
+
+@keyframes typing { 
+  0%, 60%, 100% { 
+    transform: translateY(0); 
+  } 
+  30% { 
+    transform: translateY(-10px); 
+  } 
+}
+
+.streaming-text { 
+  border-right: 2px solid #0078FF; 
+  animation: blink 1s infinite; 
+}
+
+@keyframes blink { 
+  0%, 50% { 
+    border-color: transparent; 
+  } 
+  51%, 100% { 
+    border-color: #0078FF; 
+  } 
+}
 </style>
 </head>
 <body>
@@ -29,159 +302,540 @@ button:hover { background-color: #005FCC; }
 <div id="chatIcon">🩺</div>
 
 <div id="chatPopup">
+  <div class="chat-header">Chat SVY - Trợ lý Y khoa</div>
   <div class="chatbox" id="chatbox"></div>
   <div class="chat-input">
-    <input type="text" id="userInput" placeholder="Nhập tin nhắn...">
+    <input type="text" id="userInput" placeholder="Nhập câu hỏi y khoa...">
     <button id="sendBtn">➤</button>
   </div>
 </div>
 
 <script>
+// Get DOM elements
 const chatIcon = document.getElementById("chatIcon");
 const chatPopup = document.getElementById("chatPopup");
 const chatbox = document.getElementById("chatbox");
 const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 
-chatIcon.addEventListener("click", ()=>{
-  chatPopup.style.display = chatPopup.style.display==="flex" ? "none" : "flex";
-});
+// State variables
+let isStreaming = false;
+let isOpen = false;
 
-function addMessage(content, sender="bot", isHTML=false){
+// Test function to verify everything is working
+function testElements() {
+  console.log('=== TESTING ELEMENTS ===');
+  console.log('chatIcon:', chatIcon ? '✅ Found' : '❌ Not found');
+  console.log('chatPopup:', chatPopup ? '✅ Found' : '❌ Not found');
+  console.log('chatbox:', chatbox ? '✅ Found' : '❌ Not found');
+  console.log('userInput:', userInput ? '✅ Found' : '❌ Not found');
+  console.log('sendBtn:', sendBtn ? '✅ Found' : '❌ Not found');
+  console.log('========================');
+}
+
+// Simple toggle function
+function toggleChat() {
+  console.log('🔄 Toggle clicked! Current state:', isOpen ? 'OPEN' : 'CLOSED');
+  
+  if (isOpen) {
+    console.log('📴 Closing chat...');
+    chatPopup.style.display = 'none';
+    isOpen = false;
+    console.log('✅ Chat closed');
+  } else {
+    console.log('📱 Opening chat...');
+    chatPopup.style.display = 'flex';
+    isOpen = true;
+    console.log('✅ Chat opened');
+    
+    // Add welcome message if empty
+    if (chatbox.children.length === 0) {
+      console.log('📝 Adding welcome message...');
+      addWelcomeMessage();
+    }
+    
+    // Focus input
+    setTimeout(() => {
+      userInput.focus();
+      console.log('🎯 Input focused');
+    }, 100);
+  }
+}
+
+// Add welcome message
+function addWelcomeMessage() {
+  const welcomeText = `Xin chào! Tôi là **Chat SVY** - trợ lý ảo về y khoa.
+
+Tôi có thể giúp bạn:
+• Tư vấn về các triệu chứng bệnh lý  
+• Cung cấp thông tin chẩn đoán
+• Đề xuất tài liệu và khóa học y khoa
+
+Hãy đặt câu hỏi để tôi hỗ trợ bạn!`;
+  
+  addMessage(welcomeText, "bot", true);
+  console.log('✅ Welcome message added');
+}
+
+// Add message to chatbox
+function addMessage(content, sender = "bot", isHTML = false) {
   const msg = document.createElement("div");
   msg.className = `message ${sender}`;
+  
   const bubble = document.createElement("div");
   bubble.className = "bubble";
-  if(isHTML) bubble.innerHTML = content;
-  else bubble.textContent = content;
+  
+  if (isHTML) {
+    bubble.innerHTML = parseMarkdown(content);
+  } else {
+    bubble.textContent = content;
+  }
+  
   msg.appendChild(bubble);
   chatbox.appendChild(msg);
   chatbox.scrollTop = chatbox.scrollHeight;
+  
   return bubble;
 }
 
-function addCard(item){
+// Parse markdown
+function parseMarkdown(text) {
+  return text
+    .replace(/### (.*$)/gm, '<h3>$1</h3>')
+    .replace(/## (.*$)/gm, '<h2>$1</h2>')
+    .replace(/# (.*$)/gm, '<h1>$1</h1>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/• (.*$)/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>')
+    .replace(/^/, '<p>')
+    .replace(/$/, '</p>')
+    .replace(/<p><\/p>/g, '')
+    .replace(/<p>(<ul>.*<\/ul>)<\/p>/g, '$1');
+}
+
+// Add typing indicator
+function addTypingIndicator() {
+  const msg = document.createElement("div");
+  msg.className = "message bot";
+  msg.id = "typing-indicator";
+  
+  const bubble = document.createElement("div");
+  bubble.className = "bubble typing-indicator";
+  bubble.innerHTML = '<div class="typing-dots"><div></div><div></div><div></div></div>';
+  
+  msg.appendChild(bubble);
+  chatbox.appendChild(msg);
+  chatbox.scrollTop = chatbox.scrollHeight;
+  
+  return msg;
+}
+
+// Remove typing indicator
+function removeTypingIndicator() {
+  const indicator = document.getElementById("typing-indicator");
+  if (indicator) {
+    indicator.remove();
+  }
+}
+
+// Create reference card
+function createReferenceCard(item) {
   const card = document.createElement("div");
   card.className = "card";
-  const title = document.createElement("strong");
+  
+  const title = document.createElement("div");
+  title.className = "card-title";
   title.textContent = item.title;
-  const desc = document.createElement("span");
-  desc.textContent = item.description;
-  const btn = document.createElement("button");
-  btn.textContent = "Mở tài liệu";
-  btn.onclick = ()=> alert(`Gọi hàm ${item.tool} cho '${item.title}'`);
+  
+  const description = document.createElement("div");
+  description.className = "card-description";
+  description.textContent = item.description;
+  
+  const button = document.createElement("button");
+  button.className = "card-button";
+  button.textContent = getButtonText(item.tool);
+  button.onclick = () => handleToolAction(item.tool, item.title);
+  
   card.appendChild(title);
-  card.appendChild(desc);
-  card.appendChild(btn);
+  card.appendChild(description);
+  card.appendChild(button);
+  
   return card;
 }
 
-// Nhận diện JSON trong phản hồi
-function extractJSON(text){
-  const start = text.indexOf("{");
-  const end = text.lastIndexOf("}");
-  if(start!==-1 && end!==-1 && end>start){
-    const jsonStr = text.slice(start,end+1);
-    const normalText = text.slice(0,start).trim();
-    try{
-      const jsonObj = JSON.parse(jsonStr);
-      return {normalText,jsonObj};
-    }catch(e){
-      return {normalText,text};
+// Get button text based on tool
+function getButtonText(tool) {
+  const buttonTexts = {
+    "call_document": "📄 Xem tài liệu",
+    "call_cme": "🎓 Tham gia khóa học", 
+    "call_references": "📚 Xem tham khảo"
+  };
+  return buttonTexts[tool] || "🔗 Mở";
+}
+
+// Handle tool action
+function handleToolAction(tool, title) {
+  const actions = {
+    "call_document": () => alert(`🔍 Đang tìm tài liệu: ${title}\n\nChức năng này sẽ mở thư viện tài liệu y khoa.`),
+    "call_cme": () => alert(`📖 Đang mở khóa học: ${title}\n\nChức năng này sẽ chuyển đến trang khóa học CME.`),
+    "call_references": () => alert(`📑 Đang tải tài liệu tham khảo: ${title}\n\nChức năng này sẽ hiển thị các tài liệu liên quan.`)
+  };
+  
+  (actions[tool] || (() => alert(`Đang xử lý: ${title}`)))();
+}
+
+// Extract text and JSON from response
+function extractTextAndJSON(response) {
+  const jsonStart = response.indexOf('{');
+  const jsonEnd = response.lastIndexOf('}');
+  
+  if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+    const textPart = response.substring(0, jsonStart).trim();
+    const jsonPart = response.substring(jsonStart, jsonEnd + 1);
+    
+    try {
+      const jsonObj = JSON.parse(jsonPart);
+      return { text: textPart, json: jsonObj };
+    } catch (e) {
+      console.log('JSON parse error:', e);
+      return { text: response, json: null };
     }
   }
-  return {normalText:text,jsonObj:null};
+  
+  return { text: response, json: null };
 }
 
-function processBotResponse(raw){
-  const {normalText,jsonObj} = extractJSON(raw);
-  const bubble = addMessage("","bot");
-  normalText.split(/\n+/).forEach(line=>{
-    if(line.startsWith("### ")) bubble.innerHTML += `<strong>${line.slice(4)}</strong><br>`;
-    else if(line.trim()) bubble.innerHTML += line + "<br>";
-  });
-  if(jsonObj){
-    bubble.innerHTML += "<em>Dưới đây là tài liệu tham khảo:</em><br>";
-    Object.values(jsonObj).forEach(item=>{
-      bubble.appendChild(addCard(item));
+// Send message to API
+async function sendMessage(userMessage) {
+  if (isStreaming) return;
+  
+  console.log('📤 Sending message:', userMessage);
+  isStreaming = true;
+  sendBtn.disabled = true;
+  
+  const typingIndicator = addTypingIndicator();
+  
+  try {
+    console.log('🌐 Calling API...');
+    
+    const requestBody = {
+      prompt: userMessage
+    };
+    
+    console.log('📋 Request body:', requestBody);
+    
+    // Try different approaches
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+    
+    const response = await fetch('https://terms-founded-antibody-consequence.trycloudflare.com/model/generate/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json, text/plain, */*',
+        'Origin': window.location.origin,
+        'Referer': window.location.href
+      },
+      body: JSON.stringify(requestBody),
+      mode: 'cors',
+      credentials: 'omit',
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
+    console.log('📡 API Response status:', response.status);
+    console.log('📡 API Response headers:', Object.fromEntries(response.headers.entries()));
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ API Error response:', errorText);
+      throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+    }
+
+    removeTypingIndicator();
+
+    // Check if response is streaming
+    const contentType = response.headers.get('content-type');
+    console.log('📄 Content-Type:', contentType);
+
+    let fullResponse = '';
+    const bubble = addMessage("", "bot");
+
+    if (contentType && (contentType.includes('text/event-stream') || contentType.includes('text/stream'))) {
+      console.log('🌊 Handling streaming response...');
+      
+      // Handle streaming response
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          console.log('📦 Received chunk:', chunk);
+          
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6).trim();
+              if (data === '[DONE]' || data === '') continue;
+              
+              try {
+                const parsed = JSON.parse(data);
+                console.log('📊 Streaming data:', parsed);
+                
+                if (parsed.token || parsed.text || parsed.content || parsed.delta || parsed.choices?.[0]?.delta?.content) {
+                  const token = parsed.token || parsed.text || parsed.content || parsed.delta || parsed.choices?.[0]?.delta?.content;
+                  fullResponse += token;
+                  bubble.innerHTML = parseMarkdown(fullResponse) + '<span class="streaming-text"></span>';
+                  chatbox.scrollTop = chatbox.scrollHeight;
+                }
+              } catch (e) {
+                console.log('📝 Plain text chunk:', data);
+                // If not JSON, treat as plain text
+                if (data.trim()) {
+                  fullResponse += data;
+                  bubble.innerHTML = parseMarkdown(fullResponse) + '<span class="streaming-text"></span>';
+                  chatbox.scrollTop = chatbox.scrollHeight;
+                }
+              }
+            }
+          }
+        }
+      } catch (streamError) {
+        console.error('❌ Streaming error:', streamError);
+        if (fullResponse.trim()) {
+          console.log('✅ Using partial response from stream');
+        } else {
+          throw streamError;
+        }
+      }
+      
+      // Remove streaming cursor
+      bubble.innerHTML = bubble.innerHTML.replace('<span class="streaming-text"></span>', '');
+      
+    } else {
+      console.log('📄 Handling JSON response...');
+      
+      // Handle regular JSON response
+      const responseText = await response.text();
+      console.log('📄 Raw response:', responseText);
+      
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.log('📝 Response is not JSON, treating as plain text');
+        data = { response: responseText };
+      }
+      
+      console.log('📄 Parsed response data:', data);
+      
+      fullResponse = data.response || data.message || data.text || data.output || data.generated_text || data.content || responseText || 'Không có phản hồi từ server';
+      
+      // Simulate typing for better UX
+      await simulateTyping(bubble, fullResponse);
+    }
+    
+    // Process final response
+    const { text, json } = extractTextAndJSON(fullResponse);
+    bubble.innerHTML = parseMarkdown(text);
+    
+    // Add reference cards if JSON exists
+    if (json) {
+      const cardsContainer = document.createElement("div");
+      cardsContainer.className = "reference-cards";
+      cardsContainer.innerHTML = "<em>📋 Tài liệu tham khảo:</em>";
+      
+      Object.values(json).forEach(item => {
+        if (item.title && item.description && item.tool) {
+          cardsContainer.appendChild(createReferenceCard(item));
+        }
+      });
+      
+      bubble.appendChild(cardsContainer);
+    }
+
+    console.log('✅ API call successful');
+
+  } catch (error) {
+    console.error('❌ API Error details:', {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    });
+    
+    removeTypingIndicator();
+    
+    // Different error messages based on error type
+    let errorMessage = '';
+    if (error.name === 'AbortError') {
+      errorMessage = 'Timeout: API không phản hồi trong 30 giây';
+    } else if (error.message.includes('Failed to fetch')) {
+      errorMessage = 'Không thể kết nối đến API. Có thể do:\n• CORS policy\n• Network connectivity\n• Server không hoạt động\n• URL không chính xác';
+    } else if (error.message.includes('TypeError')) {
+      errorMessage = 'Lỗi mạng hoặc server không khả dụng';
+    } else {
+      errorMessage = error.message;
+    }
+    
+    // Show detailed error message to user
+    const errorBubble = addMessage("", "bot");
+    errorBubble.innerHTML = `
+      <p>⚠️ <strong>Lỗi kết nối API:</strong></p>
+      <p style="color: #d32f2f; font-family: monospace; font-size: 12px; background: #ffebee; padding: 8px; border-radius: 4px; margin: 8px 0;">${errorMessage}</p>
+      <p><em>Đang sử dụng phản hồi mẫu...</em></p>
+    `;
+    
+    // Wait a bit then show mock response
+    setTimeout(async () => {
+      const mockResponse = getMockResponse(userMessage);
+      const { text, json } = extractTextAndJSON(mockResponse);
+      
+      const bubble = addMessage("", "bot");
+      await simulateTyping(bubble, text);
+      
+      if (json) {
+        const cardsContainer = document.createElement("div");
+        cardsContainer.className = "reference-cards";
+        cardsContainer.innerHTML = "<em>📋 Tài liệu tham khảo:</em>";
+        
+        Object.values(json).forEach(item => {
+          if (item.title && item.description && item.tool) {
+            cardsContainer.appendChild(createReferenceCard(item));
+          }
+        });
+        
+        bubble.appendChild(cardsContainer);
+      }
+    }, 1500);
+    
+  } finally {
+    isStreaming = false;
+    sendBtn.disabled = false;
   }
 }
 
-// Hàm phân loại câu hỏi
-function getBotResponse(userText){
+// Simulate typing effect
+async function simulateTyping(bubble, text) {
+  const words = text.split(' ');
+  let currentText = '';
+  
+  for (let i = 0; i < words.length; i++) {
+    currentText += words[i] + ' ';
+    bubble.innerHTML = parseMarkdown(currentText.trim()) + '<span class="streaming-text"></span>';
+    chatbox.scrollTop = chatbox.scrollHeight;
+    await new Promise(resolve => setTimeout(resolve, 50));
+  }
+  
+  bubble.innerHTML = parseMarkdown(currentText.trim());
+}
+
+// Mock response for testing
+function getMockResponse(userText) {
   const text = userText.toLowerCase();
+  
+  if (text.includes("j04.9") || text.includes("viêm phổi") || text.includes("virus")) {
+    return `## Mã bệnh: J04.9
 
-  // 1. Câu hỏi về bệnh
-  if(text.includes("đau răng") || text.includes("viêm") || text.includes("triệu chứng")){
-    return `
-### Chuẩn đoán: \nĐau răng, sưng nướu, hơi thở có mùi\n### Triệu chứng:\n Viêm quanh chóp răng cấp tính
+### Mô tả bệnh
+Viêm phổi do virus, không xác định. Tình trạng viêm cấp tính của phổi do nhiễm virus, thường biểu hiện bằng ho, sốt cao và có thể kèm theo các triệu chứng khác.
+
+### Chẩn đoán
+Viêm phổi cấp do virus (J04.9). Chẩn đoán dựa trên các triệu chứng lâm sàng điển hình như **ho dữ dội**, **sốt cao liên tục** (thường trên 38°C), khó thở, và có thể kèm theo các dấu hiệu nhiễm trùng toàn thân.
+
+### Triệu chứng chính
+• Sốt cao liên tục (>38°C)
+• Ho dữ dội, khó thở  
+• Đau ngực, đau đầu
+• Mệt mỏi, ớn lạnh
+• Sưng hạch cổ (>2cm)
+
 {
-  "documpent": {
-    "title": "Điều trị viêm quanh chóp răng",
-    "tool": "call_document",
-    "description": "Tổng quan về nguyên nhân và phác đồ điều trị viêm quanh chóp"
-  },
-  "cme": {
-    "title": "Cập nhật kiến thức về viêm tủy",
-    "tool": "call_cme",
-    "description": "Khóa học CME cung cấp kiến thức mới nhất về điều trị tủy răng"
-  }
-}
-`;
-  }
-
-  // 2. Chào hỏi
-  if(text.includes("xin chào") || text.includes("chào") || text.includes("hello")){
-    return "Xin chào bạn tôi là Chat SVY là một trợ lý ảo về y khoa để giúp đỡ các bác sỹ trẻ";
+    "document": {
+        "title": "Tài liệu chẩn đoán viêm phổi virus", 
+        "tool": "call_document",
+        "description": "Bài viết cung cấp thông tin chi tiết về triệu chứng lâm sàng, tiêu chuẩn chẩn đoán và phương pháp xét nghiệm phân biệt viêm phổi virus với các bệnh lý khác."
+    },
+    "cme": {
+        "title": "Khóa học chẩn đoán viêm phổi",
+        "tool": "call_cme",
+        "description": "Khóa học tập trung vào phương pháp chẩn đoán tiên tiến cho viêm phổi cấp do virus, bao gồm nhận diện dấu hiệu lâm sàng và phân biệt với các bệnh lý khác."
+    }
+}`;
   }
 
-  // 3. Xử lý lỗi
-  if(text.includes("???") || text.length < 5){
-    return "Xin lỗi câu hỏi của bạn không rõ ràng. Câu hỏi của bạn tôi vẫn chưa hiểu rõ.";
+  if (text.includes("xin chào") || text.includes("hello")) {
+    return "Xin chào! Tôi là **Chat SVY** - trợ lý ảo y khoa. Tôi có thể hỗ trợ bạn về:\n\n• Tư vấn triệu chứng bệnh lý\n• Thông tin chẩn đoán\n• Tài liệu và khóa học y khoa\n\nHãy đặt câu hỏi cụ thể để tôi hỗ trợ tốt nhất!";
   }
 
-  // 4. Tư vấn
-  if(text.includes("kinh nghiệm") ||text.includes("hướng dẫn") || text.includes("sử dụng") || text.includes("cách dùng")){
-    return `
-Bạn nên ôn tập, và thực hành nhiều để có thêm kinh nghiệm.
-Dưới đây là một số tài liệu và khóa học.
-{
-  "documpent": {
-    "title": "Tài liệu ôn tập bệnh lý",
-    "tool": "call_document",
-    "description": "Bộ tài liệu PDF tổng hợp bệnh lý phổ biến"
-  },
-  "cme": {
-    "title": "Khóa học y khoa online",
-    "tool": "call_cme",
-    "description": "Khóa học giúp bạn thực hành chẩn đoán và điều trị"
-  }
-}
-`;
-  }
-
-  // Mặc định: câu trả lời tự nhiên
-  return "Tôi đã nhận câu hỏi của bạn và sẽ phản hồi sớm.";
+  return "Tôi đã nhận được câu hỏi của bạn. Vui lòng cung cấp thêm thông tin chi tiết để tôi có thể hỗ trợ bạn một cách chính xác nhất.";
 }
 
-// Khi người dùng gửi tin nhắn
-sendBtn.addEventListener("click",()=>{
+// Event handlers
+function handleSendMessage() {
   const text = userInput.value.trim();
-  if(!text) return;
-  addMessage(text,"user");
+  if (!text || isStreaming) {
+    console.log('⚠️ Cannot send: empty message or streaming');
+    return;
+  }
+  
+  console.log('💬 User message:', text);
+  addMessage(text, "user");
   userInput.value = "";
-  setTimeout(()=> {
-    const rawBotResponse = getBotResponse(text);
-    processBotResponse(rawBotResponse);
-  }, 500);
+  
+  sendMessage(text);
+}
+
+// Initialize everything when page loads
+window.addEventListener('load', () => {
+  console.log('🚀 Page loaded, initializing...');
+  
+  // Test all elements
+  testElements();
+  
+  // Set up click handler for chat icon
+  if (chatIcon) {
+    chatIcon.addEventListener('click', toggleChat);
+    console.log('✅ Chat icon click handler added');
+  }
+  
+  // Set up send button
+  if (sendBtn) {
+    sendBtn.addEventListener('click', handleSendMessage);
+    console.log('✅ Send button click handler added');
+  }
+  
+  // Set up enter key
+  if (userInput) {
+    userInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSendMessage();
+      }
+    });
+    console.log('✅ Input keydown handler added');
+  }
+  
+  // Initialize chat as closed
+  if (chatPopup) {
+    chatPopup.style.display = 'none';
+    isOpen = false;
+    console.log('✅ Chat initialized as closed');
+  }
+  
+  console.log('🎉 Initialization complete!');
+  console.log('👆 Click the blue icon in bottom-right corner to test!');
 });
 
-userInput.addEventListener("keypress",(e)=>{
-  if(e.key==="Enter") sendBtn.click();
-});
 </script>
-
 
 </body>
 </html>
