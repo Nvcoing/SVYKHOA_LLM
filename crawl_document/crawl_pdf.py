@@ -46,7 +46,7 @@ def download_pdfs_from_excel(excel_file, output_folder, download_column_name='do
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Vui lòng chạy lệnh: python download_pdf.py <tên_file_excel>")
+        print("Vui lòng chạy lệnh: python crawl_pdf.py <tên_file_excel>")
         sys.exit(1)
 
     excel_file = sys.argv[1]
