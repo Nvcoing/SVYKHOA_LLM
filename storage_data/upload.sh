@@ -1,30 +1,19 @@
 #!/bin/bash
-# Script upload nhieu file Excel -> Parquet len HuggingFace
-# chmod +x upload.sh
-# ./upload.sh
+# chmod +x upload_all.sh
+# ./upload_all.sh
 
+set -e  # dung lai neu co loi
 
-PYTHON_SCRIPT="upload_data.py"
-ENV_PATH="../hf-token.env"
+echo "=== Upload dataset diagnosis ==="
+python upload_data.py NV9523/SVYKHOA ../generate_dataset/SVYKHOA_dataset_diagnosis.xlsx diagnosis
 
-echo "=== Upload Excel to HuggingFace Dataset Repo ==="
+echo "=== Upload dataset guide ==="
+python upload_data.py NV9523/SVYKHOA ../generate_dataset/SVYKHOA_dataset_guide.xlsx guide
 
-# Nhap Repo ID
-read -p "Nhap Repo ID (mac dinh: NV9523/SVYKHOA): " REPO_ID
-REPO_ID=${REPO_ID:-NV9523/SVYKHOA}
+echo "=== Upload dataset medical_talk ==="
+python upload_data.py NV9523/SVYKHOA ../generate_dataset/SVYKHOA_dataset_medicaltalk.xlsx medical_talk
 
-# Nhap danh sach file (cach nhau boi dau cach)
-read -p "Nhap duong dan cac file Excel (.xlsx) muon upload (cach nhau boi dau cach): " FILE_LIST
+echo "=== Upload dataset small_talk ==="
+python upload_data.py NV9523/SVYKHOA ../generate_dataset/SVYKHOA_dataset_smalltalk.xlsx small_talk
 
-# Nhap ten folder tren repo
-read -p "Nhap ten folder tren repo (vd: diagnosis_data): " FOLDER_NAME
-
-# Upload tung file
-for EXCEL_FILE in $FILE_LIST; do
-    if [ -f "$EXCEL_FILE" ]; then
-        echo "Dang upload: $EXCEL_FILE -> folder $FOLDER_NAME tren repo $REPO_ID"
-        python "$PYTHON_SCRIPT" "$REPO_ID" "$EXCEL_FILE" "$ENV_PATH" "$FOLDER_NAME"
-    else
-        echo "File khong ton tai: $EXCEL_FILE"
-    fi
-done
+echo "=== Done ==="
