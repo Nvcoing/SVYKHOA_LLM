@@ -58,4 +58,4 @@ if __name__ == "__main__":
 
     # Upload file
     upload_excel_to_parquet(repo_id, file_path, folder_name, hf_token)
-# python upload_data.py NV9523/SVYKHOA ../generate_dataset/SVYKHOA_dataset_diagnosis.xlsx diagnosis
+# python upload_data.py NV9523/SVYKHOA ../generate_dataset/SVYKHOA_dataset_smalltalk smalltalk
