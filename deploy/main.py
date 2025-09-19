@@ -3,8 +3,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from load_model import load_model_tokenizer
-from generate import generate_stream
+from agent_server.load_model import load_model_tokenizer
+from agent_server.generate import generate_stream
 
 MODEL_PATH = "NV9523/CHAT_SVY"  # Hoặc đường dẫn local nếu đã tải model
 

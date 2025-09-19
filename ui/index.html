@@ -5,21 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot Vy - Y Khoa</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        #chat-container { width: 500px; max-width: 100%; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        #chat-box { height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
-        .message { margin: 5px 0; }
-        .user { text-align: right; color: blue; }
-        .bot { text-align: left; color: green; }
-        #prompt { width: 80%; padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
-        #send { padding: 10px 15px; border-radius: 5px; border: none; background: #007bff; color: white; cursor: pointer; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4f0fb 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #chat-container {
+            width: 600px;
+            max-width: 100%;
+            background: white;
+            border-radius: 15px;
+            padding: 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+        #chat-header {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #chat-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        #chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #fafcff;
+        }
+        .message {
+            margin: 10px 0;
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 18px;
+            line-height: 1.4;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+        .user {
+            background: #e3f2fd;
+            color: #0d47a1;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        .bot {
+            background: white;
+            color: #333;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+        .bot::before {
+            content: "Vy";
+            display: block;
+            font-size: 12px;
+            color: #4b6cb7;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        #input-area {
+            display: flex;
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+        #prompt {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            outline: none;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        #prompt:focus {
+            border-color: #4b6cb7;
+        }
+        #send {
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: bold;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        #send:hover {
+            opacity: 0.9;
+            transform: scale(0.98);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .typing-indicator {
+            display: inline-block;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+            color: #666;
+            font-style: italic;
+        }
+        .typing-indicator::after {
+            content: "...";
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60%, 100% { content: "..."; }
+        }
     </style>
 </head>
 <body>
     <div id="chat-container">
+        <div id="chat-header">
+            <img src="http://static.photos/medical/200x200/1" alt="Vy Avatar">
+            <h2>Trợ lý Y Khoa Vy</h2>
+        </div>
         <div id="chat-box"></div>
-        <input type="text" id="prompt" placeholder="Nhập câu hỏi y khoa..."/>
-        <button id="send">Gửi</button>
+        <div id="input-area">
+            <input type="text" id="prompt" placeholder="Nhập câu h hỏi y khoa của bạn..."/>
+            <button id="send">Gửi</button>
+        </div>
     </div>
 
     <script>
@@ -60,7 +185,13 @@
         function addMessage(sender, text) {
             const msg = document.createElement('div');
             msg.className = 'message ' + sender;
-            msg.textContent = text;
+            
+            if (sender === 'bot' && text.trim() === '') {
+                msg.innerHTML = '<div class="typing-indicator">Vy đang trả lời</div>';
+            } else {
+                msg.textContent = text;
+            }
+            
             chatBox.appendChild(msg);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
@@ -70,7 +201,16 @@
             if(botMessages.length === 0) {
                 addMessage('bot', text);
             } else {
-                botMessages[botMessages.length-1].textContent = text;
+                const lastMessage = botMessages[botMessages.length-1];
+                if (lastMessage.querySelector('.typing-indicator')) {
+                    const newMsg = document.createElement('div');
+                    newMsg.className = 'message bot';
+                    newMsg.textContent = text;
+                    chatBox.replaceChild(newMsg, lastMessage);
+                } else {
+                    lastMessage.textContent = text;
+                }
+                chatBox.scrollTop = chatBox.scrollHeight;
             }
         }
 
