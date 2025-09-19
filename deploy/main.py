@@ -35,4 +35,4 @@ class PromptRequest(BaseModel):
 async def generate_text(req: PromptRequest):
     label, score = classifier.classify(req.prompt)
     print(f"Predicted label: {label}, similarity: {score:.4f}")
-    return StreamingResponse(generate_stream(model, tokenizer, device, req.prompt,f"<label>{label}</label>"), media_type="text/plain")
+    return StreamingResponse(generate_stream(model, tokenizer, device, req.prompt,f"<label>{label}</label>\n"), media_type="text/plain")

@@ -1,6 +1,6 @@
 import torch
 from sentence_transformers import util
-from embedding_model import EmbeddingModel
+from embedding.load_embedding import EmbeddingModel
 
 class PromptClassifier:
     def __init__(self, labels_descriptions, embedding_model=None):
