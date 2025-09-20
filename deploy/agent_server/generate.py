@@ -3,7 +3,7 @@ import threading
 from transformers import TextIteratorStreamer
 def build_prompt(prompt: str, labels: str = "") -> str:
     prompts = (
-            f"<|begin_of_text|>\nBạn là Vy một trợ lý ảo về Y khoa và hãy xác định mã bệnh xem nên gọi tool và trả ra json khi nào\n{prompt.strip()}\n{labels.strip()}"
+            f"<|begin_of_text|>\nBạn là Vy một trợ lý ảo về Y khoa và hãy xác định mã bệnh xem nên gọi tool và trả ra json khi nào\n{prompt.strip()}\n<label>{labels.strip()}</label>\n"
     )
     return prompts
 def generate_stream(model, tokenizer, device, prompt: str,labels: str = ""):
@@ -30,8 +30,8 @@ def generate_stream(model, tokenizer, device, prompt: str,labels: str = ""):
         top_k=50,
         top_p=0.9,
         repetition_penalty=1.2,
-        eos_token_id=tokenizer.eos_token_id,
-        pad_token_id=tokenizer.pad_token_id or tokenizer.eos_token_id,
+        eos_token_id=tokenizer.convert_tokens_to_ids("<|end_of_text|>"),
+        pad_token_id=tokenizer.pad_token_id or tokenizer.convert_tokens_to_ids("<|end_of_text|>"),
         streamer=streamer
     )
 
