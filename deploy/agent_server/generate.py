@@ -3,7 +3,7 @@ import threading
 from transformers import TextIteratorStreamer
 def build_prompt(prompt: str, labels: str = "") -> str:
     prompts = (
-            f"<|begin_of_text|>\nBạn là Vy một trợ lý ảo về Y khoa và hãy xác định mã bệnh xem nên gọi tool và trả ra json khi nào\n{prompt.strip()}\n<label>{labels.strip()}</label>\n"
+            f"<|begin_of_text|>\nBạn là Vy một trợ lý ảo về Y khoa\n{prompt.strip()}\n<label>{labels.strip()}</label>\n"
     )
     return prompts
 def generate_stream(model, tokenizer, device, prompt: str,labels: str = ""):
