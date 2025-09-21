@@ -323,3 +323,19 @@ MIT License - xem file [LICENSE](LICENSE) để biết thêm chi tiết.
 ---
 
 **SVYKHOA AI Chatbot** - Nâng cao trải nghiệm học tập với công nghệ AI tiên tiến 🚀
+## 📱 Giao diện người dùng
+
+🔗 **Demo giao diện mockup ChatSV**: [Truy cập tại đây](https://nvcoing.github.io/SVYKHOA_LLM/)
+
+### Chat Interface
+- Giao diện chat hiện đại, responsive
+- Hỗ trợ markdown và code highlighting
+- Hiển thị nguồn tài liệu tham khảo
+- Tính năng copy/share câu trả lời
+
+### Search Filters
+- Lọc theo khóa học
+- Lọc theo loại tài liệu
+- Lọc theo độ khó
+- Lọc theo chủ đề
+
