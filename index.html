@@ -153,10 +153,11 @@
         const sendBtn = document.getElementById('send');
 
         async function getApiUrl() {
-            let text = await (await fetch("./deploy/public_api.log")).text();
+            let text = await (await fetch("./deploy/public_api")).text(); // sửa lại
             let url = text.match(/https:\/\/[a-z0-9.-]+\.trycloudflare\.com/)[0];
             return url + "/model/generate/";
         }
+
 
         async function sendMessage() {
             const message = promptInput.value.trim();
