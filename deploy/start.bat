@@ -1,9 +1,11 @@
 @echo off
 REM Chạy server trong CMD mới
-start "" cmd /k "bash start_server.sh"
+start "" "D:\Git\Git\git-bash.exe" --cd="E:\job\SVYKHOA_LLM\SVYKHOA_LLM\deploy" -c "./start_server.sh"
+
 
 REM Chạy tunnel trong CMD mới
-start "" cmd /k "bash start_tunnel.sh"
+start "" "D:\Git\Git\git-bash.exe" --cd="E:\job\SVYKHOA_LLM\SVYKHOA_LLM\deploy" -c "./start_tunnel.sh"
+
 
 REM Đợi 5 giây để 2 script trên chạy
 timeout /t 5 /nobreak >nul
