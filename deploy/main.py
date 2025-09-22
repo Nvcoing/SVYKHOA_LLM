@@ -7,6 +7,7 @@ import json
 
 from agent_server.load_model import load_model_tokenizer
 from agent_server.generate import generate_stream
+from handlers.response import handle_generate_request as response
 from embedding.classifier import PromptClassifier 
 from embedding.load_embedding import EmbeddingModel
 from config.constants import MODEL, EMBEDDING
@@ -36,4 +37,4 @@ async def generate_text(req: PromptRequest):
     print(f"Received prompt: {req.prompt}")
     label, score = classifier.classify(req.prompt)
     print(f"Predicted label: {label}, similarity: {score:.4f}")
-    return StreamingResponse(generate_stream(model, tokenizer, device, req.prompt,label), media_type="text/plain")
+    return StreamingResponse(response(model, tokenizer, device, req.prompt,label), media_type="text/plain")
