@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Floating Chat Icon — SVYKHOA</title>
+  <style>
+    :root{--size:64px;--gap:16px}
+    html,body{height:100%;margin:0;font-family:system-ui,Segoe UI,Roboto, sans-serif}
+    /* blank page */
+    .page{height:100%;background:linear-gradient(180deg,#fbfbfd,#ffffff);display:flex;align-items:center;justify-content:center}
+
+    /* floating circular icon */
+    .float-btn{
+      position:fixed;right:var(--gap);bottom:var(--gap);
+      width:var(--size);height:var(--size);border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 8px 20px rgba(22,35,73,0.12);
+      background:linear-gradient(135deg,#2b6ef6,#4cc1ff);
+      color:white;font-weight:600;cursor:grab;z-index:9999;
+      user-select:none;touch-action:none;transition:box-shadow .15s,transform .15s;
+    }
+    .float-btn:active{cursor:grabbing;transform:scale(.98);box-shadow:0 6px 14px rgba(22,35,73,0.14)}
+    .float-btn .icon{width:36px;height:36px;border-radius:50%;display:inline-grid;place-items:center;font-size:18px}
+
+    /* small tooltip when hovering */
+    .tooltip{position:fixed;right:calc(var(--gap) + var(--size) + 8px);bottom:calc(var(--gap) + (var(--size) - 28px)/2);background:#111;color:#fff;padding:6px 10px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .12s,transform .12s;z-index:9998}
+    .float-btn:hover + .tooltip{opacity:1;transform:none}
+
+    /* slide-out right drawer */
+    .drawer{position:fixed;top:0;right:0;height:100%;width:420px;max-width:92vw;background:#fff;box-shadow:-18px 0 40px rgba(12,20,40,0.12);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.9,.3,1);z-index:9997;display:flex;flex-direction:column}
+    .drawer.open{transform:translateX(0)}
+    .drawer .header{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid #eee}
+    .drawer .title{font-weight:600}
+    .drawer .close{background:transparent;border:none;font-size:18px;cursor:pointer;padding:8px}
+    .drawer .frame-wrap {
+  flex: 1;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.drawer iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+    /* small handle to allow dragging the drawer in/out on touch devices */
+    .drawer .drag-handle{height:6px;width:60px;border-radius:8px;background:#eee;margin:8px auto}
+
+    /* make sure iframe covers safe area */
+    .drawer .frame-wrap{flex:1;overflow:hidden}
+
+    @media (max-width:600px){
+      .drawer{width:100vw}
+      .tooltip{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="page" aria-hidden="true"></div>
+
+  <!-- Floating button -->
+  <button id="floatBtn" class="float-btn" aria-label="Open SVYKHOA Chat">
+    <span class="icon">💬</span>
+  </button>
+  <div class="tooltip">Mở chat SVYKHOA</div>
+
+  <!-- Right drawer that will host the chatbot -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div class="header">
+      <div class="title">SVYKHOA Chat</div>
+      <div>
+        <button id="openNew" class="close" title="Mở trong tab mới">⤢</button>
+        <button id="closeBtn" class="close" title="Đóng">✕</button>
+      </div>
+    </div>
+    <div class="frame-wrap">
+      <!-- iframe src is set on first open to avoid preloading -->
+      <iframe id="chatFrame" sandbox="allow-same-origin allow-scripts allow-forms allow-popups" title="SVYKHOA Chat"></iframe>
+    </div>
+  </aside>
+
+  <script>
+    (function(){
+      const floatBtn = document.getElementById('floatBtn');
+      const drawer = document.getElementById('drawer');
+      const chatFrame = document.getElementById('chatFrame');
+      const closeBtn = document.getElementById('closeBtn');
+      const openNew = document.getElementById('openNew');
+      const CHAT_URL = 'https://nvcoing.github.io/SVYKHOA_LLM/';
+
+      // Drag logic (mouse + touch) ------------------------------------------------
+      let isDragging = false, startX=0, startY=0, origX=0, origY=0;
+      // load saved position if exists
+      const saved = localStorage.getItem('floatPos');
+      if(saved){
+        try{
+          const p = JSON.parse(saved);
+          floatBtn.style.right = 'auto';
+          floatBtn.style.left = p.x + 'px';
+          floatBtn.style.top = p.y + 'px';
+          floatBtn.style.bottom = 'auto';
+        }catch(e){}
+      }
+
+      function getPointer(e){
+        return e.touches ? e.touches[0] : e;
+      }
+
+      function onPointerDown(e){
+        const p = getPointer(e);
+        isDragging = true;
+        startX = p.clientX; startY = p.clientY;
+        const rect = floatBtn.getBoundingClientRect();
+        origX = rect.left; origY = rect.top;
+        floatBtn.setPointerCapture && floatBtn.setPointerCapture(e.pointerId);
+      }
+
+      function onPointerMove(e){
+        if(!isDragging) return;
+        const p = getPointer(e);
+        const dx = p.clientX - startX;
+        const dy = p.clientY - startY;
+        let nx = origX + dx;
+        let ny = origY + dy;
+        // constrain inside viewport
+        const vw = window.innerWidth, vh = window.innerHeight;
+        const w = floatBtn.offsetWidth, h = floatBtn.offsetHeight;
+        nx = Math.max(8, Math.min(vw - w - 8, nx));
+        ny = Math.max(8, Math.min(vh - h - 8, ny));
+        floatBtn.style.left = nx + 'px';
+        floatBtn.style.top = ny + 'px';
+        floatBtn.style.right = 'auto';
+        floatBtn.style.bottom = 'auto';
+      }
+
+      function onPointerUp(e){
+        if(!isDragging) return;
+        isDragging = false;
+        // save position
+        const rect = floatBtn.getBoundingClientRect();
+        localStorage.setItem('floatPos', JSON.stringify({x: rect.left, y: rect.top}));
+      }
+
+      // click vs drag detection
+      let clickTimeout = null;
+      function handleClick(e){
+        // If it was a drag, ignore click
+        if(isDragging) return;
+        toggleDrawer();
+      }
+
+      // attach events
+      floatBtn.addEventListener('mousedown', onPointerDown);
+      document.addEventListener('mousemove', onPointerMove);
+      document.addEventListener('mouseup', onPointerUp);
+      // touch
+      floatBtn.addEventListener('touchstart', onPointerDown, {passive:false});
+      document.addEventListener('touchmove', onPointerMove, {passive:false});
+      document.addEventListener('touchend', onPointerUp);
+
+      floatBtn.addEventListener('click', handleClick);
+
+      // Drawer open/close ---------------------------------------------------------
+      let iframeLoaded = false;
+      function openDrawer(){
+        drawer.classList.add('open');
+        drawer.setAttribute('aria-hidden','false');
+        if(!iframeLoaded){
+          chatFrame.src = CHAT_URL;
+          iframeLoaded = true;
+        }
+      }
+      function closeDrawer(){
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden','true');
+      }
+      function toggleDrawer(){
+        if(drawer.classList.contains('open')) closeDrawer(); else openDrawer();
+      }
+
+      closeBtn.addEventListener('click', closeDrawer);
+      openNew.addEventListener('click', function(){ window.open(CHAT_URL, '_blank'); });
+
+      // close drawer when clicking outside (optional) -----------------------------
+      document.addEventListener('click', function(ev){
+        const target = ev.target;
+        if(!drawer.classList.contains('open')) return;
+        // if click inside drawer or on the button -> ignore
+        if(drawer.contains(target) || floatBtn.contains(target)) return;
+        closeDrawer();
+      });
+
+      // keyboard escape to close
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDrawer(); });
+
+      // keep tooltip accessible on keyboard focus
+      floatBtn.addEventListener('focus', function(){ document.querySelector('.tooltip').style.opacity = '1'; });
+      floatBtn.addEventListener('blur', function(){ document.querySelector('.tooltip').style.opacity = ''; });
+
+    })();
+  </script>
+</body>
+</html>
