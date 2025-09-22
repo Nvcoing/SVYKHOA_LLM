@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrimeProp - Find Your Dream Home</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>AgentSV - Trợ lý Y tế</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/5.1.1/marked.min.js"></script>
 </head>
 <style>
     /* CSS Variables */
@@ -381,7 +383,7 @@ p {
   gap: 1.5rem;
 }
 
-/* Property Cards */
+/* Doctor Cards */
 .property-card {
   background-color: var(--card);
   border-radius: 0.75rem;
@@ -521,6 +523,98 @@ p {
   color: var(--foreground);
 }
 
+/* Markdown Styles */
+.message-bubble h1,
+.message-bubble h2,
+.message-bubble h3,
+.message-bubble h4,
+.message-bubble h5,
+.message-bubble h6 {
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+.message-bubble h1 { font-size: 1.25rem; }
+.message-bubble h2 { font-size: 1.125rem; }
+.message-bubble h3 { font-size: 1rem; }
+.message-bubble h4 { font-size: 0.9375rem; }
+.message-bubble h5 { font-size: 0.875rem; }
+.message-bubble h6 { font-size: 0.8125rem; }
+
+.message-bubble p {
+  margin: 0.5rem 0;
+}
+
+.message-bubble ul,
+.message-bubble ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.message-bubble li {
+  margin: 0.25rem 0;
+}
+
+.message-bubble code {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8125rem;
+}
+
+.message-bubble pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+
+.message-bubble pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.message-bubble blockquote {
+  border-left: 3px solid var(--primary);
+  padding-left: 0.75rem;
+  margin: 0.5rem 0;
+  font-style: italic;
+}
+
+.message-bubble table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+  font-size: 0.8125rem;
+}
+
+.message-bubble th,
+.message-bubble td {
+  border: 1px solid var(--border);
+  padding: 0.375rem 0.5rem;
+  text-align: left;
+}
+
+.message-bubble th {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+
+.message-bubble strong {
+  font-weight: 600;
+}
+
+.message-bubble em {
+  font-style: italic;
+}
+
+.message-bubble a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
 .input-container {
   display: flex;
   gap: 0.5rem;
@@ -582,7 +676,7 @@ p {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Property Cards in Chat */
+/* Doctor Cards in Chat */
 .chat-property-card {
   background-color: var(--card);
   border-radius: 0.5rem;
@@ -699,25 +793,25 @@ p {
         <div class="nav-container">
             <div class="nav-left">
                 <div class="logo">
-                    <div class="logo-icon">+</div>
-                    <span class="logo-text">AgentSV</span>
+                    <img src="https://github.com/Nvcoing/SVYKHOA_LLM/blob/main/doc/logo/logo.png?raw=true" alt="AgentSV Logo" width="32" height="32">
+                    <span class="logo-text">AgentSV Việt Nam</span>
                 </div>
                 
                 <div class="nav-links">
-                    <a href="#" class="nav-link">Buy</a>
-                    <a href="#" class="nav-link">Rent</a>
-                    <a href="#" class="nav-link">Sell</a>
-                    <a href="#" class="nav-link">Agents</a>
+                    <a href="#" class="nav-link">Tư vấn</a>
+                    <a href="#" class="nav-link">Bác sĩ</a>
+                    <a href="#" class="nav-link">Dịch vụ</a>
+                    <a href="#" class="nav-link">Giới thiệu</a>
                 </div>
             </div>
 
             <div class="nav-right">
                 <button class="btn btn-ghost">
                     <i class="fas fa-calendar-alt"></i>
-                    Appointments
+                    Lịch hẹn
                 </button>
-                <button class="btn btn-outline">Patient Login</button>
-                <button class="btn btn-primary">Doctor Login</button>
+                <button class="btn btn-outline">Đăng nhập bệnh nhân</button>
+                <button class="btn btn-primary">Đăng nhập bác sĩ</button>
                 <button class="btn btn-ghost mobile-menu-btn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -730,11 +824,11 @@ p {
         <div class="container">
             <div class="hero-content">
                 <h1 class="hero-title">
-                    Connect With
-                    <span class="text-primary"> Medical Experts</span>
+                    Kết nối với
+                    <span class="text-primary"> Chuyên gia Y tế</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Get personalized medical advice and connect with top healthcare professionals
+                    Nhận tư vấn y tế cá nhân hóa và kết nối với các chuyên gia hàng đầu
                 </p>
             </div>
 
@@ -746,7 +840,7 @@ p {
                         <div class="search-input-container">
                             <input 
                                 type="text" 
-                                placeholder="Ask me about medical advice... (e.g., 'What are the symptoms of diabetes?')"
+                                placeholder="Hỏi tôi về tư vấn y tế..."
                                 class="search-input"
                                 id="searchInput"
                             />
@@ -784,7 +878,7 @@ p {
                         <div class="input-container">
                             <input 
                                 type="text" 
-                                placeholder="Ask about medical advice..."
+                                placeholder="Hỏi về tư vấn y tế..."
                                 class="chat-input"
                                 id="chatInput"
                             />
@@ -798,12 +892,12 @@ p {
         </div>
     </section>
 
-    <!-- Featured Properties -->
+    <!-- Featured Doctors -->
     <section class="properties-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Featured Doctors</h2>
-                <button class="btn btn-outline">View All</button>
+                <h2 class="section-title">Bác sĩ Nổi bật</h2>
+                <button class="btn btn-outline">Xem tất cả</button>
             </div>
             
             <div class="properties-grid" id="propertiesGrid">
@@ -812,527 +906,530 @@ p {
         </div>
     </section>
 
-
-
     <script>
-        // Property data
-const properties = [
-    {
-        title: 'Luxury Villa in Whitefield',
-        price: '₹1.2 Crores',
-        location: 'Whitefield, Bangalore',
-        beds: 3,
-        baths: 3,
-        area: '2,400 sq ft',
-        imageUrl: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400&h=300&fit=crop',
-        isNew: true
-    },
-    {
-        title: 'Modern Apartment in Koramangala',
-        price: '₹85 Lakhs',
-        location: 'Koramangala, Bangalore',
-        beds: 2,
-        baths: 2,
-        area: '1,350 sq ft',
-        imageUrl: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop',
-        isNew: false
-    },
-    {
-        title: 'Spacious Penthouse',
-        price: '₹2.5 Crores',
-        location: 'Indiranagar, Bangalore',
-        beds: 4,
-        baths: 4,
-        area: '3,200 sq ft',
-        imageUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=300&fit=crop',
-        isNew: false
-    },
-    {
-        title: 'Cozy 1BHK Studio',
-        price: '₹35 Lakhs',
-        location: 'HSR Layout, Bangalore',
-        beds: 1,
-        baths: 1,
-        area: '650 sq ft',
-        imageUrl: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=400&h=300&fit=crop',
-        isNew: false
-    }
-];
-
-// Sample doctor responses for demonstration
-const samplePropertyResponses = [
-    {
-        title: 'Dr. Neha Gupta',
-        price: 'Gynecologist',
-        location: 'Max Hospital, Gurgaon',
-        beds: '8 years',
-        baths: 'English, Hindi',
-        area: 'MD Obstetrics & Gynecology',
-        imageUrl: 'http://static.photos/medical/200x200/5'
-    },
-    {
-        title: 'Dr. Sanjay Verma',
-        price: 'Psychiatrist',
-        location: 'NIMHANS, Bangalore',
-        beds: '14 years',
-        baths: 'English, Hindi, Kannada',
-        area: 'MD Psychiatry',
-        imageUrl: 'http://static.photos/medical/200x200/6'
-    },
-    {
-        title: 'Dr. Meena Iyer',
-        price: 'Dermatologist',
-        location: 'Kokilaben Hospital, Mumbai',
-        beds: '9 years',
-        baths: 'English, Hindi, Marathi',
-        area: 'MD Dermatology',
-        imageUrl: 'http://static.photos/medical/200x200/7'
-    }
-];
-
-// DOM elements
-const propertiesGrid = document.getElementById('propertiesGrid');
-const searchMode = document.getElementById('searchMode');
-const chatMode = document.getElementById('chatMode');
-const searchInput = document.getElementById('searchInput');
-const searchSendBtn = document.getElementById('searchSendBtn');
-const backToSearch = document.getElementById('backToSearch');
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const chatSendBtn = document.getElementById('chatSendBtn');
-
-// State
-let isInChatMode = false;
-let messages = [];
-
-// API Configuration
-async function getApiUrl() {
-    try {
-        let text = await (await fetch("./deploy/public_api")).text();
-        let url = text.match(/https:\/\/[a-z0-9.-]+\.trycloudflare\.com/)[0];
-        return url + "/model/generate/";
-    } catch (error) {
-        console.warn('Could not fetch API URL, using fallback');
-        return null; // Will trigger mock response
-    }
-}
-
-// Initialize the application
-function init() {
-    renderProperties();
-    setupEventListeners();
-    showWelcomeMessage();
-}
-
-// Render properties grid
-function renderProperties() {
-    propertiesGrid.innerHTML = properties.map((property, index) => 
-        createPropertyCard(property)
-    ).join('');
-}
-
-// Create property card HTML
-function createPropertyCard(property, isCompact = false) {
-    return `
-        <div class="property-card ${isCompact ? 'chat-property-card' : ''}">
-            <div style="position: relative;">
-                <img 
-                    src="${property.imageUrl}" 
-                    alt="${property.title}"
-                    class="${isCompact ? 'chat-property-image' : 'property-image'}"
-                    loading="lazy"
-                />
-                ${property.isNew ? '<div class="badge">New</div>' : ''}
-            </div>
-            <div class="${isCompact ? 'chat-property-content' : 'property-content'}">
-                <h3 class="${isCompact ? 'chat-property-title' : 'property-title'}">${property.title}</h3>
-                <div class="${isCompact ? 'chat-property-location' : 'property-location'}">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>${property.location}</span>
-                </div>
-                <div class="${isCompact ? 'chat-property-details' : 'property-details'}">
-                    <div class="property-detail">
-                        <i class="fas fa-bed"></i>
-                        <span>${property.beds}</span>
-                    </div>
-                    <div class="property-detail">
-                        <i class="fas fa-bath"></i>
-                        <span>${property.baths}</span>
-                    </div>
-                    <div class="property-detail">
-                        <i class="fas fa-vector-square"></i>
-                        <span>${property.area}</span>
-                    </div>
-                </div>
-                <div class="${isCompact ? 'chat-property-price' : 'property-price'}">
-                    ${property.price}
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// Show welcome message when page loads
-function showWelcomeMessage() {
-    // Add a subtle hint in the search placeholder
-    searchInput.placeholder = "Ask me about properties... (e.g., 'Show me 2BHK apartments under 50 lakhs in Bangalore')";
-}
-
-// Switch to chat mode
-function switchToChatMode(initialMessage) {
-    isInChatMode = true;
-    searchMode.style.display = 'none';
-    chatMode.style.display = 'flex';
-    
-    // Add initial message if provided
-    if (initialMessage) {
-        addMessage('user', initialMessage);
-        // Simulate bot response or make API call
-        handleBotResponse(initialMessage);
-    }
-    
-    chatInput.focus();
-}
-
-// Switch back to search mode
-function switchToSearchMode() {
-    isInChatMode = false;
-    chatMode.style.display = 'none';
-    searchMode.style.display = 'block';
-    
-    // Clear messages and reset
-    messages = [];
-    chatMessages.innerHTML = '';
-    searchInput.value = '';
-    chatInput.value = '';
-    searchInput.focus();
-}
-
-// Setup event listeners
-function setupEventListeners() {
-    // Search mode events
-    searchSendBtn.addEventListener('click', () => {
-        const message = searchInput.value.trim();
-        if (message) {
-            switchToChatMode(message);
-            searchInput.value = '';
-        }
-    });
-
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            const message = searchInput.value.trim();
-            if (message) {
-                switchToChatMode(message);
-                searchInput.value = '';
+        // Doctor data
+        const doctors = [
+            {
+                title: 'BS. Sarah Johnson',
+                price: 'Chuyên gia Tim mạch',
+                location: 'Bệnh viện Apollo, Delhi',
+                beds: '12 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi',
+                area: 'Tiến sĩ Tim mạch',
+                imageUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=300&fit=crop',
+                isNew: true
+            },
+            {
+                title: 'BS. Michael Chen',
+                price: 'Chuyên gia Thần kinh',
+                location: 'AIIMS, New Delhi',
+                beds: '15 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi, Quan thoại',
+                area: 'Tiến sĩ Thần kinh',
+                imageUrl: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&h=300&fit=crop',
+                isNew: false
+            },
+            {
+                title: 'BS. Priya Sharma',
+                price: 'Bác sĩ Nhi khoa',
+                location: 'Bệnh viện Fortis, Mumbai',
+                beds: '10 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi, Marathi',
+                area: 'Tiến sĩ Nhi khoa',
+                imageUrl: 'https://images.unsplash.com/photo-1594824947938-457c7d65ccb5?w=400&h=300&fit=crop',
+                isNew: false
+            },
+            {
+                title: 'BS. James Wilson',
+                price: 'Bác sĩ Phẫu thuật Chỉnh hình',
+                location: 'Bệnh viện Max, Bangalore',
+                beds: '18 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi, Kannada',
+                area: 'Thạc sĩ Chỉnh hình',
+                imageUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop',
+                isNew: false
             }
-        }
-    });
-
-    // Chat mode events
-    chatSendBtn.addEventListener('click', () => {
-        sendChatMessage();
-    });
-
-    chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            sendChatMessage();
-        }
-    });
-
-    // Back to search
-    backToSearch.addEventListener('click', () => {
-        switchToSearchMode();
-    });
-
-    // Property card clicks
-    document.addEventListener('click', (e) => {
-        const propertyCard = e.target.closest('.property-card');
-        if (propertyCard) {
-            console.log('Property card clicked');
-            // Handle property card click - could open details modal, etc.
-        }
-    });
-}
-
-// Send chat message
-function sendChatMessage() {
-    const message = chatInput.value.trim();
-    if (!message) return;
-
-    addMessage('user', message);
-    chatInput.value = '';
-    
-    // Handle bot response
-    handleBotResponse(message);
-}
-
-// Add message to chat
-function addMessage(sender, text, properties = null) {
-    const messageId = Date.now().toString();
-    const message = {
-        id: messageId,
-        type: sender,
-        content: text,
-        properties: properties
-    };
-
-    messages.push(message);
-    renderMessage(message);
-    scrollToBottom();
-}
-
-// Render a single message
-function renderMessage(message) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${message.type}`;
-    messageDiv.innerHTML = createMessageHTML(message);
-    chatMessages.appendChild(messageDiv);
-}
-
-// Create message HTML
-function createMessageHTML(message) {
-    const isUser = message.type === 'user';
-    const avatarIcon = isUser ? 'fas fa-user' : 'fas fa-robot';
-    
-    let propertiesHTML = '';
-    if (message.properties && message.properties.length > 0) {
-        propertiesHTML = `
-            <div style="margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                ${message.properties.map(property => createPropertyCard(property, true)).join('')}
-                <p style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.5rem;">
-                    Would you like to see more properties or refine your search?
-                </p>
-            </div>
-        `;
-    }
-    
-    return `
-        <div class="message-avatar ${isUser ? 'user' : 'bot'}">
-            <i class="${avatarIcon}"></i>
-        </div>
-        <div class="message-content">
-            <div class="message-bubble">
-                ${message.content}
-            </div>
-            ${propertiesHTML}
-        </div>
-    `;
-}
-
-// Add typing indicator
-function addTypingIndicator() {
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'message bot';
-    typingDiv.id = 'typingIndicator';
-    typingDiv.innerHTML = `
-        <div class="message-avatar bot">
-            <i class="fas fa-robot"></i>
-        </div>
-        <div class="message-content">
-            <div class="typing-indicator">PrimeProp AI is thinking</div>
-        </div>
-    `;
-    chatMessages.appendChild(typingDiv);
-    scrollToBottom();
-}
-
-// Remove typing indicator
-function removeTypingIndicator() {
-    const typingIndicator = document.getElementById('typingIndicator');
-    if (typingIndicator) {
-        typingIndicator.remove();
-    }
-}
-
-// Handle bot response
-async function handleBotResponse(userMessage) {
-    addTypingIndicator();
-
-    try {
-        const API_URL = await getApiUrl();
-        
-        if (API_URL) {
-            // Use real API
-            await handleRealApiResponse(userMessage, API_URL);
-        } else {
-            // Use mock response
-            await handleMockResponse(userMessage);
-        }
-    } catch (error) {
-        console.error('Error handling bot response:', error);
-        removeTypingIndicator();
-        addMessage('bot', 'Sorry, I encountered an error. Please try again.');
-    }
-}
-
-// Handle real API response
-async function handleRealApiResponse(userMessage, apiUrl) {
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                prompt: `You are a helpful real estate assistant. User asked: "${userMessage}". Please provide a helpful response about properties.`,
-                max_new_tokens: 1024 
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('API request failed');
-        }
-
-        removeTypingIndicator();
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let botMessage = '';
-        let messageId = null;
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            
-            botMessage += decoder.decode(value);
-            
-            if (!messageId) {
-                // Create initial message
-                const message = {
-                    id: Date.now().toString(),
-                    type: 'bot',
-                    content: botMessage,
-                    properties: null
-                };
-                messages.push(message);
-                messageId = message.id;
-                renderMessage(message);
-            } else {
-                // Update existing message
-                updateLastBotMessage(botMessage);
-            }
-        }
-
-        // Add sample properties if the message seems to be about property search
-        if (isPropertySearchQuery(userMessage)) {
-            setTimeout(() => {
-                const propertiesMessage = {
-                    id: Date.now().toString(),
-                    type: 'bot',
-                    content: 'Here are some properties that match your criteria:',
-                    properties: samplePropertyResponses.slice(0, 2)
-                };
-                messages.push(propertiesMessage);
-                renderMessage(propertiesMessage);
-                scrollToBottom();
-            }, 1000);
-        }
-
-    } catch (error) {
-        console.error('Real API error:', error);
-        removeTypingIndicator();
-        await handleMockResponse(userMessage);
-    }
-}
-
-// Handle mock response for demo purposes
-async function handleMockResponse(userMessage) {
-    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate thinking time
-    removeTypingIndicator();
-
-    if (isPropertySearchQuery(userMessage)) {
-        addMessage('bot', 'I found some great properties that match your criteria! Here are the top matches:');
-        
-        // Add properties after a short delay
-        setTimeout(() => {
-            const propertiesMessage = {
-                id: Date.now().toString(),
-                type: 'bot',
-                content: '',
-                properties: samplePropertyResponses.slice(0, 2)
-            };
-            messages.push(propertiesMessage);
-            renderMessage(propertiesMessage);
-            scrollToBottom();
-        }, 500);
-    } else {
-        const responses = [
-            "I'd be happy to help with your medical questions! Could you tell me more about your symptoms or concerns?",
-            "I can help you understand medical conditions and connect with appropriate specialists. What would you like to know?",
-            "Great question! I can provide medical information and help you find doctors. What health topic are you interested in?",
-            "I'm here to assist with your healthcare needs. Feel free to ask about symptoms, treatments, or finding doctors."
         ];
-        
-        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-        addMessage('bot', randomResponse);
-    }
-}
 
-// Check if message is about property search
-function isPropertySearchQuery(message) {
-    const keywords = ['bhk', 'apartment', 'flat', 'house', 'villa', 'property', 'lakhs', 'crores', 'bangalore', 'rent', 'buy', 'bedroom', 'budget'];
-    return keywords.some(keyword => message.toLowerCase().includes(keyword));
-}
+        // Sample doctor responses for chat
+        const sampleDoctorResponses = [
+            {
+                title: 'BS. Neha Gupta',
+                price: 'Bác sĩ Phụ khoa',
+                location: 'Bệnh viện Max, Gurgaon',
+                beds: '8 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi',
+                area: 'Tiến sĩ Sản Phụ khoa',
+                imageUrl: 'https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=200&h=200&fit=crop'
+            },
+            {
+                title: 'BS. Sanjay Verma',
+                price: 'Bác sĩ Tâm thần',
+                location: 'NIMHANS, Bangalore',
+                beds: '14 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi, Kannada',
+                area: 'Tiến sĩ Tâm thần học',
+                imageUrl: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=200&h=200&fit=crop'
+            }
+        ];
 
-// Update last bot message (for streaming)
-function updateLastBotMessage(text) {
-    const botMessages = chatMessages.querySelectorAll('.message.bot');
-    if (botMessages.length > 0) {
-        const lastMessage = botMessages[botMessages.length - 1];
-        const messageBubble = lastMessage.querySelector('.message-bubble');
-        if (messageBubble) {
-            messageBubble.textContent = text;
+        // DOM elements
+        const propertiesGrid = document.getElementById('propertiesGrid');
+        const searchMode = document.getElementById('searchMode');
+        const chatMode = document.getElementById('chatMode');
+        const searchInput = document.getElementById('searchInput');
+        const searchSendBtn = document.getElementById('searchSendBtn');
+        const backToSearch = document.getElementById('backToSearch');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const chatSendBtn = document.getElementById('chatSendBtn');
+
+        // State
+        let isInChatMode = false;
+        let messages = [];
+
+        // API Configuration
+        async function getApiUrl() {
+            try {
+                let text = await (await fetch("./deploy/public_api")).text();
+                let url = text.match(/https:\/\/[a-z0-9.-]+\.trycloudflare\.com/)[0];
+                return url + "/model/generate/";
+            } catch (error) {
+                console.warn('Could not fetch API URL, using fallback');
+                return null;
+            }
+        }
+
+        // Configure marked for safe rendering
+        if (typeof marked !== 'undefined') {
+            marked.setOptions({
+                breaks: true,
+                gfm: true,
+                sanitize: false,
+                smartLists: true,
+                smartypants: false
+            });
+        }
+
+        // Initialize the application
+        function init() {
+            renderDoctors();
+            setupEventListeners();
+        }
+
+        // Render doctors grid
+        function renderDoctors() {
+            propertiesGrid.innerHTML = doctors.map((doctor, index) => 
+                createDoctorCard(doctor)
+            ).join('');
+        }
+
+        // Create doctor card HTML
+        function createDoctorCard(doctor, isCompact = false) {
+            return `
+                <div class="property-card ${isCompact ? 'chat-property-card' : ''}">
+                    <div style="position: relative;">
+                        <img 
+                            src="${doctor.imageUrl}" 
+                            alt="${doctor.title}"
+                            class="${isCompact ? 'chat-property-image' : 'property-image'}"
+                            loading="lazy"
+                        />
+                        ${doctor.isNew ? '<div class="badge">New</div>' : ''}
+                    </div>
+                    <div class="${isCompact ? 'chat-property-content' : 'property-content'}">
+                        <h3 class="${isCompact ? 'chat-property-title' : 'property-title'}">${doctor.title}</h3>
+                        <div class="${isCompact ? 'chat-property-location' : 'property-location'}">
+                            <i class="fas fa-hospital"></i>
+                            <span>${doctor.location}</span>
+                        </div>
+                        <div class="${isCompact ? 'chat-property-details' : 'property-details'}">
+                            <div class="property-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>${doctor.beds}</span>
+                            </div>
+                            <div class="property-detail">
+                                <i class="fas fa-language"></i>
+                                <span>${doctor.baths}</span>
+                            </div>
+                            <div class="property-detail">
+                                <i class="fas fa-certificate"></i>
+                                <span>${doctor.area}</span>
+                            </div>
+                        </div>
+                        <div class="${isCompact ? 'chat-property-price' : 'property-price'}">
+                            ${doctor.price}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Switch to chat mode
+        function switchToChatMode(initialMessage) {
+            isInChatMode = true;
+            searchMode.style.display = 'none';
+            chatMode.style.display = 'flex';
+            
+            if (initialMessage) {
+                addMessage('user', initialMessage);
+                handleBotResponse(initialMessage);
+            }
+            
+            chatInput.focus();
+        }
+
+        // Switch back to search mode
+        function switchToSearchMode() {
+            isInChatMode = false;
+            chatMode.style.display = 'none';
+            searchMode.style.display = 'block';
+            
+            messages = [];
+            chatMessages.innerHTML = '';
+            searchInput.value = '';
+            chatInput.value = '';
+            searchInput.focus();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            searchSendBtn.addEventListener('click', () => {
+                const message = searchInput.value.trim();
+                if (message) {
+                    switchToChatMode(message);
+                    searchInput.value = '';
+                }
+            });
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const message = searchInput.value.trim();
+                    if (message) {
+                        switchToChatMode(message);
+                        searchInput.value = '';
+                    }
+                }
+            });
+
+            chatSendBtn.addEventListener('click', () => {
+                sendChatMessage();
+            });
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendChatMessage();
+                }
+            });
+
+            backToSearch.addEventListener('click', () => {
+                switchToSearchMode();
+            });
+
+            document.addEventListener('click', (e) => {
+                const doctorCard = e.target.closest('.property-card');
+                if (doctorCard) {
+                    console.log('Doctor card clicked');
+                }
+            });
+        }
+
+        // Send chat message
+        function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            addMessage('user', message);
+            chatInput.value = '';
+            
+            handleBotResponse(message);
+        }
+
+        // Add message to chat
+        function addMessage(sender, text, doctors = null) {
+            const messageId = Date.now().toString();
+            const message = {
+                id: messageId,
+                type: sender,
+                content: text,
+                doctors: doctors
+            };
+
+            messages.push(message);
+            renderMessage(message);
             scrollToBottom();
         }
-    }
-}
 
-// Scroll to bottom of chat
-function scrollToBottom() {
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// Initialize the application when DOM is loaded
-document.addEventListener('DOMContentLoaded', init);
-
-// Add loading states and error handling for images
-document.addEventListener('DOMContentLoaded', () => {
-    const images = document.querySelectorAll('img');
-    images.forEach(img => {
-        img.addEventListener('error', (e) => {
-            // Fallback image placeholder
-            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGM0Y1Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwQzIwNSAxNTAgMjEwIDE0NSAyMTAgMTQwQzIxMCAxMzUgMjA1IDEzMCAyMDAgMTMwQzE5NSAxMzAgMTkwIDEzNSAxOTAgMTQwQzE9MCAxNDUgMTk1IDE1MCAyMDAgMTUwWiIgZmlsbD0iIzdCN0I4QiIvPgo8cGF0aCBkPSJNMjQwIDEyMEwyMDAgMTYwTDE2MCAyMDBIMjQwVjEyMFoiIGZpbGw9IiM3QjdCOEIiLz4KPC9zdmc+';
-        });
-    });
-});
-
-// Add intersection observer for animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+        // Render a single message with markdown support
+        function renderMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${message.type}`;
+            messageDiv.innerHTML = createMessageHTML(message);
+            chatMessages.appendChild(messageDiv);
         }
-    });
-}, observerOptions);
 
-// Observe property cards for scroll animations
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        const propertyCards = document.querySelectorAll('.property-card');
-        propertyCards.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            card.style.transitionDelay = `${index * 0.1}s`;
-            observer.observe(card);
+        // Create message HTML with markdown rendering
+        function createMessageHTML(message) {
+            const isUser = message.type === 'user';
+            const avatarIcon = isUser ? 'fas fa-user' : 'fas fa-user-md';
+            
+            let content = message.content;
+            
+            // Render markdown for bot messages
+            if (!isUser && typeof marked !== 'undefined' && content) {
+                try {
+                    content = marked.parse(content);
+                } catch (error) {
+                    console.error('Markdown parsing error:', error);
+                    // Fallback to plain text with basic formatting
+                    content = content
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                        .replace(/`(.*?)`/g, '<code>$1</code>')
+                        .replace(/\n/g, '<br>');
+                }
+            }
+            
+            let doctorsHTML = '';
+            if (message.doctors && message.doctors.length > 0) {
+                doctorsHTML = `
+                    <div style="margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                        ${message.doctors.map(doctor => createDoctorCard(doctor, true)).join('')}
+                        <p style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.5rem;">
+                            Would you like to book an appointment with any of these doctors?
+                        </p>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="message-avatar ${isUser ? 'user' : 'bot'}">
+                    <i class="${avatarIcon}"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        ${content}
+                    </div>
+                    ${doctorsHTML}
+                </div>
+            `;
+        }
+
+        // Add typing indicator
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-avatar bot">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="message-content">
+                    <div class="typing-indicator">AgentSV đang suy nghĩ...</div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Handle bot response
+        async function handleBotResponse(userMessage) {
+            addTypingIndicator();
+
+            try {
+                const API_URL = await getApiUrl();
+                
+                if (API_URL) {
+                    await handleRealApiResponse(userMessage, API_URL);
+                } else {
+                    await handleMockResponse(userMessage);
+                }
+            } catch (error) {
+                console.error('Error handling bot response:', error);
+                removeTypingIndicator();
+                addMessage('bot', 'Xin lỗi, tôi gặp lỗi. Vui lòng thử lại.');
+            }
+        }
+
+        // Handle real API response
+        async function handleRealApiResponse(userMessage, apiUrl) {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        prompt: userMessage,
+                        max_new_tokens: 1024 
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+
+                removeTypingIndicator();
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let botMessage = '';
+                let messageId = null;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    botMessage += decoder.decode(value);
+                    
+                    if (!messageId) {
+                        const message = {
+                            id: Date.now().toString(),
+                            type: 'bot',
+                            content: botMessage,
+                            doctors: null
+                        };
+                        messages.push(message);
+                        messageId = message.id;
+                        renderMessage(message);
+                    } else {
+                        updateLastBotMessage(botMessage);
+                    }
+                }
+
+                if (isDoctorSearchQuery(userMessage)) {
+                    setTimeout(() => {
+                        const doctorsMessage = {
+                            id: Date.now().toString(),
+                            type: 'bot',
+                            content: 'Here are some doctors that might help you:',
+                            doctors: sampleDoctorResponses
+                        };
+                        messages.push(doctorsMessage);
+                        renderMessage(doctorsMessage);
+                        scrollToBottom();
+                    }, 1000);
+                }
+
+            } catch (error) {
+                console.error('Real API error:', error);
+                removeTypingIndicator();
+                await handleMockResponse(userMessage);
+            }
+        }
+
+        // Handle mock response
+        async function handleMockResponse(userMessage) {
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            removeTypingIndicator();
+
+            if (isDoctorSearchQuery(userMessage)) {
+                addMessage('bot', 'Tôi đã tìm thấy một số chuyên gia có thể giúp bạn! Đây là những lựa chọn phù hợp nhất:');
+                
+                setTimeout(() => {
+                    const doctorsMessage = {
+                        id: Date.now().toString(),
+                        type: 'bot',
+                        content: '',
+                        doctors: sampleDoctorResponses
+                    };
+                    messages.push(doctorsMessage);
+                    renderMessage(doctorsMessage);
+                    scrollToBottom();
+                }, 500);
+            } else {
+                const responses = [
+                    "I'd be **happy** to help with your medical questions! Could you tell me more about your symptoms or concerns?\n\n*Please note: This is for informational purposes only and doesn't replace professional medical advice.*",
+                    "I can help you understand medical conditions and connect with appropriate specialists. What would you like to know?\n\n**Available services:**\n- Symptom assessment\n- Doctor recommendations\n- Health information\n- Appointment booking",
+                    "Great question! I can provide medical information and help you find doctors. What health topic are you interested in?\n\n`Remember`: Always consult with healthcare professionals for proper diagnosis and treatment.",
+                    "I'm here to assist with your healthcare needs. Feel free to ask about:\n\n1. **Symptoms** and conditions\n2. **Treatments** and medications\n3. **Finding specialists**\n4. **Booking appointments**"
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage('bot', randomResponse);
+            }
+        }
+
+        // Check if message is about doctor search
+        function isDoctorSearchQuery(message) {
+            const keywords = ['doctor', 'specialist', 'physician', 'cardiologist', 'neurologist', 'pediatrician', 'find', 'recommend', 'appointment', 'consultation'];
+            return keywords.some(keyword => message.toLowerCase().includes(keyword));
+        }
+
+        // Update last bot message (for streaming)
+        function updateLastBotMessage(text) {
+            const botMessages = chatMessages.querySelectorAll('.message.bot');
+            if (botMessages.length > 0) {
+                const lastMessage = botMessages[botMessages.length - 1];
+                const messageBubble = lastMessage.querySelector('.message-bubble');
+                if (messageBubble) {
+                    // Re-render with markdown
+                    if (typeof marked !== 'undefined') {
+                        try {
+                            messageBubble.innerHTML = marked.parse(text);
+                        } catch (error) {
+                            messageBubble.textContent = text;
+                        }
+                    } else {
+                        messageBubble.textContent = text;
+                    }
+                    scrollToBottom();
+                }
+            }
+        }
+
+        // Scroll to bottom of chat
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Error handling for images
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('error', (e) => {
+                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGM0Y1Ii8+CjxjaXJjbGUgY3g9IjIwMCIgY3k9IjE1MCIgcj0iNDAiIGZpbGw9IiM3QjdCOEIiLz4KPHRleHQgeD0iMjAwIiB5PSIyMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM3QjdCOEIiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjUwMCI+RG9jdG9yIFBob3RvPC90ZXh0Pgo8L3N2Zz4=';
+                });
+            });
         });
-    }, 100);
-});
+
+        // Animation observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe doctor cards for scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const doctorCards = document.querySelectorAll('.property-card');
+                doctorCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.transitionDelay = `${index * 0.1}s`;
+                    observer.observe(card);
+                });
+            }, 100);
+        });
     </script>
 </body>
 </html>
