@@ -699,8 +699,8 @@ p {
         <div class="nav-container">
             <div class="nav-left">
                 <div class="logo">
-                    <div class="logo-icon">P</div>
-                    <span class="logo-text">PrimeProp</span>
+                    <div class="logo-icon">+</div>
+                    <span class="logo-text">AgentSV</span>
                 </div>
                 
                 <div class="nav-links">
@@ -713,11 +713,11 @@ p {
 
             <div class="nav-right">
                 <button class="btn btn-ghost">
-                    <i class="fas fa-heart"></i>
-                    Saved
+                    <i class="fas fa-calendar-alt"></i>
+                    Appointments
                 </button>
-                <button class="btn btn-outline">Sign In</button>
-                <button class="btn btn-primary">List Property</button>
+                <button class="btn btn-outline">Patient Login</button>
+                <button class="btn btn-primary">Doctor Login</button>
                 <button class="btn btn-ghost mobile-menu-btn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -730,11 +730,11 @@ p {
         <div class="container">
             <div class="hero-content">
                 <h1 class="hero-title">
-                    Find Your Dream
-                    <span class="text-primary"> Home</span>
+                    Connect With
+                    <span class="text-primary"> Medical Experts</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Discover the perfect property with our AI-powered search and personalized recommendations
+                    Get personalized medical advice and connect with top healthcare professionals
                 </p>
             </div>
 
@@ -746,7 +746,7 @@ p {
                         <div class="search-input-container">
                             <input 
                                 type="text" 
-                                placeholder="Ask me about properties... (e.g., 'Show me 2BHK apartments under 50 lakhs in Bangalore')"
+                                placeholder="Ask me about medical advice... (e.g., 'What are the symptoms of diabetes?')"
                                 class="search-input"
                                 id="searchInput"
                             />
@@ -764,10 +764,10 @@ p {
                     <div class="chat-header">
                         <div class="chatbot-info">
                             <div class="chatbot-avatar">
-                                <i class="fas fa-robot"></i>
+                                <i class="fas fa-plus"></i>
                             </div>
                             <div class="chatbot-details">
-                                <h3>PrimeProp AI Assistant</h3>
+                                <h3>AgentSV Medical Assistant</h3>
                                 <p>Online now</p>
                             </div>
                         </div>
@@ -784,7 +784,7 @@ p {
                         <div class="input-container">
                             <input 
                                 type="text" 
-                                placeholder="Ask about properties..."
+                                placeholder="Ask about medical advice..."
                                 class="chat-input"
                                 id="chatInput"
                             />
@@ -802,12 +802,12 @@ p {
     <section class="properties-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Featured Properties</h2>
+                <h2 class="section-title">Featured Doctors</h2>
                 <button class="btn btn-outline">View All</button>
             </div>
             
             <div class="properties-grid" id="propertiesGrid">
-                <!-- Properties will be populated by JavaScript -->
+                <!-- Doctors will be populated by JavaScript -->
             </div>
         </div>
     </section>
@@ -859,34 +859,34 @@ const properties = [
     }
 ];
 
-// Sample property responses for demonstration
+// Sample doctor responses for demonstration
 const samplePropertyResponses = [
     {
-        title: 'Elegant 2BHK Apartment',
-        price: '₹42 Lakhs',
-        location: 'Electronic City, Bangalore',
-        beds: 2,
-        baths: 2,
-        area: '1,150 sq ft',
-        imageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop'
+        title: 'Dr. Neha Gupta',
+        price: 'Gynecologist',
+        location: 'Max Hospital, Gurgaon',
+        beds: '8 years',
+        baths: 'English, Hindi',
+        area: 'MD Obstetrics & Gynecology',
+        imageUrl: 'http://static.photos/medical/200x200/5'
     },
     {
-        title: 'Modern 2BHK Home',
-        price: '₹47 Lakhs',
-        location: 'Marathahalli, Bangalore',
-        beds: 2,
-        baths: 2,
-        area: '1,280 sq ft',
-        imageUrl: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop'
+        title: 'Dr. Sanjay Verma',
+        price: 'Psychiatrist',
+        location: 'NIMHANS, Bangalore',
+        beds: '14 years',
+        baths: 'English, Hindi, Kannada',
+        area: 'MD Psychiatry',
+        imageUrl: 'http://static.photos/medical/200x200/6'
     },
     {
-        title: 'Cozy 2BHK Flat',
-        price: '₹39 Lakhs',
-        location: 'Banashankari, Bangalore',
-        beds: 2,
-        baths: 2,
-        area: '1,100 sq ft',
-        imageUrl: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop'
+        title: 'Dr. Meena Iyer',
+        price: 'Dermatologist',
+        location: 'Kokilaben Hospital, Mumbai',
+        beds: '9 years',
+        baths: 'English, Hindi, Marathi',
+        area: 'MD Dermatology',
+        imageUrl: 'http://static.photos/medical/200x200/7'
     }
 ];
 
@@ -1256,10 +1256,10 @@ async function handleMockResponse(userMessage) {
         }, 500);
     } else {
         const responses = [
-            "I'd be happy to help you find the perfect property! Could you tell me more about what you're looking for?",
-            "I can help you search for properties based on your budget, location preferences, and other requirements. What specific criteria do you have in mind?",
-            "Great question! I can assist you with finding properties in Bangalore and surrounding areas. What type of property interests you most?",
-            "I'm here to help you with your property search. Feel free to ask about specific locations, budgets, or property types you're interested in."
+            "I'd be happy to help with your medical questions! Could you tell me more about your symptoms or concerns?",
+            "I can help you understand medical conditions and connect with appropriate specialists. What would you like to know?",
+            "Great question! I can provide medical information and help you find doctors. What health topic are you interested in?",
+            "I'm here to assist with your healthcare needs. Feel free to ask about symptoms, treatments, or finding doctors."
         ];
         
         const randomResponse = responses[Math.floor(Math.random() * responses.length)];
