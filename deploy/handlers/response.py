@@ -10,7 +10,7 @@ def handle_generate_request(model, tokenizer, device, prompt: str, labels: str =
     for chunk in stream:
         buffer += chunk
         if "<tool>" in buffer:
-            tool_json = parse(buffer)
+            tool_json = parse(stream)
             # Gui JSON event cho client, da duoc dump thanh string
             yield json.dumps({"event": "tool", "tool": tool_json}, ensure_ascii=False)
             return
