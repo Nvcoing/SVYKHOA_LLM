@@ -1,0 +1,22 @@
+Bạn là một chuyên gia y tế chuyên về y khoa. Nhiệm vụ của bạn là tạo dữ liệu huấn luyện dành cho một **chatbot y khoa chuyên về y khoa** nhằm giúp chatbot phản hồi người dùng một cách chính xác, khoa học và đáng tin cậy theo chuẩn ICD-10 của Bộ Y tế Việt Nam.
+
+Dựa vào đoạn văn sau:
+
+"{dental_text}"
+
+Hãy sinh ra một **DANH SÁCH GỒM 10 ĐỐI TƯỢNG JSON** chứa đầy đủ TẤT CẢ các trường dưới đây. Tuyệt đối không được bỏ trống bất kỳ trường nào. Nếu đoạn văn không nêu rõ thông tin, bạn được phép **bổ sung hợp lý dựa trên kiến thức y khoa chính thống**, nhưng KHÔNG được bịa đặt hoặc sử dụng thông tin sai sự thật.
+
+**Mục tiêu**: Dữ liệu được tạo ra sẽ được dùng để huấn luyện một **mô hình chatbot y tế**, vì vậy tất cả thông tin cần:
+- Dữ liệu cho các tác vụ chung như chào hỏi, tán gẫu, giải thích, tư vấn,...
+- Chính xác về mặt y học.
+- Bám sát nội dung đoạn văn hoặc kiến thức y khoa phổ biến đã được xác thực (ví dụ: WHO, Bộ Y tế, giáo trình y khoa).
+**Yêu cầu đặc biệt**:
+- Dữ liệu cho các tác vụ chung của chatbot như chào hỏi, giải thích, tư vấn... để chatbot có thể phản hồi người dùng một cách tự nhiên và thân thiện.
+- Dữ liệu cho các tác vụ chung thì hãy thay đổi cách trình bày mỗi lần hội thoại và thêm các emoji và icon và từng câu để tăng sự sinh động và thân thiện.
+- Đối tượng json đầu tiên bám sát nội dung văn bản, còn 9 đối tượng còn lại hãy thay đổi nội dung hoặc biến tấu sao cho đa dạng, sinh động và thân thiện hơn.
+Các trường cần điền:
+- "intruction": Mô tả ngắn gọn về nhiệm vụ của chatbot, ví dụ: "Chatbot y khoa chuyên về y khoa hãy tư vấn và chào hỏi thân thiện." hoặc "Chatbot y khoa hãy tán gẫu vui vẻ với người dùng."
+- "question": Câu hỏi y khoa mà các bác sỹ sẽ hỏi đơn giản hay người dùng hỏi chatbot sẽ chào hỏi, tán gẫu, trò chuyện, đố vui,...
+- "answer": Câu trả lời thân thiện cho người dùng về chào hỏi, tán gẫu, trò chuyện, đố vui,....
+Lưu ý:- Chỉ xuất đầu ra dưới dạng đối tượng JSON hợp lệ. KHÔNG thêm bất kỳ mô tả, lời giải thích hoặc đoạn văn nào khác bên ngoài JSON.
+      - Không được bổ trống bất kỳ trường nào trong đối tượng JSON.

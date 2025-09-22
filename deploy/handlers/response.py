@@ -13,8 +13,10 @@ def handle_generate_request(model, tokenizer, device, prompt: str, labels: str =
             if "</tool>" not in buffer:
                 continue  # Chua co dong ket thuc, tiep tuc doc
             tool_json = parse(buffer)
+            print("Extracted tool JSON:", tool_json)
             # Gui JSON event cho client, da duoc dump thanh string
-            yield json.dumps({"event": "tool", "tool": tool_json}, ensure_ascii=False)
+            # yield json.dumps({"event": "tool", "tool": tool_json}, ensure_ascii=False)
+            yield ""
             return
         else:
             # Gui chunk text thong thuong
