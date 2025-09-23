@@ -12,6 +12,7 @@ from embedding.classifier import PromptClassifier
 from embedding.load_embedding import EmbeddingModel
 from config.constants import MODEL, EMBEDDING
 from db.import_data import insert_all
+from rag.search_chromdb import search_query as search
 
 app = FastAPI()
 app.add_middleware(
@@ -36,4 +37,5 @@ class PromptRequest(BaseModel):
 async def generate_text(req: PromptRequest):
     label, score = classifier.classify(req.prompt)
     print(f"Predicted label: {label}, similarity: {score:.4f}")
+    # search(req.prompt, collection_name=label, top_k=1)
     return StreamingResponse(response(model, tokenizer, device, req.prompt,label), media_type="text/plain")
