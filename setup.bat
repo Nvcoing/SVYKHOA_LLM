@@ -1,19 +1,30 @@
 @echo off
-REM Chạy server trong CMD mới
-start "" ".\tool\Git\git-bash.exe" --cd=".\deploy" -c "./start_server.sh"
+REM ================================
+REM Setup Python environment script
+REM ================================
 
+echo [1/3] Checking Python installation...
+python --version >nul 2>&1
+IF ERRORLEVEL 1 (
+    echo Python not found! Please install Python 3.x first.
+    pause
+    exit /b 1
+)
 
-REM Chạy tunnel trong CMD mới
-start "" ".\tool\Git\git-bash.exe" --cd=".\deploy" -c "./start_tunnel.sh"
+echo [2/3] Upgrading pip...
+python -m pip install --upgrade pip
 
+echo [3/3] Installing requirements from requirements.txt...
+IF EXIST requirements.txt (
+    pip install -r requirements.txt
+) ELSE (
+    echo requirements.txt not found in current directory!
+    pause
+    exit /b 1
+)
 
-REM Đợi 10 giây để 2 script trên chạy
-timeout /t 10 /nobreak >nul
-
-REM Thực hiện git push
-git add .
-git commit -m "Auto commit"
-git push
-
-echo Done!
+echo.
+echo ================================
+echo Environment setup completed!
+echo ================================
 pause

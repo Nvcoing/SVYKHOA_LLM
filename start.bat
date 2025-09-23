@@ -12,7 +12,7 @@ timeout /t 10 /nobreak >nul
 
 REM Thực hiện git push
 git add .
-git commit -m "Auto commit"
+git commit -m "Auto deploy"
 git push
 
 echo Done!
