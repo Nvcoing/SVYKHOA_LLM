@@ -1,10 +1,10 @@
 @echo off
 REM Chạy server trong CMD mới
-start "" "D:\Git\Git\git-bash.exe" --cd="E:\job\SVYKHOA_LLM\SVYKHOA_LLM\deploy" -c "./start_server.sh"
+start "" ".\tool\Git\git-bash.exe" --cd=".\deploy" -c "./start_server.sh"
 
 
 REM Chạy tunnel trong CMD mới
-start "" "D:\Git\Git\git-bash.exe" --cd="E:\job\SVYKHOA_LLM\SVYKHOA_LLM\deploy" -c "./start_tunnel.sh"
+start "" ".\tool\Git\git-bash.exe" --cd=".\deploy" -c "./start_tunnel.sh"
 
 
 REM Đợi 10 giây để 2 script trên chạy
