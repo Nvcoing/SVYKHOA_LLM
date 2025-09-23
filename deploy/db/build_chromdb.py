@@ -1,5 +1,5 @@
 import chromadb
-from load_data import load_datasets
+from db.load_data import load_datasets
 from embedding.load_embedding import EmbeddingModel
 
 # Khởi tạo DB
