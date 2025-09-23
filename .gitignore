@@ -13,3 +13,9 @@ data/document_dataset/document_chunk_dataset.xlsx
 *.pyc
 # /tools/Git
 /deploy/chroma_db
+*.sqlite3
+deploy/chroma_db/chroma.sqlite3
+deploy/chroma_db/chroma.sqlite3
+deploy/chroma_db/chroma.sqlite3
+*.sqlite3
+*.sqlite3
