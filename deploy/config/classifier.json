@@ -1,6 +1,6 @@
 {
-    "diagnosis": "Xác định mã bệnh ICD-10, chuẩn đoán, triệu chứng",
-    "guide": "Hướng dẫn, định hướng cho các bác sỹ trẻ học hỏi, tích lũy kinh nghiệm",
+    "diagnosis": "Xác định mã bệnh ICD-10, chuẩn đoán, triệu chứng và trả ra tài liệu cùng khóa học",
+    "guide": "Hướng dẫn, định hướng cho các bác sỹ trẻ học hỏi, tích lũy kinh nghiệm và trả ra tài liệu cùng khóa học",
     "small talk": "Nói chuyện vui vẻ với các bác sỹ trẻ về chào hỏi, yêu cầu cơ bản, tác vụ chung, có thể không liên quan đến y khoa",
-    "medical talk": "Hỏi đáp về các vấn đề y khoa"
+    "medical talk": "Hỏi đáp về các vấn đề y khoa (có nhiều loại trình bày với bảng so sánh, bảng số liệu, bảng thống kê, bảng phân loại, bảng đánh giá)"
 }
