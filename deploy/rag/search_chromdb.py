@@ -11,8 +11,12 @@ def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
     Nhận câu hỏi (prompt) và truy vấn vectorDB theo label (collection name).
     Trả ra list intruction + list answer (diagnosis thì có thêm symptom).
     """
+    if label == "small talk":
+        collection_name = "small_talk"
+    if label == "medical talk":
+        collection_name = "medical_talk"
     # Lấy collection tương ứng với label
-    collection = client.get_or_create_collection(name=label)
+    collection = client.get_or_create_collection(name=collection_name)
 
     # Sinh embedding cho câu hỏi
     query_emb = EMBEDDER.embed([prompt])
