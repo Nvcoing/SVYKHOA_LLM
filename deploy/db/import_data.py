@@ -1,4 +1,4 @@
-from db.build_chromdb import insert_dataframe, datasets
+from build_chromdb import insert_dataframe, datasets
 
 def insert_all():
     # Diagnosis

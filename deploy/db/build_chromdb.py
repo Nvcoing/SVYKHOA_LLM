@@ -1,6 +1,6 @@
 import chromadb
-from db.load_data import load_datasets
-from embedding.load_embedding import EmbeddingModel
+from load_data import load_datasets
+from load_embedding import EmbeddingModel
 
 # Khởi tạo DB
 client = chromadb.PersistentClient(path="./chroma_db")
@@ -8,7 +8,7 @@ client = chromadb.PersistentClient(path="./chroma_db")
 # Tải dữ liệu
 datasets = load_datasets()
 
-# Load embedding model
+# Load embedding model (dùng thống nhất cho insert + search)
 embedder = EmbeddingModel()
 
 def insert_dataframe(df, collection_name, text_fields, meta_fields, batch_size=5000):
@@ -20,12 +20,17 @@ def insert_dataframe(df, collection_name, text_fields, meta_fields, batch_size=5
         docs, metadatas, ids, embeddings = [], [], [], []
 
         for idx, row in df[start:end].iterrows():
+            # Ghép text fields làm document chính
             content = " ".join(
                 str(row[field]) for field in text_fields
                 if field in row and str(row[field]) != "nan"
             )
+            if not content.strip():
+                continue
+
             docs.append(content)
 
+            # Metadata
             meta = {
                 field: str(row[field])
                 for field in meta_fields
@@ -35,19 +40,21 @@ def insert_dataframe(df, collection_name, text_fields, meta_fields, batch_size=5
 
             ids.append(f"{collection_name}_{idx}")
 
+            # Embedding
             vec = embedder.encode(content)
             if hasattr(vec, "tolist"):
                 vec = vec.tolist()
             if isinstance(vec, list) and len(vec) > 0 and isinstance(vec[0], (list, tuple)):
                 vec = vec[0]
-
             embeddings.append(vec)
 
-        collection.add(
-            documents=docs,
-            embeddings=embeddings,
-            metadatas=metadatas,
-            ids=ids
-        )
-        print(f"Inserted batch {start}-{end} into {collection_name}")
+        if docs:
+            collection.add(
+                documents=docs,
+                embeddings=embeddings,
+                metadatas=metadatas,
+                ids=ids
+            )
+            print(f"Inserted {len(docs)} docs ({start}-{end}) into {collection_name}")
 
+    print(f"Done inserting {collection_name} with {collection.count()} records")
