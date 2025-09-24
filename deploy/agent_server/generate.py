@@ -15,6 +15,7 @@ def build_prompt(prompt: str, labels: str = "",auguments=None):
         prompts = (
                 f"<|begin_of_text|>\n{Intruction}\n{prompt.strip()}\nHãy trả lời như sau:\n{Answer}\n<label>{labels.strip()}</label>\n"
         )
+    print("Generated Prompt:", prompts)
     return prompts
 def generate_stream(model, tokenizer, device, prompt: str,labels: str = "", auguments=None):
     input_ids = tokenizer(

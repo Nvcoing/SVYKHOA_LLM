@@ -9,17 +9,17 @@ def augment_prompt(prompt: str, label: str = "medical talk", n_results: int = 1)
     if label == "diagnosis":
         intruction_list, answer_list, symptom_list = res
         result = {
-            "Intruction": intruction_list[0],
+            "Intruction": intruction_list[0] if intruction_list else "",
             "Question": prompt,
-            "Diagnosis": answer_list[0],
-            "Symptom": symptom_list[0]
+            "Diagnosis": answer_list[0] if answer_list else "",
+            "Symptom": symptom_list[0] if symptom_list else ""
         }
     else:
         intruction_list, answer_list = res
         result = {
-            "Intruction": intruction_list[0],
+            "Intruction": intruction_list[0] if intruction_list else "",
             "Question": prompt,
-            "Answer": answer_list[0]
+            "Answer": answer_list[0] if answer_list else ""
         }
     return result
 
