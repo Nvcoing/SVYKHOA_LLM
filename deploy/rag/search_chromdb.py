@@ -1,32 +1,42 @@
+# rag/search_chromdb.py
 import chromadb
-from embedding.load_embedding import EmbeddingModel
+from config.config import EMBEDDER
 
-# Khởi tạo client và model
+# Kết nối tới ChromaDB
 client = chromadb.PersistentClient(path="./chroma_db")
-embedder = EmbeddingModel()
 
-def search_query(query, collection_name:str="medical_talk", top_k:int=3):
-    collection = client.get_collection(name=collection_name)
 
-    query_emb = embedder.encode(query)
+def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
+    """
+    Nhận câu hỏi (prompt) và truy vấn vectorDB theo label (collection name).
+    Trả ra list intruction + list answer (diagnosis thì có thêm symptom).
+    """
+    # Lấy collection tương ứng với label
+    collection = client.get_or_create_collection(name=label)
 
+    # Sinh embedding cho câu hỏi
+    query_emb = EMBEDDER.embed([prompt])
+
+    # Truy vấn collection
     results = collection.query(
         query_embeddings=query_emb,
-        n_results=top_k
+        n_results=n_results
     )
 
-    # Lấy kết quả
-    output = []
-    for doc, meta in zip(results["documents"][0], results["metadatas"][0]):
-        if collection_name == "diagnosis":
-            output.append({
-                "question": doc,
-                "symptom": meta.get("symptom", ""),
-                "diagnosis": meta.get("diagnosis", "")
-            })
+    # Tách kết quả
+    intruction_list, answer_list, symptom_list = [], [], []
+
+    for i, meta in enumerate(results["metadatas"][0]):
+        if label == "diagnosis":
+            intruction_list.append(meta.get("intruction", ""))
+            answer_list.append(meta.get("diagnosis", ""))  # map diagnosis thành answer
+            symptom_list.append(meta.get("symptom", ""))
         else:
-            output.append({
-                "question": doc,
-                "answer": meta.get("answer", "")
-            })
-    return output
+            intruction_list.append(meta.get("intruction", ""))
+            answer_list.append(meta.get("answer", ""))
+
+    # Nếu diagnosis thì trả thêm symptom_list
+    if label == "diagnosis":
+        return intruction_list, answer_list, symptom_list
+    else:
+        return intruction_list, answer_list

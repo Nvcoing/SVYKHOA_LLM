@@ -1,12 +1,14 @@
 from agent_server.generate import generate_stream
 from handlers.pasre_tool import extract_tool_json_from_response as parse
 from nlp.process_prompt import clean_text as clean 
-import json
+from rag.augment import augment_prompt as aug
 
-def handle_generate_request(model, tokenizer, device, prompt: str, labels: str = ""):
+
+def handle_generate_request(model, tokenizer, device, prompt: str, labels: str = "medical talk"):
     print(f"Received prompt: {prompt}")
+    auguments = aug(prompt, labels, n_results=1)
     prompt= clean(prompt)
-    stream = generate_stream(model, tokenizer, device, prompt, labels)
+    stream = generate_stream(model, tokenizer, device, prompt, labels, auguments)
     buffer = ""
     for chunk in stream:
         buffer += chunk

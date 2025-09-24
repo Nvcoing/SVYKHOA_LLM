@@ -1,14 +1,24 @@
 import torch
 import threading
 from transformers import TextIteratorStreamer
-def build_prompt(prompt: str, labels: str = "") -> str:
-    prompts = (
-            f"<|begin_of_text|>\nBạn là Vy một trợ lý ảo về Y khoa\n{prompt.strip()}\n<label>{labels.strip()}</label>\n"
-    )
+def build_prompt(prompt: str, labels: str = "",auguments=None):
+    if labels == "diagnosis":
+        Intruction = auguments["Intruction"]
+        Diagnosis = auguments["Diagnosis"]
+        Symptom = auguments["Symptom"]
+        prompts = (
+                f"<|begin_of_text|>\n{Intruction}\n{prompt.strip()}\nHãy trả lời như sau:\nChuẩn đoán:{Diagnosis}Triệu chứng:{Symptom}\n<label>{labels.strip()}</label>\n"
+        )
+    else:
+        Intruction = auguments["Intruction"]
+        Answer = auguments["Answer"]
+        prompts = (
+                f"<|begin_of_text|>\n{Intruction}\n{prompt.strip()}\nHãy trả lời như sau:\n{Answer}\n<label>{labels.strip()}</label>\n"
+        )
     return prompts
-def generate_stream(model, tokenizer, device, prompt: str,labels: str = ""):
+def generate_stream(model, tokenizer, device, prompt: str,labels: str = "", auguments=None):
     input_ids = tokenizer(
-        build_prompt(prompt, labels),
+        build_prompt(prompt, labels, auguments),
         return_tensors="pt",
         truncation=True,
         max_length=1024
