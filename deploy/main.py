@@ -11,7 +11,6 @@ from handlers.response import handle_generate_request as response
 from embedding.classifier import PromptClassifier 
 from embedding.load_embedding import EmbeddingModel
 from config.config import EMBEDDER, LLM, TOKENIZER, DEVICE
-from deploy.import_data import insert_all
 from rag.search_chromdb import search_query as search
 
 app = FastAPI()
@@ -22,7 +21,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-insert_all()
 with open("config/classifier.json", "r", encoding="utf-8") as f:
     labels = json.load(f)
 
