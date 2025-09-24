@@ -11,7 +11,6 @@ from handlers.response import handle_generate_request as response
 from embedding.classifier import PromptClassifier 
 from embedding.load_embedding import EmbeddingModel
 from config.config import EMBEDDER, LLM, TOKENIZER, DEVICE
-from rag.search_chromdb import search_query as search
 
 app = FastAPI()
 app.add_middleware(
