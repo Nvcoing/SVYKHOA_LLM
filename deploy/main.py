@@ -11,7 +11,7 @@ from handlers.response import handle_generate_request as response
 from embedding.classifier import PromptClassifier 
 from embedding.load_embedding import EmbeddingModel
 from config.constants import MODEL, EMBEDDING
-from db.import_data import insert_all
+from deploy.import_data import insert_all
 from rag.search_chromdb import search_query as search
 
 app = FastAPI()

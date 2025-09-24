@@ -9,6 +9,10 @@ def insert_all():
         meta_fields=[
             'icd_10',
             'icd_10/title',
+            "intruction", 
+            "question", 
+            "symptom", 
+            "diagnosis",
             'document/title',
             'document/description',
             'cme/title',
@@ -22,6 +26,9 @@ def insert_all():
         collection_name="guide",
         text_fields=["intruction", "question", "answer"],
         meta_fields=[
+            "intruction", 
+            "question", 
+            "answer",
             'document/title',
             'document/tool',
             'document/description',
@@ -36,7 +43,7 @@ def insert_all():
         datasets["medical_talk"],
         collection_name="medical_talk",
         text_fields=["intruction", "question", "answer"],
-        meta_fields=[]
+        meta_fields=["intruction", "question", "answer"]
     )
 
     # Small Talk
@@ -44,7 +51,7 @@ def insert_all():
         datasets["small_talk"],
         collection_name="small_talk",
         text_fields=["intruction", "question", "answer"],
-        meta_fields=[]
+        meta_fields=["intruction", "question", "answer"]
     )
 
     print("Inserted ChromDB")
