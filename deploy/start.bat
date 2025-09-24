@@ -11,7 +11,7 @@ REM Đợi 10 giây để 2 script trên chạy
 timeout /t 10 /nobreak >nul
 
 REM Thực hiện git push
-git checkout dev
+git checkout main
 git add .
 git commit -m "Auto deploy"
 git push
