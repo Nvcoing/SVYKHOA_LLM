@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentSV - Trợ lý Y tế</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/5.1.1/marked.min.js"></script>
+</head>
+<style>
+    /* CSS Variables */
+:root {
+  --font-size: 14px;
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1a1a1a;
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #e9ebef;
+  --accent-foreground: #1a1a1a;
+  --border: rgba(0, 0, 0, 0.1);
+  --input-background: #f3f3f5;
+  --radius: 0.625rem;
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: var(--font-size);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Typography */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+
+.btn-outline:hover {
+  background-color: var(--accent);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--foreground);
+}
+
+.btn-ghost:hover {
+  background-color: var(--accent);
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  color: var(--muted-foreground);
+  transition: background-color 0.2s;
+}
+
+.btn-close:hover {
+  background-color: var(--accent);
+}
+
+/* Navigation */
+.navbar {
+  border-bottom: 1px solid var(--border);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-icon {
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--foreground);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  color: var(--foreground);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+}
+
+/* Hero Section */
+.hero {
+  padding: 4rem 0 6rem;
+}
+
+.hero-content {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--foreground);
+  margin-bottom: 1.5rem;
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--muted-foreground);
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+/* Chat Interface */
+.chat-container {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.search-mode {
+  width: 100%;
+}
+
+.search-box {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-xl);
+}
+
+.search-input-container {
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+  height: 3rem;
+  padding: 0 1rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--primary);
+}
+
+.search-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* Chat Mode */
+.chat-mode {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  flex-direction: column;
+  height: 32rem;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem 1rem 0 0;
+}
+
+.chatbot-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.chatbot-avatar {
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatbot-details h3 {
+  font-weight: 500;
+  color: var(--foreground);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.chatbot-details p {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: rgba(250, 252, 255, 0.5);
+}
+
+.chat-input-area {
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 0 0 1rem 1rem;
+}
+
+/* Properties Section */
+.properties-section {
+  padding: 4rem 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: var(--foreground);
+}
+
+.properties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Doctor Cards */
+.property-card {
+  background-color: var(--card);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.property-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.property-image {
+  width: 100%;
+  height: 12rem;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.property-card:hover .property-image {
+  transform: scale(1.05);
+}
+
+.property-content {
+  padding: 1rem;
+}
+
+.property-title {
+  font-weight: 500;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+  transition: color 0.2s;
+}
+
+.property-card:hover .property-title {
+  color: var(--primary);
+}
+
+.property-location {
+  display: flex;
+  align-items: center;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.property-location i {
+  margin-right: 0.25rem;
+}
+
+.property-details {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.property-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.property-price {
+  color: var(--primary);
+  font-weight: 500;
+  font-size: 1.125rem;
+}
+
+.badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background-color: var(--primary);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Message Styles */
+.message {
+  display: flex;
+  gap: 0.5rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.message.user {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.message-avatar.user {
+  background-color: var(--primary);
+  color: white;
+}
+
+.message-avatar.bot {
+  background-color: var(--primary);
+  color: white;
+}
+
+.message-content {
+  max-width: 80%;
+}
+
+.message-bubble {
+  padding: 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.message.user .message-bubble {
+  background-color: var(--primary);
+  color: white;
+  margin-left: auto;
+}
+
+.message.bot .message-bubble {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+/* Markdown Styles */
+.message-bubble h1,
+.message-bubble h2,
+.message-bubble h3,
+.message-bubble h4,
+.message-bubble h5,
+.message-bubble h6 {
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+.message-bubble h1 { font-size: 1.25rem; }
+.message-bubble h2 { font-size: 1.125rem; }
+.message-bubble h3 { font-size: 1rem; }
+.message-bubble h4 { font-size: 0.9375rem; }
+.message-bubble h5 { font-size: 0.875rem; }
+.message-bubble h6 { font-size: 0.8125rem; }
+
+.message-bubble p {
+  margin: 0.5rem 0;
+}
+
+.message-bubble ul,
+.message-bubble ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.message-bubble li {
+  margin: 0.25rem 0;
+}
+
+.message-bubble code {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8125rem;
+}
+
+.message-bubble pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+
+.message-bubble pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.message-bubble blockquote {
+  border-left: 3px solid var(--primary);
+  padding-left: 0.75rem;
+  margin: 0.5rem 0;
+  font-style: italic;
+}
+
+.message-bubble table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+  font-size: 0.8125rem;
+}
+
+.message-bubble th,
+.message-bubble td {
+  border: 1px solid var(--border);
+  padding: 0.375rem 0.5rem;
+  text-align: left;
+}
+
+.message-bubble th {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+
+.message-bubble strong {
+  font-weight: 600;
+}
+
+.message-bubble em {
+  font-style: italic;
+}
+
+.message-bubble a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.input-container {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  font-size: 0.875rem;
+}
+
+.chat-input:focus {
+  border-color: var(--primary);
+}
+
+.send-btn {
+  padding: 0.75rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  min-width: 3rem;
+}
+
+.send-btn:hover {
+  background-color: #1d4ed8;
+}
+
+/* Typing Indicator */
+.typing-indicator {
+  display: inline-block;
+  padding: 0.75rem;
+  background-color: var(--muted);
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.typing-indicator::after {
+  content: "...";
+  animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: "."; }
+  40% { content: ".."; }
+  60%, 100% { content: "..."; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Doctor Cards in Chat */
+.chat-property-card {
+  background-color: var(--card);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-top: 0.75rem;
+  width: 18rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chat-property-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.chat-property-image {
+  width: 100%;
+  height: 8rem;
+  object-fit: cover;
+}
+
+.chat-property-content {
+  padding: 0.75rem;
+}
+
+.chat-property-title {
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.chat-property-location {
+  display: flex;
+  align-items: center;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.chat-property-details {
+  display: flex;
+  gap: 0.75rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.chat-property-price {
+  color: var(--primary);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  
+  .mobile-menu-btn {
+    display: flex;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .search-box {
+    padding: 1rem;
+  }
+  
+  .search-buttons {
+    flex-direction: column;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .chat-mode {
+    height: 28rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .search-box {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+  
+  .search-buttons {
+    margin-top: 0;
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-title {
+    font-size: 3.75rem;
+  }
+  
+  .properties-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+</style>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo">
+                    <img src="https://github.com/Nvcoing/SVYKHOA_LLM/blob/main/doc/logo/logo.png?raw=true" alt="AgentSV Logo" width="32" height="32">
+                    <span class="logo-text">AgentSV Việt Nam</span>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="#" class="nav-link">Tư vấn</a>
+                    <a href="#" class="nav-link">Bác sĩ</a>
+                    <a href="#" class="nav-link">Dịch vụ</a>
+                    <a href="#" class="nav-link">Giới thiệu</a>
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <button class="btn btn-ghost">
+                    <i class="fas fa-calendar-alt"></i>
+                    Lịch hẹn
+                </button>
+                <button class="btn btn-outline">Đăng nhập bệnh nhân</button>
+                <button class="btn btn-primary">Đăng nhập bác sĩ</button>
+                <button class="btn btn-ghost mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Kết nối với
+                    <span class="text-primary"> Chuyên gia Y tế</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Nhận tư vấn y tế cá nhân hóa và kết nối với các chuyên gia hàng đầu
+                </p>
+            </div>
+
+            <!-- Chat Interface -->
+            <div class="chat-container" id="chatContainer">
+                <!-- Initial Search Mode -->
+                <div class="search-mode" id="searchMode">
+                    <div class="search-box">
+                        <div class="search-input-container">
+                            <input 
+                                type="text" 
+                                placeholder="Hỏi tôi về tư vấn y tế..."
+                                class="search-input"
+                                id="searchInput"
+                            />
+                        </div>
+                        <div class="search-buttons">
+                            <button class="btn btn-primary" id="searchSendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Mode -->
+                <div class="chat-mode" id="chatMode" style="display: none;">
+                    <div class="chat-header">
+                        <div class="chatbot-info">
+                            <div class="chatbot-avatar">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="chatbot-details">
+                                <h3>AgentSV Medical Assistant</h3>
+                                <p>Online now</p>
+                            </div>
+                        </div>
+                        <button class="btn-close" id="backToSearch">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Messages will be populated by JavaScript -->
+                    </div>
+
+                    <div class="chat-input-area">
+                        <div class="input-container">
+                            <input 
+                                type="text" 
+                                placeholder="Hỏi về tư vấn y tế..."
+                                class="chat-input"
+                                id="chatInput"
+                            />
+                            <button class="btn btn-primary send-btn" id="chatSendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Doctors -->
+    <section class="properties-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Bác sĩ Nổi bật</h2>
+                <button class="btn btn-outline">Xem tất cả</button>
+            </div>
+            
+            <div class="properties-grid" id="propertiesGrid">
+                <!-- Doctors will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Doctor data
+        const doctors = [
+            {
+                title: 'BS. Sarah Johnson',
+                price: 'Chuyên gia Tim mạch',
+                location: 'Bệnh viện Apollo, Delhi',
+                beds: '12 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi',
+                area: 'Tiến sĩ Tim mạch',
+                imageUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=300&fit=crop',
+                isNew: true
+            },
+            {
+                title: 'BS. Michael Chen',
+                price: 'Chuyên gia Thần kinh',
+                location: 'AIIMS, New Delhi',
+                beds: '15 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi, Quan thoại',
+                area: 'Tiến sĩ Thần kinh',
+                imageUrl: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&h=300&fit=crop',
+                isNew: false
+            },
+            {
+                title: 'BS. Priya Sharma',
+                price: 'Bác sĩ Nhi khoa',
+                location: 'Bệnh viện Fortis, Mumbai',
+                beds: '10 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi, Marathi',
+                area: 'Tiến sĩ Nhi khoa',
+                imageUrl: 'https://images.unsplash.com/photo-1594824947938-457c7d65ccb5?w=400&h=300&fit=crop',
+                isNew: false
+            },
+            {
+                title: 'BS. James Wilson',
+                price: 'Bác sĩ Phẫu thuật Chỉnh hình',
+                location: 'Bệnh viện Max, Bangalore',
+                beds: '18 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi, Kannada',
+                area: 'Thạc sĩ Chỉnh hình',
+                imageUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop',
+                isNew: false
+            }
+        ];
+
+        // Sample doctor responses for chat
+        const sampleDoctorResponses = [
+            {
+                title: 'BS. Neha Gupta',
+                price: 'Bác sĩ Phụ khoa',
+                location: 'Bệnh viện Max, Gurgaon',
+                beds: '8 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi',
+                area: 'Tiến sĩ Sản Phụ khoa',
+                imageUrl: 'https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=200&h=200&fit=crop'
+            },
+            {
+                title: 'BS. Sanjay Verma',
+                price: 'Bác sĩ Tâm thần',
+                location: 'NIMHANS, Bangalore',
+                beds: '14 năm kinh nghiệm',
+                baths: 'Tiếng Anh, Hindi, Kannada',
+                area: 'Tiến sĩ Tâm thần học',
+                imageUrl: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=200&h=200&fit=crop'
+            }
+        ];
+
+        // DOM elements
+        const propertiesGrid = document.getElementById('propertiesGrid');
+        const searchMode = document.getElementById('searchMode');
+        const chatMode = document.getElementById('chatMode');
+        const searchInput = document.getElementById('searchInput');
+        const searchSendBtn = document.getElementById('searchSendBtn');
+        const backToSearch = document.getElementById('backToSearch');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const chatSendBtn = document.getElementById('chatSendBtn');
+
+        // State
+        let isInChatMode = false;
+        let messages = [];
+
+        // API Configuration
+        async function getApiUrl() {
+            try {
+                let text = await (await fetch("./deploy/public_api")).text();
+                let url = text.match(/https:\/\/[a-z0-9.-]+\.trycloudflare\.com/)[0];
+                return url + "/model/generate/";
+            } catch (error) {
+                console.warn('Could not fetch API URL, using fallback');
+                return null;
+            }
+        }
+
+        // Configure marked for safe rendering
+        if (typeof marked !== 'undefined') {
+            marked.setOptions({
+                breaks: true,
+                gfm: true,
+                sanitize: false,
+                smartLists: true,
+                smartypants: false
+            });
+        }
+
+        // Initialize the application
+        function init() {
+            renderDoctors();
+            setupEventListeners();
+        }
+
+        // Render doctors grid
+        function renderDoctors() {
+            propertiesGrid.innerHTML = doctors.map((doctor, index) => 
+                createDoctorCard(doctor)
+            ).join('');
+        }
+
+        // Create doctor card HTML
+        function createDoctorCard(doctor, isCompact = false) {
+            return `
+                <div class="property-card ${isCompact ? 'chat-property-card' : ''}">
+                    <div style="position: relative;">
+                        <img 
+                            src="${doctor.imageUrl}" 
+                            alt="${doctor.title}"
+                            class="${isCompact ? 'chat-property-image' : 'property-image'}"
+                            loading="lazy"
+                        />
+                        ${doctor.isNew ? '<div class="badge">New</div>' : ''}
+                    </div>
+                    <div class="${isCompact ? 'chat-property-content' : 'property-content'}">
+                        <h3 class="${isCompact ? 'chat-property-title' : 'property-title'}">${doctor.title}</h3>
+                        <div class="${isCompact ? 'chat-property-location' : 'property-location'}">
+                            <i class="fas fa-hospital"></i>
+                            <span>${doctor.location}</span>
+                        </div>
+                        <div class="${isCompact ? 'chat-property-details' : 'property-details'}">
+                            <div class="property-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>${doctor.beds}</span>
+                            </div>
+                            <div class="property-detail">
+                                <i class="fas fa-language"></i>
+                                <span>${doctor.baths}</span>
+                            </div>
+                            <div class="property-detail">
+                                <i class="fas fa-certificate"></i>
+                                <span>${doctor.area}</span>
+                            </div>
+                        </div>
+                        <div class="${isCompact ? 'chat-property-price' : 'property-price'}">
+                            ${doctor.price}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Switch to chat mode
+        function switchToChatMode(initialMessage) {
+            isInChatMode = true;
+            searchMode.style.display = 'none';
+            chatMode.style.display = 'flex';
+            
+            if (initialMessage) {
+                addMessage('user', initialMessage);
+                handleBotResponse(initialMessage);
+            }
+            
+            chatInput.focus();
+        }
+
+        // Switch back to search mode
+        function switchToSearchMode() {
+            isInChatMode = false;
+            chatMode.style.display = 'none';
+            searchMode.style.display = 'block';
+            
+            messages = [];
+            chatMessages.innerHTML = '';
+            searchInput.value = '';
+            chatInput.value = '';
+            searchInput.focus();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            searchSendBtn.addEventListener('click', () => {
+                const message = searchInput.value.trim();
+                if (message) {
+                    switchToChatMode(message);
+                    searchInput.value = '';
+                }
+            });
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const message = searchInput.value.trim();
+                    if (message) {
+                        switchToChatMode(message);
+                        searchInput.value = '';
+                    }
+                }
+            });
+
+            chatSendBtn.addEventListener('click', () => {
+                sendChatMessage();
+            });
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendChatMessage();
+                }
+            });
+
+            backToSearch.addEventListener('click', () => {
+                switchToSearchMode();
+            });
+
+            document.addEventListener('click', (e) => {
+                const doctorCard = e.target.closest('.property-card');
+                if (doctorCard) {
+                    console.log('Doctor card clicked');
+                }
+            });
+        }
+
+        // Send chat message
+        function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            addMessage('user', message);
+            chatInput.value = '';
+            
+            handleBotResponse(message);
+        }
+
+        // Add message to chat
+        function addMessage(sender, text, doctors = null) {
+            const messageId = Date.now().toString();
+            const message = {
+                id: messageId,
+                type: sender,
+                content: text,
+                doctors: doctors
+            };
+
+            messages.push(message);
+            renderMessage(message);
+            scrollToBottom();
+        }
+
+        // Render a single message with markdown support
+        function renderMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${message.type}`;
+            messageDiv.innerHTML = createMessageHTML(message);
+            chatMessages.appendChild(messageDiv);
+        }
+
+        // Create message HTML with markdown rendering
+        function createMessageHTML(message) {
+            const isUser = message.type === 'user';
+            const avatarIcon = isUser ? 'fas fa-user' : 'fas fa-user-md';
+            
+            let content = message.content;
+            
+            // Render markdown for bot messages
+            if (!isUser && typeof marked !== 'undefined' && content) {
+                try {
+                    content = marked.parse(content);
+                } catch (error) {
+                    console.error('Markdown parsing error:', error);
+                    // Fallback to plain text with basic formatting
+                    content = content
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                        .replace(/`(.*?)`/g, '<code>$1</code>')
+                        .replace(/\n/g, '<br>');
+                }
+            }
+            
+            let doctorsHTML = '';
+            if (message.doctors && message.doctors.length > 0) {
+                doctorsHTML = `
+                    <div style="margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                        ${message.doctors.map(doctor => createDoctorCard(doctor, true)).join('')}
+                        <p style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.5rem;">
+                            Would you like to book an appointment with any of these doctors?
+                        </p>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="message-avatar ${isUser ? 'user' : 'bot'}">
+                    <i class="${avatarIcon}"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        ${content}
+                    </div>
+                    ${doctorsHTML}
+                </div>
+            `;
+        }
+
+        // Add typing indicator
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-avatar bot">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="message-content">
+                    <div class="typing-indicator">AgentSV đang suy nghĩ...</div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Handle bot response
+        async function handleBotResponse(userMessage) {
+            addTypingIndicator();
+
+            try {
+                const API_URL = await getApiUrl();
+                
+                if (API_URL) {
+                    await handleRealApiResponse(userMessage, API_URL);
+                } else {
+                    await handleMockResponse(userMessage);
+                }
+            } catch (error) {
+                console.error('Error handling bot response:', error);
+                removeTypingIndicator();
+                addMessage('bot', 'Xin lỗi, tôi gặp lỗi. Vui lòng thử lại.');
+            }
+        }
+
+        // Handle real API response
+        async function handleRealApiResponse(userMessage, apiUrl) {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        prompt: userMessage,
+                        max_new_tokens: 1024 
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+
+                removeTypingIndicator();
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let botMessage = '';
+                let messageId = null;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    botMessage += decoder.decode(value);
+                    
+                    if (!messageId) {
+                        const message = {
+                            id: Date.now().toString(),
+                            type: 'bot',
+                            content: botMessage,
+                            doctors: null
+                        };
+                        messages.push(message);
+                        messageId = message.id;
+                        renderMessage(message);
+                    } else {
+                        updateLastBotMessage(botMessage);
+                    }
+                }
+
+                if (isDoctorSearchQuery(userMessage)) {
+                    setTimeout(() => {
+                        const doctorsMessage = {
+                            id: Date.now().toString(),
+                            type: 'bot',
+                            content: 'Here are some doctors that might help you:',
+                            doctors: sampleDoctorResponses
+                        };
+                        messages.push(doctorsMessage);
+                        renderMessage(doctorsMessage);
+                        scrollToBottom();
+                    }, 1000);
+                }
+
+            } catch (error) {
+                console.error('Real API error:', error);
+                removeTypingIndicator();
+                await handleMockResponse(userMessage);
+            }
+        }
+
+        // Handle mock response
+        async function handleMockResponse(userMessage) {
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            removeTypingIndicator();
+
+            if (isDoctorSearchQuery(userMessage)) {
+                addMessage('bot', 'Tôi đã tìm thấy một số chuyên gia có thể giúp bạn! Đây là những lựa chọn phù hợp nhất:');
+                
+                setTimeout(() => {
+                    const doctorsMessage = {
+                        id: Date.now().toString(),
+                        type: 'bot',
+                        content: '',
+                        doctors: sampleDoctorResponses
+                    };
+                    messages.push(doctorsMessage);
+                    renderMessage(doctorsMessage);
+                    scrollToBottom();
+                }, 500);
+            } else {
+                const responses = [
+                    "I'd be **happy** to help with your medical questions! Could you tell me more about your symptoms or concerns?\n\n*Please note: This is for informational purposes only and doesn't replace professional medical advice.*",
+                    "I can help you understand medical conditions and connect with appropriate specialists. What would you like to know?\n\n**Available services:**\n- Symptom assessment\n- Doctor recommendations\n- Health information\n- Appointment booking",
+                    "Great question! I can provide medical information and help you find doctors. What health topic are you interested in?\n\n`Remember`: Always consult with healthcare professionals for proper diagnosis and treatment.",
+                    "I'm here to assist with your healthcare needs. Feel free to ask about:\n\n1. **Symptoms** and conditions\n2. **Treatments** and medications\n3. **Finding specialists**\n4. **Booking appointments**"
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage('bot', randomResponse);
+            }
+        }
+
+        // Check if message is about doctor search
+        function isDoctorSearchQuery(message) {
+            const keywords = ['doctor', 'specialist', 'physician', 'cardiologist', 'neurologist', 'pediatrician', 'find', 'recommend', 'appointment', 'consultation'];
+            return keywords.some(keyword => message.toLowerCase().includes(keyword));
+        }
+
+        // Update last bot message (for streaming)
+        function updateLastBotMessage(text) {
+            const botMessages = chatMessages.querySelectorAll('.message.bot');
+            if (botMessages.length > 0) {
+                const lastMessage = botMessages[botMessages.length - 1];
+                const messageBubble = lastMessage.querySelector('.message-bubble');
+                if (messageBubble) {
+                    // Re-render with markdown
+                    if (typeof marked !== 'undefined') {
+                        try {
+                            messageBubble.innerHTML = marked.parse(text);
+                        } catch (error) {
+                            messageBubble.textContent = text;
+                        }
+                    } else {
+                        messageBubble.textContent = text;
+                    }
+                    scrollToBottom();
+                }
+            }
+        }
+
+        // Scroll to bottom of chat
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Error handling for images
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('error', (e) => {
+                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGM0Y1Ii8+CjxjaXJjbGUgY3g9IjIwMCIgY3k9IjE1MCIgcj0iNDAiIGZpbGw9IiM3QjdCOEIiLz4KPHRleHQgeD0iMjAwIiB5PSIyMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM3QjdCOEIiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjUwMCI+RG9jdG9yIFBob3RvPC90ZXh0Pgo8L3N2Zz4=';
+                });
+            });
+        });
+
+        // Animation observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe doctor cards for scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const doctorCards = document.querySelectorAll('.property-card');
+                doctorCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.transitionDelay = `${index * 0.1}s`;
+                    observer.observe(card);
+                });
+            }, 100);
+        });
+    </script>
+</body>
+</html>
