@@ -7,8 +7,8 @@ REM Chạy tunnel trong CMD mới
 start "" "..\tools\Git\git-bash.exe" --cd=".\deploy" -c "./start_tunnel.sh"
 
 
-REM Đợi 10 giây để 2 script trên chạy
-timeout /t 10 /nobreak >nul
+REM Đợi 20 giây để 2 script trên chạy
+timeout /t 20 /nobreak >nul
 
 REM Thực hiện git push
 git checkout main
