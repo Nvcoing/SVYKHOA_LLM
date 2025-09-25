@@ -36,6 +36,8 @@ def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
         query_embeddings=[query_emb],
         n_results=n_results
     )
+    print("diagnosis:", client.get_or_create_collection("diagnosis").count())
+    print("guide:", client.get_or_create_collection("guide").count())
 
     # Debug xem có kết quả ko
     print("Raw results:", results)
