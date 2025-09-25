@@ -10,7 +10,7 @@ REM Đợi 10 giây để 2 script trên chạy
 timeout /t 20 /nobreak >nul
 
 REM Chạy html-obfuscator trong Git Bash mới
-start "" "..\tools\Git\git-bash.exe" -c "html-obfuscator chatsvy.html index.html; exec bash"
+start "" "..\tools\Git\git-bash.exe" -c "html-obfuscator chatsvy.html > index.html"
 
 
 REM Thực hiện git push
