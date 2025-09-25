@@ -7,13 +7,13 @@ def build_prompt(prompt: str, labels: str = "",auguments=None):
         Diagnosis = auguments["Diagnosis"]
         Symptom = auguments["Symptom"]
         prompts = (
-                f"<|begin_of_text|>\n{Intruction}\n{prompt.strip()}\nHãy trả lời như sau:\nChuẩn đoán:{Diagnosis}Triệu chứng:{Symptom}\n<label>{labels.strip()}</label>\n"
+                f"<|begin_of_text|>\n{Intruction}\nCâu hỏi cần trả lời:{prompt.strip()}\nHãy trả lời câu hỏi trên dựa câu trả lời này:\nChuẩn đoán:{Diagnosis}Triệu chứng:{Symptom}\n<label>{labels.strip()}</label>\n"
         )
     else:
         Intruction = auguments["Intruction"]
         Answer = auguments["Answer"]
         prompts = (
-                f"<|begin_of_text|>\n{Intruction}\n{prompt.strip()}\nHãy trả lời như sau:\n{Answer}\n<label>{labels.strip()}</label>\n"
+                f"<|begin_of_text|>\n{Intruction}\nCâu hỏi cần trả lời:{prompt.strip()}\nHãy trả lời câu hỏi trên dựa câu trả lời này:\n{Answer}\n<label>{labels.strip()}</label>\n"
         )
     print("Generated Prompt:", prompts)
     return prompts
