@@ -4,3 +4,11 @@ requests
 transformers
 peft   
 chromadb 
+sentence-transformers
+pandas
+openpyxl
+google-generativeai
+numpy
+huggingface-hub
+tqdm
+tavily 
