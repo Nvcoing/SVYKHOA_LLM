@@ -7,7 +7,7 @@ from search_engine.duck_x2go_search import DuckDuckGoSearchEngine as DGS
 from search_engine.firecrawl_search import FirecrawlWrapper as FW
 from search_engine.google_search import GoogleSearch as GS
 from search_engine.tavily_search import TavilySearch as TS
-from search_chromdb import search_db as search
+from rag.search_chromdb import search_db as search
 from config.config import EMBEDDER,TAVILY_API_KEY, GOOGLE_API_KEY, GOOGLE_CSE_ID, TAVILY_API_KEY, FIRECRAWLER_API_KEY
 # Dùng sentence-transformers để embedding và so sánh
 from sentence_transformers import util
