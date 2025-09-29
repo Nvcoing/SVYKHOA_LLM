@@ -1,5 +1,5 @@
 import json
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 
 class DuckDuckGoSearchEngine:
     def __init__(self):
