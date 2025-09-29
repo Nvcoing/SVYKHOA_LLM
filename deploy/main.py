@@ -4,14 +4,12 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import json
-import asyncio
 
 from agent_server.load_model import load_model_tokenizer
 from agent_server.generate import generate_stream
 from handlers.response import handle_generate_request as response
 from embedding.classifier import PromptClassifier 
 from config.config import EMBEDDER, LLM, TOKENIZER, DEVICE
-from rag.search_engine import SearchEngine
 
 app = FastAPI()
 app.add_middleware(
@@ -30,14 +28,11 @@ class PromptRequest(BaseModel):
     prompt: str
     max_new_tokens: int = 1024
 
-engine = SearchEngine()
 
 
 @app.post("/model/generate/")
 async def generate_text(req: PromptRequest):
     label, score = classifier.classify(req.prompt)
-    result = await engine.search_all(req.prompt, top_k=1)
-    print(result)
     print(f"Predicted label: {label}, similarity: {score:.4f}")
     # search(req.prompt, collection_name=label, top_k=1)
     return StreamingResponse(response(LLM, TOKENIZER, DEVICE, req.prompt,label), media_type="text/plain")
