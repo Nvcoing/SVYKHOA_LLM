@@ -11,6 +11,7 @@ from handlers.response import handle_generate_request as response
 from embedding.classifier import PromptClassifier 
 from embedding.load_embedding import EmbeddingModel
 from config.config import EMBEDDER, LLM, TOKENIZER, DEVICE
+from rag.search_engine import SearchEngine as search_engine
 
 app = FastAPI()
 app.add_middleware(
@@ -22,7 +23,7 @@ app.add_middleware(
 )
 with open("config/classifier.json", "r", encoding="utf-8") as f:
     labels = json.load(f)
-
+search_engine()
 classifier = PromptClassifier(labels, EMBEDDER)
 class PromptRequest(BaseModel):
     prompt: str
