@@ -1,15 +1,9 @@
 from tavily import TavilyClient
-from dotenv import load_dotenv
-import os
 import json
 
 class TavilySearch:
-    def __init__(self):
-        # Load biến môi trường từ .env
-        load_dotenv()
-        api_key = os.getenv("TAVILY_API_KEY")
-        if not api_key:
-            raise ValueError("Không tìm thấy TAVILY_API_KEY trong .env")
+    def __init__(self, api_key=None):
+
         self.client = TavilyClient(api_key=api_key)
 
     def search(self, query: str, n: int = 5, fetch_content: bool = True):

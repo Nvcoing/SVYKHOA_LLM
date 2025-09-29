@@ -1,17 +1,11 @@
 from firecrawl import Firecrawl
 import json
-import os
-from dotenv import load_dotenv
 import math
 from urllib.parse import urlparse
 
-# Load biến môi trường từ file .env
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-load_dotenv(dotenv_path=dotenv_path)
-
 class FirecrawlWrapper:
     def __init__(self, api_key=None):
-        self.api_key = api_key or os.getenv("FIRECRAWL_API_KEY")
+        self.api_key = api_key 
         self.client = Firecrawl(api_key=self.api_key)
 
     def serialize_obj(self, obj):

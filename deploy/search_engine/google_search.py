@@ -1,15 +1,13 @@
-import os
 import requests
 from bs4 import BeautifulSoup
 from googleapiclient.discovery import build
-from dotenv import load_dotenv
-import json
+
 
 class GoogleSearch:
-    def __init__(self, dotenv_path="../../.env"):
-        load_dotenv(dotenv_path=dotenv_path)
-        self.api_key = os.getenv("GOOGLE_API_KEY")
-        self.cse_id = os.getenv("GOOGLE_CSE_ID")
+    def __init__(self, api_key=None, cse_id=None):
+
+        self.api_key = api_key
+        self.cse_id = cse_id
 
     def _get_page_content(self, url):
         try:
