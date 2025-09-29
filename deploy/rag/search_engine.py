@@ -18,7 +18,6 @@ class SearchEngine:
         self.fire = FW(api_key=FIRECRAWLER_API_KEY)
         self.google = GS(api_key=GOOGLE_API_KEY, cse_id=GOOGLE_CSE_ID)
         self.tavily = TS(api_key=TAVILY_API_KEY)
-        self.chromadb = search()
         self.embedder = EMBEDDER
 
     def _get_text_from_results(self, engine_name, results):
