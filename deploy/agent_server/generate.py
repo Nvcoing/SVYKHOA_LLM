@@ -1,7 +1,7 @@
 import threading
 from transformers import TextIteratorStreamer
 
-from handlers.response import build_prompt
+from handlers.prompt import build_prompt
 
 def generate_stream(model, tokenizer, device, prompt: str,labels: str = "", auguments_local=None, auguments_online=None):
     input_ids = tokenizer(
