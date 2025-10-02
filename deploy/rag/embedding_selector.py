@@ -59,14 +59,14 @@ class EmbeddingSelector:
             return None
 
         # Encode query
-        query_emb = self.model.encode(query, convert_to_tensor=True)
+        query_emb = self.model.encode(query)
 
         # Encode kết hợp snippet + content + highlight
         corpus = [
             f"{c['snippet'] or ''} {c['content'] or ''} {c['highlight'] or ''}"
             for c in candidates
         ]
-        corpus_emb = self.model.encode(corpus, convert_to_tensor=True)
+        corpus_emb = self.model.encode(corpus)
 
         # Cosine similarity
         scores = util.cos_sim(query_emb, corpus_emb)[0]
