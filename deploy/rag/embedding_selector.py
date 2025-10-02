@@ -61,7 +61,8 @@ class EmbeddingSelector:
 
         # Encode kết hợp snippet + content + highlight
         corpus = [
-            f"{c['snippet'] or ''} {c['content'] or ''} {c['highlight'] or ''}"
+            # f"{c['snippet'] or ''} {c['content'] or ''} {c['highlight'] or ''}"
+             f"{c['content'] or ''}"
             for c in candidates
         ]
         corpus_emb = self.model.encode(corpus)
