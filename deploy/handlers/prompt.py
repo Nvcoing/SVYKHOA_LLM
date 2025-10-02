@@ -1,7 +1,13 @@
+import json
+
 def build_prompt(prompt: str, labels: str = "",auguments_local=None, auguments_online=None):
-    snippet = auguments_online["results"][0]["snippet"]
-    content = auguments_online["results"][0]["content"]
-    highlight = auguments_online["results"][0]["highlight"]
+    if isinstance(auguments_online, str):
+        auguments_online = json.loads(auguments_online)  # parse nếu bị string
+
+        best_result = auguments_online["results"][0]
+        snippet = best_result["snippet"]
+        content = best_result["content"]
+        highlight = best_result["highlight"]
     #     print("\nTitle tốt nhất:", best["results"][0]["title"])
 #     print("Snippet:", best["results"][0]["snippet"])
 #     print("Content:", best["results"][0]["content"])
