@@ -1,12 +1,10 @@
 import json
 from sentence_transformers import util
 from config.config import EMBEDDER
-from rag.search_engine import SearchEngine
 
 class EmbeddingSelector:
     def __init__(self, model = EMBEDDER):
         # Load model embedding
-        print(" Đang load model embedding...")
         self.model = model
 
     def select_best(self, query, search_results, top_k=3, return_json=True):
