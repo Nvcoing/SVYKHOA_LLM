@@ -3,26 +3,28 @@ from rag.search_chromdb import search_db as search
 def augment_prompt(prompt: str, label: str = "medical talk", n_results: int = 1):
     """
     Nhận câu hỏi (prompt) và truy vấn vectorDB theo label (collection name).
-    Trả ra dict chứa nội dung augment.
+    Trả ra dict chứa nội dung augment kèm độ chính xác.
     """
     res = search(prompt, label=label, n_results=n_results)
+    
     if label == "diagnosis":
-        intruction_list, answer_list, symptom_list = res
+        intruction_list, answer_list, symptom_list, score_list = res
         result = {
             "Intruction": intruction_list[0] if intruction_list else "",
             "Question": prompt,
             "Diagnosis": answer_list[0] if answer_list else "",
-            "Symptom": symptom_list[0] if symptom_list else ""
+            "Symptom": symptom_list[0] if symptom_list else "",
+            "Score": score_list[0] if score_list else None
         }
     else:
-        intruction_list, answer_list = res
+        intruction_list, answer_list, score_list = res
         result = {
             "Intruction": intruction_list[0] if intruction_list else "",
             "Question": prompt,
-            "Answer": answer_list[0] if answer_list else ""
+            "Answer": answer_list[0] if answer_list else "",
+            "Score": score_list[0] if score_list else None
         }
     return result
-
 
 # # Ví dụ sử dụng
 # q1 = "Bệnh tiểu đường là gì?"
