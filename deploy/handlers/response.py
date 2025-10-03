@@ -8,14 +8,13 @@ from rag.search_engine import SearchEngine
 
 def handle_generate_request(model, tokenizer, device, prompt: str, labels: str = "medical talk"):
     print(f"Received prompt: {prompt}")
+    # engine = SearchEngine()
+    # search_results = engine.search_all(prompt, top_k=1)
+    # selector = EmbeddingSelector()
+    # auguments_online = selector.select_best(prompt, search_results["raw_results"], top_k=1)
     auguments_local = aug(prompt, labels, n_results=1)
-    print("Local augmentation:", auguments_local)
-    engine = SearchEngine()
-    search_results = engine.search_all(prompt, top_k=1)
-    selector = EmbeddingSelector()
-    auguments_online = selector.select_best(prompt, search_results["raw_results"], top_k=1)
     prompt= clean(prompt)
-    stream = generate_stream(model, tokenizer, device, prompt, labels, auguments_local, auguments_online)
+    stream = generate_stream(model, tokenizer, device, prompt, labels, auguments_local, auguments_online =None)
     buffer = ""
     for chunk in stream:
         buffer += chunk
