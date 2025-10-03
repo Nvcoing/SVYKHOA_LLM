@@ -4,6 +4,7 @@ from nlp.process_prompt import clean_text as clean
 from rag.augment import augment_prompt as aug
 from rag.embedding_selector import EmbeddingSelector
 from rag.search_engine import SearchEngine
+from handlers.prompt import build_prompt, prompt_summary
 
 
 def handle_generate_request(model, tokenizer, device, prompt: str, labels: str = "medical talk"):
@@ -14,7 +15,9 @@ def handle_generate_request(model, tokenizer, device, prompt: str, labels: str =
     auguments_online = selector.search_no_embed(search_results["raw_results"], top_k=1)
     auguments_local = aug(prompt, labels, n_results=1)
     prompt= clean(prompt)
-    stream = generate_stream(model, tokenizer, device, prompt, labels, auguments_local, auguments_online)
+    augment_answer = prompt_summary(prompt, labels, auguments_local, auguments_online)
+    prompt = build_prompt(prompt, labels, auguments_local, auguments_online, augment_answer)
+    stream = generate_stream(model, tokenizer, device, prompt)
     buffer = ""
     for chunk in stream:
         buffer += chunk

@@ -1,11 +1,10 @@
 import threading
 from transformers import TextIteratorStreamer
 
-from handlers.prompt import build_prompt
 
-def generate_stream(model, tokenizer, device, prompt: str,labels: str = "", auguments_local=None, auguments_online=None):
+def generate_stream(model, tokenizer, device, prompt: str):
     input_ids = tokenizer(
-        build_prompt(prompt, labels, auguments_local, auguments_online),
+        prompt,
         return_tensors="pt",
         truncation=True,
         max_length=1024
