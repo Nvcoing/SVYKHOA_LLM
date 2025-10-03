@@ -38,3 +38,29 @@ def generate_stream(model, tokenizer, device, prompt: str):
     # Yield new text as it is streamed
     for new_text in streamer:
         yield new_text
+def generate(model, tokenizer, device, prompt: str):
+    input_ids = tokenizer(
+        prompt,
+        return_tensors="pt",
+        truncation=True,
+        max_length=1024
+    ).input_ids.to(device)
+
+    model.eval()
+
+    generation_kwargs = dict(
+        input_ids=input_ids,
+        max_new_tokens=1024,
+        do_sample=True,
+        temperature=0.8,
+        top_k=50,
+        top_p=0.9,
+        repetition_penalty=1.2,
+        eos_token_id=tokenizer.convert_tokens_to_ids("<|end_of_text|>"),
+        pad_token_id=tokenizer.pad_token_id or tokenizer.convert_tokens_to_ids("<|end_of_text|>")
+    )
+
+    outputs = model.generate(**generation_kwargs)
+
+    text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return text
