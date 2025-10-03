@@ -47,14 +47,32 @@ class EmbeddingSelector:
                         "content": r.get("raw_content") if "raw_content" in r else r.get("content"),
                         "highlight": r.get("raw_content") or r.get("content"),
                     })
-        return candidates
+        return self._clean_candidates(candidates)
+
+    def _clean_candidates(self, candidates):
+        cleaned = []
+        seen_titles = set()
+        for c in candidates:
+            title = (c.get("title") or "").strip()
+            if title in seen_titles:
+                continue
+            seen_titles.add(title)
+            summary = c.get("content") or c.get("snippet") or c.get("highlight") or ""
+            cleaned.append({
+                "engine": c.get("engine"),
+                "title": title,
+                "snippet": c.get("snippet") or "",
+                "content": summary.strip(),
+                "highlight": (c.get("highlight") or "")[:300],
+            })
+        return cleaned
 
     def search_no_embed(self, search_results, top_k=3, return_json=True):
-        candidates = self._parse_results(search_results, top_k = top_k)
+        candidates = self._parse_results(search_results, top_k)
         return json.dumps(candidates, ensure_ascii=False, indent=2) if return_json else candidates
 
     def search_with_embed(self, query, search_results, top_k=3, return_json=True):
-        candidates = self._parse_results(search_results, top_k = top_k)  # Lấy nhiều hơn để chọn lọc
+        candidates = self._parse_results(search_results)
         if not candidates:
             return None
         query_emb = self.model.encode(query)
@@ -67,11 +85,12 @@ class EmbeddingSelector:
             "title": candidates[int(i)]["title"],
             "snippet": candidates[int(i)]["snippet"],
             "content": candidates[int(i)]["content"],
-            "highlight": (candidates[int(i)]["highlight"] or "")[:300],
+            "highlight": candidates[int(i)]["highlight"],
             "similarity": float(scores[i])
         } for i in sorted_idx]
         result = {"query": query, "results": best}
         return json.dumps(result, ensure_ascii=False, indent=2) if return_json else result
+
 
 
 

@@ -3,12 +3,12 @@ import json
 def build_prompt(prompt: str, labels: str = "",auguments_local=None, auguments_online=None):
     if isinstance(auguments_online, str):
         auguments_online = json.loads(auguments_online)  # parse nếu bị string
-    print("Online augmentation:", auguments_online)
+    tavily_snippets = [r["snippet"] for r in auguments_online if r["engine"] == "tavily"]
         # best_result = auguments_online["results"][0]
         # snippet = best_result["snippet"]
         # content = best_result["content"]
         # highlight = best_result["highlight"]
-    
+    print("Tavily snippets:", tavily_snippets)
     if labels == "diagnosis":
         Intruction = auguments_local["Intruction"]
         Diagnosis = auguments_local["Diagnosis"]
