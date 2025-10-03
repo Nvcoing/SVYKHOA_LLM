@@ -63,4 +63,6 @@ def generate(model, tokenizer, device, prompt: str):
     outputs = model.generate(**generation_kwargs)
 
     text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    text = text[len(prompt):].strip()
     return text
