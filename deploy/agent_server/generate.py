@@ -56,8 +56,8 @@ def generate(model, tokenizer, device, prompt: str):
         top_k=50,
         top_p=0.9,
         repetition_penalty=1.2,
-        eos_token_id=tokenizer.convert_tokens_to_ids("<|end_of_text|>"),
-        pad_token_id=tokenizer.pad_token_id or tokenizer.convert_tokens_to_ids("<|end_of_text|>")
+        eos_token_id=tokenizer.convert_tokens_to_ids("<|end_of_text|>") or tokenizer.convert_tokens_to_ids("</answer>"),
+        pad_token_id=tokenizer.pad_token_id or tokenizer.convert_tokens_to_ids("<|end_of_text|>") or tokenizer.convert_tokens_to_ids("</answer>"),
     )
 
     outputs = model.generate(**generation_kwargs)
