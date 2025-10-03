@@ -50,11 +50,11 @@ class EmbeddingSelector:
         return candidates
 
     def search_no_embed(self, search_results, top_k=3, return_json=True):
-        candidates = self._parse_results(search_results, top_k)
+        candidates = self._parse_results(search_results, top_k = top_k)
         return json.dumps(candidates, ensure_ascii=False, indent=2) if return_json else candidates
 
     def search_with_embed(self, query, search_results, top_k=3, return_json=True):
-        candidates = self._parse_results(search_results)
+        candidates = self._parse_results(search_results, top_k = top_k)  # Lấy nhiều hơn để chọn lọc
         if not candidates:
             return None
         query_emb = self.model.encode(query)
