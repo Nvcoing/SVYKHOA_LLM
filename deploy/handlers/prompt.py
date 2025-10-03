@@ -3,7 +3,7 @@ import json
 def build_prompt(prompt: str, labels: str = "",auguments_local=None, auguments_online=None):
     if isinstance(auguments_online, str):
         auguments_online = json.loads(auguments_online)  # parse nếu bị string
-    tavily_snippets = [r["snippet"] for r in auguments_online if r["engine"] == "tavily"]
+    tavily_snippets = " ".join([r["snippet"] for r in auguments_online if r["engine"] == "tavily"])
         # best_result = auguments_online["results"][0]
         # snippet = best_result["snippet"]
         # content = best_result["content"]
