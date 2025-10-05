@@ -14,7 +14,7 @@ def handle_generate_request(model, tokenizer, device, prompt: str, labels: str =
     selector = EmbeddingSelector()
     auguments_online = selector.search_no_embed(search_results["raw_results"], top_k=1)
     auguments_local = aug(prompt, labels, n_results=1)
-    prompt= clean(prompt)
+    # prompt= clean(prompt)
     augment_answer = generate(model, tokenizer, device, prompt_summary(prompt, labels, auguments_local, auguments_online))
     print("Augment Answer:", augment_answer)
     prompt = build_prompt(prompt, labels, auguments_local, auguments_online, augment_answer)
