@@ -1112,15 +1112,96 @@ p {
             }
         }
 
+        async function getApiUrl() {
+            try {
+                let text = await (await fetch("./deploy/public_api")).text();
+                let url = text.match(/https:\/\/[a-z0-9.-]+\.trycloudflare\.com/)[0];
+                return url + "/model/generate/";
+            } catch (error) {
+                console.warn('Could not fetch API URL, using fallback');
+                return null;
+            }
+        }
+
         async function handleBotResponse(userMessage) {
             addTypingIndicator();
 
             try {
-                await handleMockResponse(userMessage);
+                const API_URL = await getApiUrl();
+                
+                if (API_URL) {
+                    await handleRealApiResponse(userMessage, API_URL);
+                } else {
+                    await handleMockResponse(userMessage);
+                }
             } catch (error) {
                 console.error('Error handling bot response:', error);
                 removeTypingIndicator();
                 addMessage('bot', 'Xin lỗi, tôi gặp lỗi. Vui lòng thử lại.');
+            }
+        }
+
+        async function handleRealApiResponse(userMessage, apiUrl) {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        prompt: userMessage,
+                        max_new_tokens: 1024 
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+
+                removeTypingIndicator();
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let botMessage = '';
+                let messageId = null;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    botMessage += decoder.decode(value);
+                    
+                    if (!messageId) {
+                        const message = {
+                            id: Date.now().toString(),
+                            type: 'bot',
+                            content: botMessage,
+                            doctors: null
+                        };
+                        messages.push(message);
+                        messageId = message.id;
+                        renderMessage(message);
+                    } else {
+                        updateLastBotMessage(botMessage);
+                    }
+                }
+
+                if (isDoctorSearchQuery(userMessage)) {
+                    setTimeout(() => {
+                        const doctorsMessage = {
+                            id: Date.now().toString(),
+                            type: 'bot',
+                            content: 'Here are some doctors that might help you:',
+                            doctors: sampleDoctorResponses
+                        };
+                        messages.push(doctorsMessage);
+                        renderMessage(doctorsMessage);
+                        scrollToBottom();
+                    }, 1000);
+                }
+
+            } catch (error) {
+                console.error('Real API error:', error);
+                removeTypingIndicator();
+                await handleMockResponse(userMessage);
             }
         }
 
@@ -1130,6 +1211,18 @@ p {
 
             if (isDoctorSearchQuery(userMessage)) {
                 addMessage('bot', 'Tôi đã tìm thấy một số chuyên gia có thể giúp bạn! Đây là những lựa chọn phù hợp nhất:');
+                
+                setTimeout(() => {
+                    const doctorsMessage = {
+                        id: Date.now().toString(),
+                        type: 'bot',
+                        content: '',
+                        doctors: sampleDoctorResponses
+                    };
+                    messages.push(doctorsMessage);
+                    renderMessage(doctorsMessage);
+                    scrollToBottom();
+                }, 500);
             } else {
                 const responses = [
                     "Tôi rất vui được hỗ trợ bạn với các câu hỏi y tế! Bạn có thể chia sẻ thêm về triệu chứng hoặc mối quan tâm của mình không?\n\n**Lưu ý:** Thông tin này chỉ mang tính chất tham khảo và không thay thế cho tư vấn y tế chuyên nghiệp.",
