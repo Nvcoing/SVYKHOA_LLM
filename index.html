@@ -8,12 +8,23 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/5.1.1/marked.min.js"></script>
+    <!-- favicon cho trình duyệt -->
+    <link rel="icon" href="https://github.com/Nvcoing/SVYKHOA_LLM/blob/main/doc/logo/logo.png?raw=true" type="image/png" sizes="32x32">
+
+    <!-- cũ hơn / một số trình duyệt -->
+    <link rel="shortcut icon" href="https://github.com/Nvcoing/SVYKHOA_LLM/blob/main/doc/logo/logo.png?raw=true">
+
+    <!-- icon cho iOS home screen -->
+    <link rel="apple-touch-icon" href="https://github.com/Nvcoing/SVYKHOA_LLM/blob/main/doc/logo/logo.png?raw=true">
+
+    <!-- tuỳ chon: theme color tren mobile -->
+    <meta name="theme-color" content="#ffffff">
+
 </head>
 <style>
-    /* CSS Variables */
 :root {
   --font-size: 14px;
-  --background: #ffffff;
+  --background: #f8fafc;
   --foreground: #1a1a1a;
   --card: #ffffff;
   --card-foreground: #1a1a1a;
@@ -27,11 +38,10 @@
   --accent-foreground: #1a1a1a;
   --border: rgba(0, 0, 0, 0.1);
   --input-background: #f3f3f5;
-  --radius: 0.625rem;
+  --radius: 0.75rem;
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 }
 
 * {
@@ -58,7 +68,6 @@ body {
   padding: 0 1rem;
 }
 
-/* Typography */
 h1 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -82,13 +91,12 @@ p {
   line-height: 1.5;
 }
 
-/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1.25rem;
   border-radius: var(--radius);
   font-size: 0.875rem;
   font-weight: 500;
@@ -105,42 +113,30 @@ p {
 
 .btn-primary:hover {
   background-color: #1d4ed8;
-}
-
-.btn-outline {
-  background-color: transparent;
-  color: var(--foreground);
-  border: 1px solid var(--border);
-}
-
-.btn-outline:hover {
-  background-color: var(--accent);
-}
-
-.btn-ghost {
-  background-color: transparent;
-  color: var(--foreground);
-}
-
-.btn-ghost:hover {
-  background-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
 }
 
 .btn-close {
-  background: transparent;
-  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
   cursor: pointer;
   padding: 0.5rem;
-  border-radius: 0.375rem;
-  color: var(--muted-foreground);
-  transition: background-color 0.2s;
+  border-radius: 0.5rem;
+  color: var(--foreground);
+  transition: all 0.2s;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-close:hover {
   background-color: var(--accent);
+  transform: scale(1.05);
 }
 
-/* Navigation */
 .navbar {
   border-bottom: 1px solid var(--border);
   background-color: rgba(255, 255, 255, 0.95);
@@ -172,28 +168,20 @@ p {
   gap: 0.5rem;
 }
 
-.logo-icon {
-  width: 2rem;
-  height: 2rem;
-  background-color: var(--primary);
-  color: white;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 0.875rem;
-}
-
 .logo-text {
   font-size: 1.25rem;
   font-weight: bold;
   color: var(--foreground);
 }
 
-/* Hero Section */
 .hero {
   padding: 4rem 0 6rem;
+  transition: opacity 0.3s ease;
+}
+
+.hero.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .hero-content {
@@ -219,7 +207,6 @@ p {
   margin: 0 auto;
 }
 
-/* Chat Interface */
 .chat-container {
   max-width: 64rem;
   margin: 0 auto;
@@ -227,15 +214,22 @@ p {
 
 .search-mode {
   width: 100%;
+  transition: all 0.3s ease;
 }
 
 .search-box {
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--border);
-  border-radius: 1rem;
-  padding: 1.5rem;
+  border-radius: 1.5rem;
+  padding: 2rem;
   box-shadow: var(--shadow-xl);
+  transition: all 0.3s ease;
+}
+
+.search-box:hover {
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.15);
+  transform: translateY(-2px);
 }
 
 .search-input-container {
@@ -244,18 +238,20 @@ p {
 
 .search-input {
   width: 100%;
-  height: 3rem;
-  padding: 0 1rem;
-  background-color: rgba(255, 255, 255, 0.5);
-  border: 1px solid var(--border);
+  height: 3.5rem;
+  padding: 0 1.5rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 2px solid var(--border);
   border-radius: var(--radius);
   font-size: 1rem;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
 }
 
 .search-input:focus {
   border-color: var(--primary);
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .search-buttons {
@@ -264,100 +260,381 @@ p {
   margin-top: 1rem;
 }
 
-/* Chat Mode */
+/* Chat Mode - Fullscreen */
 .chat-mode {
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-  box-shadow: var(--shadow-xl);
-  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background);
+  z-index: 50;
+  display: none;
   flex-direction: column;
-  height: 32rem;
+  animation: slideIn 0.3s ease;
+}
+
+.chat-mode.active {
+  display: flex;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .chat-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 1rem 2rem;
   border-bottom: 1px solid var(--border);
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 1rem 1rem 0 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
 }
 
 .chatbot-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .chatbot-avatar {
-  width: 2rem;
-  height: 2rem;
-  background-color: var(--primary);
+  width: 3rem;
+  height: 3rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: var(--shadow-lg);
 }
 
 .chatbot-details h3 {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--foreground);
-  font-size: 1rem;
+  font-size: 1.125rem;
   margin: 0;
 }
 
 .chatbot-details p {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: var(--muted-foreground);
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #22c55e;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  background-color: rgba(250, 252, 255, 0.5);
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
 }
 
 .chat-input-area {
-  padding: 1rem;
+  padding: 1.5rem 2rem;
   border-top: 1px solid var(--border);
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 0 0 1rem 1rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+  backdrop-filter: blur(12px);
 }
 
-/* Properties Section */
+.input-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.message {
+  display: flex;
+  gap: 0.75rem;
+  animation: fadeIn 0.4s ease;
+  max-width: 85%;
+}
+
+.message.user {
+  flex-direction: row-reverse;
+  margin-left: auto;
+}
+
+.message-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.message-avatar.user {
+  background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+  color: white;
+  box-shadow: var(--shadow);
+}
+
+.message-avatar.bot {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  box-shadow: var(--shadow);
+}
+
+.message-content {
+  flex: 1;
+}
+
+.message-bubble {
+  padding: 1rem 1.25rem;
+  border-radius: 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  box-shadow: var(--shadow);
+}
+
+.message.user .message-bubble {
+  background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+  color: white;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.message.bot .message-bubble {
+  background-color: white;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 0.25rem;
+}
+
+.message-bubble h1,
+.message-bubble h2,
+.message-bubble h3,
+.message-bubble h4,
+.message-bubble h5,
+.message-bubble h6 {
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+.message-bubble h1 { font-size: 1.25rem; }
+.message-bubble h2 { font-size: 1.125rem; }
+.message-bubble h3 { font-size: 1rem; }
+
+.message-bubble p {
+  margin: 0.5rem 0;
+}
+
+.message-bubble ul,
+.message-bubble ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.message-bubble li {
+  margin: 0.25rem 0;
+}
+
+.message-bubble code {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+}
+
+.message-bubble pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.message-bubble pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.input-container {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 1rem 1.25rem;
+  background-color: white;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  font-size: 0.9375rem;
+  transition: all 0.2s;
+}
+
+.chat-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.send-btn {
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.send-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.send-btn:active {
+  transform: translateY(0);
+}
+
+.typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  background-color: white;
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  font-size: 0.9375rem;
+  color: var(--muted-foreground);
+  box-shadow: var(--shadow);
+}
+
+.typing-dots {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.typing-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--primary);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
 .properties-section {
   padding: 4rem 0;
 }
 
-.section-header {
+.reference-block {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
+  opacity: 0.2;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.reference-block.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.reference-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--foreground);
   margin-bottom: 2rem;
 }
 
-.section-title {
-  font-size: 1.875rem;
-  font-weight: bold;
-  color: var(--foreground);
-}
-
 .properties-grid {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
-/* Doctor Cards */
 .property-card {
   background-color: var(--card);
   border-radius: 0.75rem;
@@ -432,317 +709,29 @@ p {
   font-size: 1.125rem;
 }
 
-.badge {
-  position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
-  background-color: var(--primary);
-  color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.375rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-/* Message Styles */
-.message {
-  display: flex;
-  gap: 0.5rem;
-  animation: fadeIn 0.3s ease;
-}
-
-.message.user {
-  flex-direction: row-reverse;
-}
-
-.message-avatar {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.message-avatar.user {
-  background-color: var(--primary);
-  color: white;
-}
-
-.message-avatar.bot {
-  background-color: var(--primary);
-  color: white;
-}
-
-.message-content {
-  max-width: 80%;
-}
-
-.message-bubble {
-  padding: 0.75rem;
-  border-radius: 1rem;
-  font-size: 0.875rem;
-  line-height: 1.4;
-}
-
-.message.user .message-bubble {
-  background-color: var(--primary);
-  color: white;
-  margin-left: auto;
-}
-
-.message.bot .message-bubble {
-  background-color: var(--muted);
-  color: var(--foreground);
-}
-
-/* Markdown Styles */
-.message-bubble h1,
-.message-bubble h2,
-.message-bubble h3,
-.message-bubble h4,
-.message-bubble h5,
-.message-bubble h6 {
-  margin: 0.5rem 0;
-  font-weight: 600;
-}
-
-.message-bubble h1 { font-size: 1.25rem; }
-.message-bubble h2 { font-size: 1.125rem; }
-.message-bubble h3 { font-size: 1rem; }
-.message-bubble h4 { font-size: 0.9375rem; }
-.message-bubble h5 { font-size: 0.875rem; }
-.message-bubble h6 { font-size: 0.8125rem; }
-
-.message-bubble p {
-  margin: 0.5rem 0;
-}
-
-.message-bubble ul,
-.message-bubble ol {
-  margin: 0.5rem 0;
-  padding-left: 1.5rem;
-}
-
-.message-bubble li {
-  margin: 0.25rem 0;
-}
-
-.message-bubble code {
-  background-color: rgba(0, 0, 0, 0.1);
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
-  font-family: 'Courier New', monospace;
-  font-size: 0.8125rem;
-}
-
-.message-bubble pre {
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  overflow-x: auto;
-  margin: 0.5rem 0;
-}
-
-.message-bubble pre code {
-  background-color: transparent;
-  padding: 0;
-}
-
-.message-bubble blockquote {
-  border-left: 3px solid var(--primary);
-  padding-left: 0.75rem;
-  margin: 0.5rem 0;
-  font-style: italic;
-}
-
-.message-bubble table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0.5rem 0;
-  font-size: 0.8125rem;
-}
-
-.message-bubble th,
-.message-bubble td {
-  border: 1px solid var(--border);
-  padding: 0.375rem 0.5rem;
-  text-align: left;
-}
-
-.message-bubble th {
-  background-color: rgba(0, 0, 0, 0.05);
-  font-weight: 600;
-}
-
-.message-bubble strong {
-  font-weight: 600;
-}
-
-.message-bubble em {
-  font-style: italic;
-}
-
-.message-bubble a {
-  color: var(--primary);
-  text-decoration: underline;
-}
-
-.input-container {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.chat-input {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  background-color: rgba(255, 255, 255, 0.5);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  outline: none;
-  font-size: 0.875rem;
-}
-
-.chat-input:focus {
-  border-color: var(--primary);
-}
-
-.send-btn {
-  padding: 0.75rem;
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: background-color 0.2s;
-  min-width: 3rem;
-}
-
-.send-btn:hover {
-  background-color: #1d4ed8;
-}
-
-/* Typing Indicator */
-.typing-indicator {
-  display: inline-block;
-  padding: 0.75rem;
-  background-color: var(--muted);
-  border-radius: 1rem;
-  font-size: 0.875rem;
-  color: var(--muted-foreground);
-  font-style: italic;
-}
-
-.typing-indicator::after {
-  content: "...";
-  animation: dots 1.5s steps(5, end) infinite;
-}
-
-@keyframes dots {
-  0%, 20% { content: "."; }
-  40% { content: ".."; }
-  60%, 100% { content: "..."; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Doctor Cards in Chat */
-.chat-property-card {
-  background-color: var(--card);
-  border-radius: 0.5rem;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  margin-top: 0.75rem;
-  width: 18rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.chat-property-card:hover {
-  border-color: var(--primary);
-  transform: translateY(-1px);
-}
-
-.chat-property-image {
-  width: 100%;
-  height: 8rem;
-  object-fit: cover;
-}
-
-.chat-property-content {
-  padding: 0.75rem;
-}
-
-.chat-property-title {
-  font-weight: 500;
-  font-size: 0.875rem;
-  margin-bottom: 0.25rem;
-}
-
-.chat-property-location {
-  display: flex;
-  align-items: center;
-  color: var(--muted-foreground);
-  font-size: 0.75rem;
-  margin-bottom: 0.25rem;
-}
-
-.chat-property-details {
-  display: flex;
-  gap: 0.75rem;
-  color: var(--muted-foreground);
-  font-size: 0.75rem;
-  margin-bottom: 0.25rem;
-}
-
-.chat-property-price {
-  color: var(--primary);
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-/* Reference Block */
-.reference-block {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  opacity: 0.2;
-  transition: opacity 0.4s;
-  pointer-events: none;
-}
-.reference-block.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-.reference-title {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--foreground);
-}
-.properties-grid {
-  width: 100%;
-}
-.property-card {
-  /* giữ nguyên style cũ nếu có */
-}
-
-.sidebar-content {
-  overflow-y: scroll;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-}
-.sidebar-content::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .chat-messages {
+    padding: 1rem;
+  }
+  
+  .chat-header {
+    padding: 1rem;
+  }
+  
+  .chat-input-area {
+    padding: 1rem;
+  }
+  
+  .message {
+    max-width: 90%;
+  }
 }
 </style>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-left">
@@ -754,8 +743,7 @@ p {
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="heroSection">
         <div class="container">
             <div class="hero-content">
                 <h1 class="hero-title">
@@ -767,9 +755,7 @@ p {
                 </p>
             </div>
 
-            <!-- Chat Interface -->
             <div class="chat-container" id="chatContainer">
-                <!-- Initial Search Mode -->
                 <div class="search-mode" id="searchMode">
                     <div class="search-box">
                         <div class="search-input-container">
@@ -783,42 +769,7 @@ p {
                         <div class="search-buttons">
                             <button class="btn btn-primary" id="searchSendBtn">
                                 <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Chat Mode -->
-                <div class="chat-mode" id="chatMode" style="display: none;">
-                    <div class="chat-header">
-                        <div class="chatbot-info">
-                            <div class="chatbot-avatar">
-                                <i class="fas fa-plus"></i>
-                            </div>
-                            <div class="chatbot-details">
-                                <h3>AgentSV Medical Assistant</h3>
-                                <p>Online now</p>
-                            </div>
-                        </div>
-                        <button class="btn-close" id="backToSearch">
-                            <i class="fas fa-arrow-left"></i>
-                        </button>
-                    </div>
-
-                    <div class="chat-messages" id="chatMessages">
-                        <!-- Messages will be populated by JavaScript -->
-                    </div>
-
-                    <div class="chat-input-area">
-                        <div class="input-container">
-                            <input 
-                                type="text" 
-                                placeholder="Hỏi về tư vấn y tế..."
-                                class="chat-input"
-                                id="chatInput"
-                            />
-                            <button class="btn btn-primary send-btn" id="chatSendBtn">
-                                <i class="fas fa-paper-plane"></i>
+                                Gửi câu hỏi
                             </button>
                         </div>
                     </div>
@@ -827,18 +778,52 @@ p {
         </div>
     </section>
 
-    <!-- Featured Doctors -->
-    <section class="properties-section">
-            <div id="reference-block" class="reference-block">
-        <h2 class="reference-title">Tài liệu tham khảo</h2>
-        <div class="properties-grid" id="propertiesGrid">
-            <!-- Các tài liệu hoặc bác sĩ sẽ được render ở đây -->
+    <div class="chat-mode" id="chatMode">
+        <div class="chat-header">
+            <div class="chatbot-info">
+                <div class="chatbot-avatar">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="chatbot-details">
+                    <h3>AgentSV Medical Assistant</h3>
+                    <p>
+                        <span class="status-dot"></span>
+                        Đang hoạt động
+                    </p>
+                </div>
+            </div>
+            <button class="btn-close" id="backToSearch">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages"></div>
+
+        <div class="chat-input-area">
+            <div class="input-wrapper">
+                <div class="input-container">
+                    <input 
+                        type="text" 
+                        placeholder="Nhập câu hỏi của bạn..."
+                        class="chat-input"
+                        id="chatInput"
+                    />
+                    <button class="btn btn-primary send-btn" id="chatSendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <section class="properties-section">
+        <div id="reference-block" class="reference-block">
+            <h2 class="reference-title">Tài liệu tham khảo</h2>
+            <div class="properties-grid" id="propertiesGrid"></div>
+        </div>
     </section>
 
     <script>
-        // Doctor data
         const doctors = [
             {
                 title: 'BS. Sarah Johnson',
@@ -882,7 +867,6 @@ p {
             }
         ];
 
-        // Sample doctor responses for chat
         const sampleDoctorResponses = [
             {
                 title: 'BS. Neha Gupta',
@@ -904,8 +888,8 @@ p {
             }
         ];
 
-        // DOM elements
         const propertiesGrid = document.getElementById('propertiesGrid');
+        const heroSection = document.getElementById('heroSection');
         const searchMode = document.getElementById('searchMode');
         const chatMode = document.getElementById('chatMode');
         const searchInput = document.getElementById('searchInput');
@@ -914,24 +898,14 @@ p {
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const chatSendBtn = document.getElementById('chatSendBtn');
+        const stopResponseBtn = document.getElementById('stopResponseBtn');
 
-        // State
         let isInChatMode = false;
         let messages = [];
 
-        // API Configuration
-        async function getApiUrl() {
-            try {
-                let text = await (await fetch("./deploy/public_api")).text();
-                let url = text.match(/https:\/\/[a-z0-9.-]+\.trycloudflare\.com/)[0];
-                return url + "/model/generate/";
-            } catch (error) {
-                console.warn('Could not fetch API URL, using fallback');
-                return null;
-            }
-        }
+        // Thêm biến trạng thái phản hồi
+        let isBotResponding = false;
 
-        // Configure marked for safe rendering
         if (typeof marked !== 'undefined') {
             marked.setOptions({
                 breaks: true,
@@ -942,39 +916,35 @@ p {
             });
         }
 
-        // Initialize the application
         function init() {
             renderDoctors();
             setupEventListeners();
         }
 
-        // Render doctors grid
         function renderDoctors() {
-            propertiesGrid.innerHTML = doctors.map((doctor, index) => 
+            propertiesGrid.innerHTML = doctors.map(doctor => 
                 createDoctorCard(doctor)
             ).join('');
         }
 
-        // Create doctor card HTML
-        function createDoctorCard(doctor, isCompact = false) {
+        function createDoctorCard(doctor) {
             return `
-                <div class="property-card ${isCompact ? 'chat-property-card' : ''}">
+                <div class="property-card">
                     <div style="position: relative;">
                         <img 
                             src="${doctor.imageUrl}" 
                             alt="${doctor.title}"
-                            class="${isCompact ? 'chat-property-image' : 'property-image'}"
+                            class="property-image"
                             loading="lazy"
                         />
-                        ${doctor.isNew ? '<div class="badge">New</div>' : ''}
                     </div>
-                    <div class="${isCompact ? 'chat-property-content' : 'property-content'}">
-                        <h3 class="${isCompact ? 'chat-property-title' : 'property-title'}">${doctor.title}</h3>
-                        <div class="${isCompact ? 'chat-property-location' : 'property-location'}">
+                    <div class="property-content">
+                        <h3 class="property-title">${doctor.title}</h3>
+                        <div class="property-location">
                             <i class="fas fa-hospital"></i>
                             <span>${doctor.location}</span>
                         </div>
-                        <div class="${isCompact ? 'chat-property-details' : 'property-details'}">
+                        <div class="property-details">
                             <div class="property-detail">
                                 <i class="fas fa-clock"></i>
                                 <span>${doctor.beds}</span>
@@ -988,7 +958,7 @@ p {
                                 <span>${doctor.area}</span>
                             </div>
                         </div>
-                        <div class="${isCompact ? 'chat-property-price' : 'property-price'}">
+                        <div class="property-price">
                             ${doctor.price}
                         </div>
                     </div>
@@ -996,11 +966,11 @@ p {
             `;
         }
 
-        // Switch to chat mode
         function switchToChatMode(initialMessage) {
             isInChatMode = true;
-            searchMode.style.display = 'none';
-            chatMode.style.display = 'flex';
+            heroSection.classList.add('hidden');
+            chatMode.classList.add('active');
+            document.body.style.overflow = 'hidden';
             
             if (initialMessage) {
                 addMessage('user', initialMessage);
@@ -1010,20 +980,22 @@ p {
             chatInput.focus();
         }
 
-        // Switch back to search mode
         function switchToSearchMode() {
             isInChatMode = false;
-            chatMode.style.display = 'none';
-            searchMode.style.display = 'block';
+            chatMode.classList.remove('active');
+            heroSection.classList.remove('hidden');
+            document.body.style.overflow = 'auto';
             
             messages = [];
             chatMessages.innerHTML = '';
             searchInput.value = '';
             chatInput.value = '';
-            searchInput.focus();
+            
+            setTimeout(() => {
+                searchInput.focus();
+            }, 300);
         }
 
-        // Setup event listeners
         function setupEventListeners() {
             searchSendBtn.addEventListener('click', () => {
                 const message = searchInput.value.trim();
@@ -1057,16 +1029,35 @@ p {
                 switchToSearchMode();
             });
 
-            document.addEventListener('click', (e) => {
-                const doctorCard = e.target.closest('.property-card');
-                if (doctorCard) {
-                    console.log('Doctor card clicked');
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && isInChatMode) {
+                    switchToSearchMode();
                 }
+            });
+
+            // Sửa lại hàm setSendButtonState để hiển thị nút dừng khi bot đang trả lời
+            function setSendButtonState(isResponding) {
+                if (isResponding) {
+                    chatSendBtn.style.display = 'none';
+                    stopResponseBtn.style.display = 'inline-flex';
+                    chatInput.disabled = true; // Không thể chat khi bot đang trả lời
+                } else {
+                    chatSendBtn.style.display = 'inline-flex';
+                    stopResponseBtn.style.display = 'none';
+                    chatInput.disabled = false;
+                }
+            }
+
+            // Thêm sự kiện cho nút dừng trả lời
+            stopResponseBtn.addEventListener('click', () => {
+                stopBotResponse = true;
+                setSendButtonState(false);
             });
         }
 
-        // Send chat message
+        // Sửa lại các hàm liên quan đến gửi chat
         function sendChatMessage() {
+            if (isBotResponding) return; // Không cho gửi khi bot đang trả lời
             const message = chatInput.value.trim();
             if (!message) return;
 
@@ -1076,7 +1067,6 @@ p {
             handleBotResponse(message);
         }
 
-        // Add message to chat
         function addMessage(sender, text, doctors = null) {
             const messageId = Date.now().toString();
             const message = {
@@ -1091,7 +1081,6 @@ p {
             scrollToBottom();
         }
 
-        // Render a single message with markdown support
         function renderMessage(message) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${message.type}`;
@@ -1099,38 +1088,23 @@ p {
             chatMessages.appendChild(messageDiv);
         }
 
-        // Create message HTML with markdown rendering
         function createMessageHTML(message) {
             const isUser = message.type === 'user';
             const avatarIcon = isUser ? 'fas fa-user' : 'fas fa-user-md';
             
             let content = message.content;
             
-            // Render markdown for bot messages
             if (!isUser && typeof marked !== 'undefined' && content) {
                 try {
                     content = marked.parse(content);
                 } catch (error) {
                     console.error('Markdown parsing error:', error);
-                    // Fallback to plain text with basic formatting
                     content = content
                         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                         .replace(/\*(.*?)\*/g, '<em>$1</em>')
                         .replace(/`(.*?)`/g, '<code>$1</code>')
                         .replace(/\n/g, '<br>');
                 }
-            }
-            
-            let doctorsHTML = '';
-            if (message.doctors && message.doctors.length > 0) {
-                doctorsHTML = `
-                    <div style="margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                        ${message.doctors.map(doctor => createDoctorCard(doctor, true)).join('')}
-                        <p style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.5rem;">
-                            Would you like to book an appointment with any of these doctors?
-                        </p>
-                    </div>
-                `;
             }
             
             return `
@@ -1141,12 +1115,10 @@ p {
                     <div class="message-bubble">
                         ${content}
                     </div>
-                    ${doctorsHTML}
                 </div>
             `;
         }
 
-        // Add typing indicator
         function addTypingIndicator() {
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message bot';
@@ -1156,14 +1128,20 @@ p {
                     <i class="fas fa-user-md"></i>
                 </div>
                 <div class="message-content">
-                    <div class="typing-indicator">AgentSV đang suy nghĩ...</div>
+                    <div class="typing-indicator">
+                        <span>Đang suy nghĩ</span>
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
                 </div>
             `;
             chatMessages.appendChild(typingDiv);
             scrollToBottom();
         }
 
-        // Remove typing indicator
         function removeTypingIndicator() {
             const typingIndicator = document.getElementById('typingIndicator');
             if (typingIndicator) {
@@ -1171,8 +1149,21 @@ p {
             }
         }
 
-        // Handle bot response
+        async function getApiUrl() {
+            try {
+                let text = await (await fetch("./deploy/public_api")).text();
+                let url = text.match(/https:\/\/[a-z0-9.-]+\.trycloudflare\.com/)[0];
+                return url + "/model/generate/";
+            } catch (error) {
+                console.warn('Could not fetch API URL, using fallback');
+                return null;
+            }
+        }
+
+        // Khi bắt đầu phản hồi bot
         async function handleBotResponse(userMessage) {
+            isBotResponding = true;
+            chatInput.disabled = true; // Không gõ được khi bot trả lời
             addTypingIndicator();
 
             try {
@@ -1187,10 +1178,13 @@ p {
                 console.error('Error handling bot response:', error);
                 removeTypingIndicator();
                 addMessage('bot', 'Xin lỗi, tôi gặp lỗi. Vui lòng thử lại.');
+            } finally {
+                isBotResponding = false;
+                chatInput.disabled = false; // Cho phép gõ lại khi bot trả lời xong
+                removeTypingIndicator();
             }
         }
 
-        // Handle real API response
         async function handleRealApiResponse(userMessage, apiUrl) {
             try {
                 const response = await fetch(apiUrl, {
@@ -1255,7 +1249,6 @@ p {
             }
         }
 
-        // Handle mock response
         async function handleMockResponse(userMessage) {
             await new Promise(resolve => setTimeout(resolve, 1500));
             removeTypingIndicator();
@@ -1276,10 +1269,10 @@ p {
                 }, 500);
             } else {
                 const responses = [
-                    "I'd be **happy** to help with your medical questions! Could you tell me more about your symptoms or concerns?\n\n*Please note: This is for informational purposes only and doesn't replace professional medical advice.*",
-                    "I can help you understand medical conditions and connect with appropriate specialists. What would you like to know?\n\n**Available services:**\n- Symptom assessment\n- Doctor recommendations\n- Health information\n- Appointment booking",
-                    "Great question! I can provide medical information and help you find doctors. What health topic are you interested in?\n\n`Remember`: Always consult with healthcare professionals for proper diagnosis and treatment.",
-                    "I'm here to assist with your healthcare needs. Feel free to ask about:\n\n1. **Symptoms** and conditions\n2. **Treatments** and medications\n3. **Finding specialists**\n4. **Booking appointments**"
+                    "Tôi rất vui được hỗ trợ bạn với các câu hỏi y tế! Bạn có thể chia sẻ thêm về triệu chứng hoặc mối quan tâm của mình không?\n\n**Lưu ý:** Thông tin này chỉ mang tính chất tham khảo và không thay thế cho tư vấn y tế chuyên nghiệp.",
+                    "Tôi có thể giúp bạn hiểu về các tình trạng y tế và kết nối với các chuyên gia phù hợp. Bạn muốn biết điều gì?\n\n**Dịch vụ có sẵn:**\n- Đánh giá triệu chứng\n- Giới thiệu bác sĩ\n- Thông tin sức khỏe\n- Đặt lịch hẹn",
+                    "Câu hỏi hay! Tôi có thể cung cấp thông tin y tế và giúp bạn tìm bác sĩ. Bạn quan tâm đến chủ đề sức khỏe nào?\n\n**Nhớ rằng:** Luôn tham khảo ý kiến của chuyên gia y tế để có chẩn đoán và điều trị chính xác.",
+                    "Tôi ở đây để hỗ trợ nhu cầu chăm sóc sức khỏe của bạn. Vui lòng hỏi về:\n\n1. **Triệu chứng** và tình trạng\n2. **Điều trị** và thuốc men\n3. **Tìm chuyên gia**\n4. **Đặt lịch hẹn**"
                 ];
                 
                 const randomResponse = responses[Math.floor(Math.random() * responses.length)];
@@ -1287,20 +1280,17 @@ p {
             }
         }
 
-        // Check if message is about doctor search
         function isDoctorSearchQuery(message) {
-            const keywords = ['doctor', 'specialist', 'physician', 'cardiologist', 'neurologist', 'pediatrician', 'find', 'recommend', 'appointment', 'consultation'];
+            const keywords = ['doctor', 'specialist', 'bác sĩ', 'chuyên gia', 'tìm', 'recommend', 'appointment', 'consultation', 'khám'];
             return keywords.some(keyword => message.toLowerCase().includes(keyword));
         }
 
-        // Update last bot message (for streaming)
         function updateLastBotMessage(text) {
             const botMessages = chatMessages.querySelectorAll('.message.bot');
             if (botMessages.length > 0) {
                 const lastMessage = botMessages[botMessages.length - 1];
                 const messageBubble = lastMessage.querySelector('.message-bubble');
                 if (messageBubble) {
-                    // Re-render with markdown
                     if (typeof marked !== 'undefined') {
                         try {
                             messageBubble.innerHTML = marked.parse(text);
@@ -1315,15 +1305,12 @@ p {
             }
         }
 
-        // Scroll to bottom of chat
         function scrollToBottom() {
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Initialize the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
 
-        // Error handling for images
         document.addEventListener('DOMContentLoaded', () => {
             const images = document.querySelectorAll('img');
             images.forEach(img => {
@@ -1333,7 +1320,6 @@ p {
             });
         });
 
-        // Animation observer
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1348,7 +1334,6 @@ p {
             });
         }, observerOptions);
 
-        // Observe doctor cards for scroll animations
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const doctorCards = document.querySelectorAll('.property-card');
@@ -1362,16 +1347,16 @@ p {
             }, 100);
         });
 
-document.addEventListener('DOMContentLoaded', function() {
-  const refBlock = document.getElementById('reference-block');
-  window.addEventListener('scroll', function() {
-    if (window.scrollY > 400) {
-      refBlock.classList.add('visible');
-    } else {
-      refBlock.classList.remove('visible');
-    }
-  });
-});
+        document.addEventListener('DOMContentLoaded', function() {
+            const refBlock = document.getElementById('reference-block');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 400) {
+                    refBlock.classList.add('visible');
+                } else {
+                    refBlock.classList.remove('visible');
+                }
+            });
+        });
     </script>
 </body>
 </html>
