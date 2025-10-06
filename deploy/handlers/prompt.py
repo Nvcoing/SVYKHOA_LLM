@@ -8,6 +8,11 @@ def build_prompt(prompt: str, labels: str = "",auguments_local=None, auguments_o
                 # f"<|begin_of_text|>\n{Intruction}\nCâu hỏi cần trả lời:{prompt.strip()}\nHãy trình bày câu hỏi dựa vào nội dung sau:\n**Đoạn trích ngắn**:{snippet}\n**Nội dung chính**:{highlight}\nHãy trình bày câu hỏi theo dạng dưới đây nhưng không được lấy theo nội dung:\n**Chuẩn đoán:**{Diagnosis}\n**Triệu chứng:**{Symptom}\n<label>{labels.strip()}</label>\n"
                 f"<|begin_of_text|>\n{Intruction}\nHãy trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n{augment_answer}\nLưu ý: Bạn không được trả lời theo nội dung trên mà phải dựa vào kiến thức y khoa của bạn để trả lời đúng nội dung câu hỏi.\n<label>{labels.strip()}</label>\n",
         )
+    elif labels == "small talk":
+        Intruction = auguments_local["Intruction"]
+        prompts = (
+                f"<|begin_of_text|>\n{Intruction}\nHãy trả lời lời như sau:{auguments_local}\n<label>{labels.strip()}</label>\n",
+        )
     else:
         Intruction = auguments_local["Intruction"]
         prompts = (
@@ -28,11 +33,17 @@ def prompt_summary(prompt: str, labels: str = "medical talk",auguments_local=Non
         Diagnosis = auguments_local["Diagnosis"]
         Symptom = auguments_local["Symptom"]
         prompts = (
-            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Chuẩn đoán**:\n{Diagnosis}\n* **Triệu chứng**:\n{Symptom} *\n* **Nội dung ngắn 1**:\n{tavily_snippets}\n* **Nội dung ngắn 2**:\n{google_snippets}\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>medical talk</label>\n<answer>\n"
+            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Chuẩn đoán**:\n{Diagnosis}\n* **Triệu chứng**:\n{Symptom} *\n* **Nội dung ngắn 1**:\n{tavily_snippets}\n* **Nội dung ngắn 2**:\n{google_snippets}\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n"
         )
-    else:
+    elif labels == "medical talk":
         Answer = auguments_local["Answer"]
         prompts = (
-            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Câu trả lời**:\n{Answer}\n* **Nội dung ngắn 1**:\n{tavily_snippets}\n* **Nội dung ngắn 2**:\n{google_snippets}\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n<answer>\n"
+            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Câu trả lời**:\n{Answer}\n* **Nội dung ngắn 1**:\n{tavily_snippets}\n* **Nội dung ngắn 2**:\n{google_snippets}\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n"
         )
+    elif labels == "guide":
+        Answer = auguments_local["Answer"]
+        prompts = (
+            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Câu trả lời**:\n{Answer}\n* **Nội dung ngắn 1**:\n{tavily_snippets}\n* **Nội dung ngắn 2**:\n{google_snippets}\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n"
+        )
+
     return prompts
