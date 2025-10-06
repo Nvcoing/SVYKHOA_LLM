@@ -1,67 +1,41 @@
 import json
-from duck_x2go_search import DuckDuckGoSearchEngine as DGS
-from firecrawl_search import FirecrawlWrapper as FW
-from google_search import GoogleSearch as GS
-from tavily_search import TavilySearch as TS
-from embedding.load_embedding import EmbeddingModel
+import torch
 from sentence_transformers import util
+from embedding.load_embedding import EmbeddingModel
+from duckduckgo_search import DDGS
+from googleapiclient.discovery import build
 
 
 class SearchEngine:
-    def __init__(self):
-        self.duck = DGS()
-        self.fire = FW(api_key="fc-bcde7168d906417c9e8428486ea2ea6b")
-        self.google = GS(api_key="AIzaSyATiZoYWWr-v3syCVMhOy5YSqZPcMNzvmQ", cse_id="c3d8b458cd8fd43ad")
-        self.tavily = TS(api_key="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")
+    def __init__(self, engine="duckduckgo", top_k=3):
+        self.engine = engine
+        self.top_k = top_k
         self.embedder = EmbeddingModel()
 
-    def _get_text_from_results(self, engine_name, results):
-        texts = []
-        if not results:
-            return texts
+    def _search_duckduckgo(self, query):
+        with DDGS() as ddgs:
+            return list(ddgs.text(query, max_results=5))
 
-        if engine_name == "duckduckgo":
-            for r in results:
-                texts.append(r.get("title", "") + " " + r.get("body", ""))
-        elif engine_name == "firecrawl":
-            if "web" in results:
-                for r in results["web"]:
-                    texts.append(r.get("title", "") + " " + r.get("content", ""))
-        elif engine_name == "google":
-            for r in results:
-                texts.append(r.get("title", "") + " " + r.get("snippet", "") + " " + r.get("content", ""))
-        elif engine_name == "tavily":
-            for r in results.get("results", []):
-                texts.append(r.get("title", "") + " " + r.get("content", ""))
-        return texts
+    def _search_google(self, query):
+        service = build("customsearch", "v1", developerKey="YOUR_API_KEY")
+        res = (
+            service.cse()
+            .list(q=query, cx="YOUR_SEARCH_ENGINE_ID", num=5)
+            .execute()
+        )
+        return res.get("items", [])
 
-    def search_all(self, query: str, top_k: int = 3):
-        jobs = {
-            "duckduckgo": (self.duck.search, query, 3),
-            "firecrawl": (self.fire.search, query, 3),
-            "google": (self.google.search, query, 3),
-            "tavily": (self.tavily.search, query, 3),
-        }
-
+    def search(self, query):
         engines = {}
-        for name, (func, arg1, arg2) in jobs.items():
-            try:
-                res = func(arg1, arg2)
-                engines[name] = res
 
-                # In ra ngay sau khi search
-                print(f"\n==== {name.upper()} RESULTS ====")
-                texts = self._get_text_from_results(name, res)
-                for i, t in enumerate(texts, 1):
-                    print(f"[{i}] {t[:200]}...")  # chỉ in 200 ký tự đầu
-            except Exception as e:
-                print(f"[{name}] error:", e)
-                engines[name] = None
+        if self.engine in ["duckduckgo", "all"]:
+            engines["duckduckgo"] = self._search_duckduckgo(query)
+        if self.engine in ["google", "all"]:
+            engines["google"] = self._search_google(query)
 
-        # Embed prompt
+        # Embed query
         query_emb = self.embedder.encode(query)
 
-        # Gom tất cả kết quả
         candidates = []
         for engine_name, res in engines.items():
             texts = self._get_text_from_results(engine_name, res)
@@ -71,33 +45,35 @@ class SearchEngine:
         if not candidates:
             return None
 
-        # Embed toàn bộ corpus
+        # Embed corpus (không batch_size)
         corpus = [c["text"] for c in candidates]
-        corpus_emb = self.embedder.encode(corpus, batch_size=16, convert_to_tensor=True)
+        corpus_emb = self.embedder.encode(corpus)
+
+        # Convert sang tensor nếu chưa phải
+        if not torch.is_tensor(query_emb):
+            query_emb = torch.tensor(query_emb)
+        if not torch.is_tensor(corpus_emb):
+            corpus_emb = torch.tensor(corpus_emb)
 
         # Tính cosine similarity
         scores = util.cos_sim(query_emb, corpus_emb)[0]
 
-        # Chọn top_k
-        sorted_idx = scores.argsort(descending=True)[:top_k]
-        best_results = []
-        for idx in sorted_idx:
-            best_results.append({
-                "engine": candidates[int(idx)]["engine"],
-                "text": candidates[int(idx)]["text"],
-                "similarity": float(scores[idx])
-            })
+        best_idx = torch.argmax(scores).item()
+        best_candidate = candidates[best_idx]
+        best_candidate["score"] = scores[best_idx].item()
 
-        return {
-            "query": query,
-            "results": best_results
-        }
+        return best_candidate
+
+    def _get_text_from_results(self, engine_name, results):
+        if engine_name == "duckduckgo":
+            return [r.get("body") or r.get("title") or "" for r in results]
+        elif engine_name == "google":
+            return [r.get("snippet", "") for r in results]
+        return []
 
 
 if __name__ == "__main__":
-    query = "Sâu răng là gì?"
-    engine = SearchEngine()
-    result = engine.search_all(query, top_k=1)
-
-    print("\n==== FINAL BEST MATCHES ====")
+    se = SearchEngine(engine="all", top_k=3)
+    query = "Sâu răng là gì"
+    result = se.search(query)
     print(json.dumps(result, ensure_ascii=False, indent=2))
