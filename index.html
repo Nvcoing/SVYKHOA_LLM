@@ -731,6 +731,15 @@ p {
 .property-card {
   /* giữ nguyên style cũ nếu có */
 }
+
+.sidebar-content {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+.sidebar-content::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
 </style>
 <body>
     <!-- Navigation -->

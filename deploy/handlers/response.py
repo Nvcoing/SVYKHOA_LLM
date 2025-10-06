@@ -5,7 +5,7 @@ from rag.augment import augment_prompt as aug
 from rag.embedding_selector import EmbeddingSelector
 from rag.search_engine import SearchEngine
 from handlers.prompt import build_prompt, prompt_summary
-
+from nlp.process_augument import clean_special_tags as clean_tags
 
 def handle_generate_request(model, tokenizer, device, prompt: str, labels: str = "medical talk"):
     print(f"Received prompt: {prompt}")
@@ -16,7 +16,7 @@ def handle_generate_request(model, tokenizer, device, prompt: str, labels: str =
         auguments_online = selector.search_no_embed(search_results["raw_results"], top_k=1)
         auguments_local = aug(prompt, labels, n_results=1)
         # prompt= clean(prompt)
-        augment_answer = generate(model, tokenizer, device, prompt_summary(prompt, labels, auguments_local, auguments_online))
+        augment_answer = clean_tags(generate(model, tokenizer, device, prompt_summary(prompt, labels, auguments_local, auguments_online)))
         print("Augment Answer:", augment_answer)
         prompt = build_prompt(prompt, labels, auguments_local, auguments_online, augment_answer)
         stream = generate_stream(model, tokenizer, device, prompt)
