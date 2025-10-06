@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: svy_app_container
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      bash -c "deploy/start_server.sh & deploy/start_tunnel.sh && wait"

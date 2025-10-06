@@ -10,8 +10,9 @@ def build_prompt(prompt: str, labels: str = "",auguments_local=None, auguments_o
         )
     elif labels == "small talk":
         Intruction = auguments_local["Intruction"]
+        Answer = auguments_local["Answer"]
         prompts = (
-                f"<|begin_of_text|>\n{Intruction}\nHãy trả lời lời như sau:{auguments_local}\n<label>{labels.strip()}</label>\n",
+                f"<|begin_of_text|>\n{Intruction}\nHãy trả lời lời như sau:{Answer}\n<label>{labels.strip()}</label>\n",
         )
     else:
         Intruction = auguments_local["Intruction"]

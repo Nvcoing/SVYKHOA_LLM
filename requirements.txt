@@ -11,8 +11,8 @@ google-generativeai
 numpy
 huggingface-hub
 tqdm
-tavily 
 duckduckgo-search
 firecrawl
 beautifulsoup4
 tavily-python
+wikipedia-api
