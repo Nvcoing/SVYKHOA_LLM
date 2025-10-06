@@ -9,7 +9,6 @@ from agent_server.load_model import load_model_tokenizer
 from agent_server.generate import generate_stream
 from handlers.response import handle_generate_request as response
 from embedding.classifier import PromptClassifier 
-from embedding.load_embedding import EmbeddingModel
 from config.config import EMBEDDER, LLM, TOKENIZER, DEVICE
 
 app = FastAPI()
@@ -23,10 +22,13 @@ app.add_middleware(
 with open("config/classifier.json", "r", encoding="utf-8") as f:
     labels = json.load(f)
 
+
 classifier = PromptClassifier(labels, EMBEDDER)
 class PromptRequest(BaseModel):
     prompt: str
     max_new_tokens: int = 1024
+
+
 
 @app.post("/model/generate/")
 async def generate_text(req: PromptRequest):

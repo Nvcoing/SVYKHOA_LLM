@@ -16,7 +16,7 @@ python -m pip install --upgrade pip
 
 echo [3/3] Installing requirements from requirements.txt...
 IF EXIST requirements.txt (
-    pip install -r requirements.txt
+    pip install -r requirements.txt --break-system-packages
 ) ELSE (
     echo requirements.txt not found in current directory!
     pause

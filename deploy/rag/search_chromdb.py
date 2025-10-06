@@ -1,10 +1,5 @@
-import chromadb
-from embedding.load_embedding import EmbeddingModel
+from config.config import CHROMADB, EMBEDDER
 
-# Kết nối tới DB
-client = chromadb.PersistentClient(path="./chroma_db")
-# Dùng cùng 1 embedder như build
-embedder = EmbeddingModel()
 
 def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
     """
@@ -22,10 +17,10 @@ def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
     else:
         raise ValueError(f"Unknown label: {label}")
 
-    collection = client.get_or_create_collection(name=collection_name)
+    collection = CHROMADB.get_or_create_collection(name=collection_name)
 
     # Sinh embedding cho câu hỏi
-    query_emb = embedder.encode(prompt)
+    query_emb = EMBEDDER.encode(prompt)
     if hasattr(query_emb, "tolist"):
         query_emb = query_emb.tolist()
     if isinstance(query_emb[0], (list, tuple)):
