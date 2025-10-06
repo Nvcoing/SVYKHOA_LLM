@@ -50,7 +50,7 @@ def generate(model, tokenizer, device, prompt: str):
 
     generation_kwargs = dict(
         input_ids=input_ids,
-        max_new_tokens=1024,
+        max_new_tokens=512,
         do_sample=True,
         temperature=0.8,
         top_k=50,
