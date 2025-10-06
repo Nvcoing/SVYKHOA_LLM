@@ -811,9 +811,6 @@ p {
                     <button class="btn btn-primary send-btn" id="chatSendBtn">
                         <i class="fas fa-paper-plane"></i>
                     </button>
-                    <button class="btn btn-close" id="stopResponseBtn" title="Dừng trả lời" style="margin-left:8px; display:none;">
-                        <i class="fas fa-stop"></i>
-                    </button>
                 </div>
             </div>
         </div>
@@ -901,21 +898,13 @@ p {
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const chatSendBtn = document.getElementById('chatSendBtn');
+        const stopResponseBtn = document.getElementById('stopResponseBtn');
 
         let isInChatMode = false;
         let messages = [];
-        let isBotResponding = false;
-        let stopBotResponse = false;
 
-        function setSendButtonState(isResponding) {
-            if (isResponding) {
-                chatSendBtn.style.display = 'none';
-                stopResponseBtn.style.display = 'inline-flex';
-            } else {
-                chatSendBtn.style.display = 'inline-flex';
-                stopResponseBtn.style.display = 'none';
-            }
-        }
+        // Thêm biến trạng thái phản hồi
+        let isBotResponding = false;
 
         if (typeof marked !== 'undefined') {
             marked.setOptions({
@@ -1045,10 +1034,30 @@ p {
                     switchToSearchMode();
                 }
             });
+
+            // Sửa lại hàm setSendButtonState để hiển thị nút dừng khi bot đang trả lời
+            function setSendButtonState(isResponding) {
+                if (isResponding) {
+                    chatSendBtn.style.display = 'none';
+                    stopResponseBtn.style.display = 'inline-flex';
+                    chatInput.disabled = true; // Không thể chat khi bot đang trả lời
+                } else {
+                    chatSendBtn.style.display = 'inline-flex';
+                    stopResponseBtn.style.display = 'none';
+                    chatInput.disabled = false;
+                }
+            }
+
+            // Thêm sự kiện cho nút dừng trả lời
+            stopResponseBtn.addEventListener('click', () => {
+                stopBotResponse = true;
+                setSendButtonState(false);
+            });
         }
 
+        // Sửa lại các hàm liên quan đến gửi chat
         function sendChatMessage() {
-            if (isBotResponding) return; // Không cho chat khi bot đang trả lời
+            if (isBotResponding) return; // Không cho gửi khi bot đang trả lời
             const message = chatInput.value.trim();
             if (!message) return;
 
@@ -1151,27 +1160,28 @@ p {
             }
         }
 
+        // Khi bắt đầu phản hồi bot
         async function handleBotResponse(userMessage) {
-            addTypingIndicator();
             isBotResponding = true;
-            stopBotResponse = false;
-            chatInput.disabled = true;
-            setSendButtonState(true);
+            chatInput.disabled = true; // Không gõ được khi bot trả lời
+            addTypingIndicator();
 
             try {
                 const API_URL = await getApiUrl();
+                
                 if (API_URL) {
                     await handleRealApiResponse(userMessage, API_URL);
                 } else {
                     await handleMockResponse(userMessage);
                 }
             } catch (error) {
+                console.error('Error handling bot response:', error);
                 removeTypingIndicator();
                 addMessage('bot', 'Xin lỗi, tôi gặp lỗi. Vui lòng thử lại.');
             } finally {
                 isBotResponding = false;
-                chatInput.disabled = false;
-                setSendButtonState(false);
+                chatInput.disabled = false; // Cho phép gõ lại khi bot trả lời xong
+                removeTypingIndicator();
             }
         }
 
@@ -1186,7 +1196,9 @@ p {
                     })
                 });
 
-                if (!response.ok) throw new Error('API request failed');
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
 
                 removeTypingIndicator();
 
@@ -1196,11 +1208,11 @@ p {
                 let messageId = null;
 
                 while (true) {
-                    if (stopBotResponse) break; // Dừng trả ra phản hồi khi nút dừng được ấn
                     const { done, value } = await reader.read();
                     if (done) break;
+                    
                     botMessage += decoder.decode(value);
-
+                    
                     if (!messageId) {
                         const message = {
                             id: Date.now().toString(),
@@ -1231,6 +1243,7 @@ p {
                 }
 
             } catch (error) {
+                console.error('Real API error:', error);
                 removeTypingIndicator();
                 await handleMockResponse(userMessage);
             }
