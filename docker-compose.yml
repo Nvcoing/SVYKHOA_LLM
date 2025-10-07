@@ -1,14 +1,15 @@
 version: "3.9"
 
 services:
-  app:
-    build: .
-    container_name: svy_app_container
-    restart: always
+  llm_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: llm_deploy_container
+    working_dir: /app/deploy
+    command: bash -c "./start_server.sh & ./start_tunnel.sh && tail -f /dev/null"
     ports:
       - "8000:8000"
     volumes:
       - .:/app
-    working_dir: /app
-    command: >
-      bash -c "deploy/start_server.sh & deploy/start_tunnel.sh && wait"
+    restart: always

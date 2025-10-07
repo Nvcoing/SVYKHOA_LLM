@@ -1,20 +1,23 @@
-# Base image
+# ===== BASE IMAGE =====
 FROM python:3.12-slim
 
-# Đặt thư mục làm việc
+# ===== CÀI GÓI CẦN THIẾT =====
+RUN apt-get update && apt-get install -y bash curl git && rm -rf /var/lib/apt/lists/*
+
+# ===== THƯ MỤC LÀM VIỆC =====
 WORKDIR /app
 
-# Copy toàn bộ project
-COPY . /app
+# ===== COPY TOÀN BỘ PROJECT =====
+COPY . .
 
-# Cho phép thực thi 2 file trong deploy/
-RUN chmod +x deploy/start_server.sh deploy/start_tunnel.sh
-
-# Cài các dependency
+# ===== CÀI PYTHON LIBRARIES =====
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Mở port server (ví dụ 8000)
+# ===== CHO PHÉP FILE SH CHẠY =====
+RUN chmod +x ./deploy/start_server.sh ./deploy/start_tunnel.sh
+
+# ===== MỞ PORT =====
 EXPOSE 8000
 
-# Chạy 2 tiến trình song song (server + tunnel)
-CMD ["bash", "-c", "deploy/start_server.sh & deploy/start_tunnel.sh && wait"]
+# ===== CHẠY SERVER & TUNNEL =====
+CMD ["bash", "-c", "cd deploy && ./start_server.sh & ./start_tunnel.sh && wait"]
