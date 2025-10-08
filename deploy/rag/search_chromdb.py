@@ -1,5 +1,6 @@
 from config.config import CHROMADB, EMBEDDER
-
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
     """
