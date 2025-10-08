@@ -36,7 +36,7 @@ def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
     # Debug xem có kết quả ko
     print("Raw results:", results)
 
-    intruction_list, answer_list, symptom_list = [], [], []
+    intruction_list, answer_list, symptom_list, distance_list  = [], [], [], []
     for meta in results.get("metadatas", [[]])[0]:
         if label == "diagnosis":
             intruction_list.append(meta.get("intruction", ""))
@@ -45,7 +45,9 @@ def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
         else:
             intruction_list.append(meta.get("intruction", ""))
             answer_list.append(meta.get("answer", ""))
-
+    for dist_group in results.get("distances", [[]]):
+        for d in dist_group:
+            distance_list.append(d)
     if label == "diagnosis":
-        return intruction_list, answer_list, symptom_list
-    return intruction_list, answer_list
+        return intruction_list, answer_list, symptom_list, distance_list
+    return intruction_list, answer_list, distance_list

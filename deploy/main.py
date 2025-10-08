@@ -5,8 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import json
 
-from agent_server.load_model import load_model_tokenizer
-from agent_server.generate import generate_stream
 from handlers.response import handle_generate_request as response
 from embedding.classifier import PromptClassifier 
 from config.config import EMBEDDER, LLM, TOKENIZER, DEVICE
