@@ -9,21 +9,20 @@ from nlp.process_augument import clean_special_tags as clean_tags
 
 def handle_generate_request(model, tokenizer, device, prompt: str, labels: str = "medical talk"):
     print(f"Received prompt: {prompt}")
-    if labels in ["diagnosis", "medical talk", "guide"]:
+    auguments_local = aug(prompt, labels, n_results=1)
+    if auguments_local["loss_score"] >= 0.7:
         engine = SearchEngine()
         search_results = engine.search_all(f"{prompt.strip()}(wikipedia)", top_k=1)
         selector = EmbeddingSelector()
         auguments_online = selector.search_no_embed(search_results["raw_results"], top_k=1)
-        auguments_local = aug(prompt, labels, n_results=1)
-        # prompt= clean(prompt)
         augment_answer = clean_tags(generate(model, tokenizer, device, prompt_summary(prompt, labels, auguments_local, auguments_online)))
         print("Augment Answer:", augment_answer)
         prompt = build_prompt(prompt, labels, auguments_local, auguments_online, augment_answer)
         stream = generate_stream(model, tokenizer, device, prompt)
     else:
-        auguments_local = aug(prompt, labels, n_results=1)
         prompt = build_prompt(prompt, labels, auguments_local, auguments_online = None, augment_answer = None)
         stream = generate_stream(model, tokenizer, device, prompt)
+
     buffer = ""
     for chunk in stream:
         buffer += chunk

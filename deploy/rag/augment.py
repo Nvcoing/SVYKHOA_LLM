@@ -7,19 +7,21 @@ def augment_prompt(prompt: str, label: str = "medical talk", n_results: int = 1)
     """
     res = search(prompt, label=label, n_results=n_results)
     if label == "diagnosis":
-        intruction_list, answer_list, symptom_list = res
+        intruction_list, answer_list, symptom_list,distance_list = res
         result = {
             "Intruction": intruction_list[0] if intruction_list else "",
             "Question": prompt,
             "Diagnosis": answer_list[0] if answer_list else "",
-            "Symptom": symptom_list[0] if symptom_list else ""
+            "Symptom": symptom_list[0] if symptom_list else "",
+            "loss_score": distance_list[0] if distance_list else ""
         }
     else:
-        intruction_list, answer_list = res
+        intruction_list, answer_list, distance_list = res
         result = {
             "Intruction": intruction_list[0] if intruction_list else "",
             "Question": prompt,
-            "Answer": answer_list[0] if answer_list else ""
+            "Answer": answer_list[0] if answer_list else "",
+            "loss_score": distance_list[0] if distance_list else ""
         }
     return result
 

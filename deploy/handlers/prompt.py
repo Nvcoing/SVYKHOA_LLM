@@ -46,5 +46,10 @@ def prompt_summary(prompt: str, labels: str = "medical talk",auguments_local=Non
         prompts = (
             f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Câu trả lời**:\n{Answer}\n* **Nội dung ngắn 1**:\n{tavily_snippets}\n* **Nội dung ngắn 2**:\n{google_snippets}\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n"
         )
+    elif labels == "small talk":
+        Answer = auguments_local["Answer"]
+        prompts = (
+            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời lời như sau:{Answer}\n<label>{labels}</label>\n",
+        )
 
     return prompts
