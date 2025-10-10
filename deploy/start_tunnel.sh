@@ -20,7 +20,7 @@ cloudflared tunnel --url $LOCAL_URL 2>&1 | while read line; do
         echo "Public API: $PUBLIC_URL"
         echo "$PUBLIC_URL" > $OUTPUT_FILE
         echo "Đã lưu vào $OUTPUT_FILE"
-        pkill -P $$ cloudflared   # Kill process con cloudflared
-        exit 0
+        # pkill -P $$ cloudflared   # Kill process con cloudflared
+        # exit 0
     fi
 done
