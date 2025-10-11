@@ -34,17 +34,17 @@ def prompt_summary(prompt: str, labels: str = "medical talk",auguments_local=Non
         Diagnosis = auguments_local["Diagnosis"]
         Symptom = auguments_local["Symptom"]
         prompts = (
-            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Chuẩn đoán**:\n{Diagnosis}\n* **Triệu chứng**:\n{Symptom} *\n* **Nội dung ngắn 1**:\n{tavily_snippets}\n* **Nội dung ngắn 2**:\n{google_snippets}\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n"
+            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n"
         )
     elif labels == "medical talk":
         Answer = auguments_local["Answer"]
         prompts = (
-            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Câu trả lời**:\n{Answer}\n* **Nội dung ngắn 1**:\n{tavily_snippets}\n* **Nội dung ngắn 2**:\n{google_snippets}\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n"
+            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n"
         )
     elif labels == "guide":
         Answer = auguments_local["Answer"]
         prompts = (
-            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Câu trả lời**:\n{Answer}\n* **Nội dung ngắn 1**:\n{tavily_snippets}\n* **Nội dung ngắn 2**:\n{google_snippets}\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n"
+            f"<|begin_of_text|>\nHãy là chatbot y khoa và tóm tắt nội dung sau để trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n* **Nội dung chính 1**:\n{tavily_highlight}\n* **Nội dung chính 2**:\n{google_highlight}\n<label>{labels}</label>\n"
         )
     elif labels == "small talk":
         Answer = auguments_local["Answer"]
