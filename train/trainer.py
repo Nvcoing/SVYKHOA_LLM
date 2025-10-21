@@ -49,7 +49,7 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         tok = tokenizer(
             example["text"],
             truncation=True,
-            max_length=1600,
+            max_length=3000,
             padding="max_length"
         )
         labels = tok["input_ids"].copy()
@@ -73,7 +73,7 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         output_dir="SVYKHOA_Chatbox",
         per_device_train_batch_size=1,
         gradient_accumulation_steps=1,
-        num_train_epochs=2,
+        num_train_epochs=1,
         learning_rate=1e-3,
         fp16=True,
         logging_steps=100,
