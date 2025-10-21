@@ -71,15 +71,15 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
 
     training_args = TrainingArguments(
         output_dir="SVYKHOA_Chatbox",
-        per_device_train_batch_size=2,
-        gradient_accumulation_steps=4,
+        per_device_train_batch_size=1,
+        gradient_accumulation_steps=1,
         num_train_epochs=1,
         learning_rate=1e-3,
         fp16=True,
         logging_steps=50,
         save_strategy="steps",
-        save_steps=200,  # Lưu checkpoint mỗi 200 bước
-        save_total_limit=3,
+        save_steps=500,  # Lưu checkpoint mỗi 200 bước
+        save_total_limit=1,
         remove_unused_columns=False,  #  Cần thiết cho causal LM
         report_to=["none"]
     )
