@@ -58,6 +58,7 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         save_strategy="steps",
         save_steps=200,          # lưu checkpoint mỗi 200 bước
         save_total_limit=3,
+        remove_unused_columns=False,
         report_to=["none"]
     )
 

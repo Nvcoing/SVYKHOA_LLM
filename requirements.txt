@@ -17,3 +17,4 @@ beautifulsoup4
 tavily-python
 wikipedia-api
 pyarrow
+bitsandbytes
