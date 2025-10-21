@@ -3,7 +3,6 @@ import torch
 from transformers import Trainer, TrainingArguments, DataCollatorForLanguageModeling, TrainerCallback
 from huggingface_hub import upload_folder, snapshot_download
 
-
 # ===== 1. Callback tự động push checkpoint =====
 class CheckpointPush(TrainerCallback):
     def __init__(self, repo_id: str, token: str, save_steps: int):
@@ -43,8 +42,31 @@ def find_last_checkpoint(local_dir: str):
     return last_ckpt
 
 
-# ===== 3. Tạo Trainer có upload + resume =====
+# ===== 3. Hàm tạo Trainer có upload + resume =====
 def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=None):
+    # === 3.1 Tokenize dữ liệu trước khi huấn luyện ===
+    def tokenize_batch(example):
+        tok = tokenizer(
+            example["text"],
+            truncation=True,
+            max_length=1500,
+            padding="max_length"
+        )
+        labels = tok["input_ids"].copy()
+        labels = [(l if l != tokenizer.pad_token_id else -100) for l in labels]
+        tok["labels"] = labels
+        return tok
+
+    # Xoá toàn bộ cột cũ, chỉ giữ tokenized fields
+    dataset_tokenized = dataset.map(
+        tokenize_batch,
+        batched=True,
+        remove_columns=dataset.column_names
+    )
+
+    print("Dataset sau khi tokenize:", dataset_tokenized.column_names)
+
+    # === 3.2 Cấu hình huấn luyện ===
     data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
     training_args = TrainingArguments(
@@ -56,28 +78,29 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         fp16=True,
         logging_steps=50,
         save_strategy="steps",
-        save_steps=200,          # lưu checkpoint mỗi 200 bước
+        save_steps=200,  # Lưu checkpoint mỗi 200 bước
         save_total_limit=3,
-        remove_unused_columns=False,
+        remove_unused_columns=False,  #  Cần thiết cho causal LM
         report_to=["none"]
     )
 
     trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=dataset,
+        train_dataset=dataset_tokenized,
         data_collator=data_collator,
         tokenizer=tokenizer,
         callbacks=[CheckpointPush(repo_id, hf_token, training_args.save_steps)]
     )
 
-    # ===== 4. Resume checkpoint từ repo HF nếu có =====
+    # === 3.3 Resume checkpoint từ repo HF nếu có ===
     print("Đang kiểm tra checkpoint từ repo HF...")
     local_ckpt_dir = snapshot_download(repo_id=repo_id, token=hf_token)
     last_ckpt = find_last_checkpoint(local_ckpt_dir)
     if last_ckpt:
         print(f"Tiếp tục huấn luyện từ checkpoint: {last_ckpt}")
-        # Patch lại _load_rng_state để tránh lỗi weights_only
+
+        # Patch tránh lỗi weights_only
         original_load_rng_state = trainer._load_rng_state
         def patched_load_rng_state(checkpoint):
             rng_file = os.path.join(checkpoint, "rng_state.pth")
