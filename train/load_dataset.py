@@ -4,10 +4,10 @@ import json
 
 def build_dataset():
     # Đọc dữ liệu từ HuggingFace Dataset
-    df_diagnosis = pd.read_parquet('hf://datasets/NV9523/SVYKHOA/diagnosis/SVYKHOA_dataset_diagnosis.parquet')
-    df_guide = pd.read_parquet('hf://datasets/NV9523/SVYKHOA/guide/SVYKHOA_dataset_guide.parquet')
-    df_medical_talk = pd.read_parquet('hf://datasets/NV9523/SVYKHOA/medical_talk/SVYKHOA_dataset_medicaltalk.parquet')
-    df_small_talk = pd.read_parquet('hf://datasets/NV9523/SVYKHOA/small_talk/SVYKHOA_dataset_smalltalk.parquet')
+    df_diagnosis = pd.read_parquet('hf://datasets/NV9523/SVYKHOA/diagnosis_aug/SVYKHOA_dataset_diagnosis.parquet')
+    df_guide = pd.read_parquet('hf://datasets/NV9523/SVYKHOA/guide_aug/SVYKHOA_dataset_guide.parquet')
+    df_medical_talk = pd.read_parquet('hf://datasets/NV9523/SVYKHOA/medical_talk_aug/SVYKHOA_dataset_medicaltalk.parquet')
+    df_small_talk = pd.read_parquet('hf://datasets/NV9523/SVYKHOA/small_talk_aug/SVYKHOA_dataset_smalltalk.parquet')
 
     def format_prompt_diagnosis(row):
         data = {
