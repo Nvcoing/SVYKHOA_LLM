@@ -5,15 +5,15 @@
 set -e  # dung lai neu co loi
 
 echo "=== Upload dataset diagnosis ==="
-python upload_data.py NV9523/SVYKHOA ../argument/SVYKHOA_dataset_diagnosis.xlsx diagnosis
+python upload_data.py NV9523/SVYKHOA ../argument/SVYKHOA_dataset_diagnosis.xlsx diagnosis_aug
 
 echo "=== Upload dataset guide ==="
-python upload_data.py NV9523/SVYKHOA ../argument/SVYKHOA_dataset_guide.xlsx guide
+python upload_data.py NV9523/SVYKHOA ../argument/SVYKHOA_dataset_guide.xlsx guide_aug
 
 echo "=== Upload dataset medical_talk ==="
-python upload_data.py NV9523/SVYKHOA ../argument/SVYKHOA_dataset_medicaltalk.xlsx medical_talk
+python upload_data.py NV9523/SVYKHOA ../argument/SVYKHOA_dataset_medicaltalk.xlsx medical_talk_aug
 
 echo "=== Upload dataset small_talk ==="
-python upload_data.py NV9523/SVYKHOA ../argument/SVYKHOA_dataset_smalltalk.xlsx small_talk
+python upload_data.py NV9523/SVYKHOA ../argument/SVYKHOA_dataset_smalltalk.xlsx small_talk_aug
 
 echo "=== Done ==="
