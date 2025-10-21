@@ -56,7 +56,7 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         labels = [(l if l != tokenizer.pad_token_id else -100) for l in labels]
         tok["labels"] = labels
         return tok
-
+    dataset.set_format(None)
     # Xoá toàn bộ cột cũ, chỉ giữ tokenized fields
     dataset_tokenized = dataset.map(
         tokenize_batch,
