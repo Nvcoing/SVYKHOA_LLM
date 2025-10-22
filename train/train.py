@@ -17,7 +17,7 @@ if __name__ == "__main__":
     model, tokenizer = load_model_tokenizer()
 
     # Load dataset
-    dataset = build_dataset()
+    dataset = build_dataset(tokenizer)
 
     # Gọi Trainer
     trainer = get_trainer(
