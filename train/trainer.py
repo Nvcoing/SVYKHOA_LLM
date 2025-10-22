@@ -52,8 +52,10 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
             max_length=1500,
             padding="max_length"
         )
-        labels = [(l if l != tokenizer.pad_token_id else -100) for l in labels]
-        tok["labels"] = labels
+        tok["labels"] = [
+            (l if l != tokenizer.pad_token_id else -100)
+            for l in tok["input_ids"]
+        ]
         return tok
     dataset.set_format(None)
     # Xoá toàn bộ cột cũ, chỉ giữ tokenized fields
