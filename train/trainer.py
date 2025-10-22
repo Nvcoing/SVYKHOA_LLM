@@ -49,7 +49,7 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         tok = tokenizer(
             example["text"],
             truncation=True,
-            max_length=1536,
+            max_length=1500,
             padding="max_length"
         )
         labels = [(l if l != tokenizer.pad_token_id else -100) for l in labels]
@@ -64,7 +64,7 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         num_proc=1,
         remove_columns=dataset.column_names,
         keep_in_memory=False,         
-        load_from_cache_file=False,
+        load_from_cache_file=True,
     )
 
     print("Dataset sau khi tokenize:", dataset_tokenized.column_names)
