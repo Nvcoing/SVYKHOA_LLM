@@ -81,7 +81,7 @@ def build_dataset(tokenizer):
         tok = tokenizer(
             example["text"],
             truncation=True,
-            max_length=2048,
+            max_length=1536,
             padding="max_length"
         )
         tok["labels"] = [
