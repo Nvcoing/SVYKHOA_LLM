@@ -49,7 +49,7 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         tok = tokenizer(
             example["text"],
             truncation=True,
-            max_length=2040,
+            max_length=2048,
             padding="max_length"
         )
         labels = tok["input_ids"].copy()
@@ -61,7 +61,7 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
     dataset_tokenized = dataset.map(
         tokenize_batch,
         batched=True,
-        batch_size=64,              
+        batch_size=32,              
         num_proc=1,
         remove_columns=dataset.column_names,
         keep_in_memory=False,         
