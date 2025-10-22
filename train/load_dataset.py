@@ -81,7 +81,7 @@ def build_dataset(tokenizer):
         tok = tokenizer(
             example["text"],
             truncation=True,
-            max_length=1500,
+            max_length=2048,
             padding="max_length"
         )
         tok["labels"] = [
@@ -117,7 +117,7 @@ def build_dataset(tokenizer):
         print(f"Hoàn tất {name}: {len(ds_tok)} mẫu đã tokenize\n")
 
     # === Gộp tất cả lại và xáo trộn ===
-    dataset_all = concatenate_datasets(datasets_tokenized).shuffle(seed=random.randint(0, 9999))
+    dataset_all = concatenate_datasets(datasets_tokenized).shuffle(seed=42)
     print(f"Đã gộp và xáo trộn toàn bộ dataset. Tổng mẫu: {len(dataset_all)}")
 
     return dataset_all
