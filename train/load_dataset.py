@@ -90,8 +90,8 @@ def build_dataset(tokenizer):
             return_attention_mask=True,
         )
         tok["labels"] = [
-        [(l if l != tokenizer.pad_token_id else -100) for l in input_ids]
-        for input_ids in tok["input_ids"]
+            [(l if l != tokenizer.pad_token_id else -100) for l in seq]
+            for seq in tok["input_ids"]
         ]
         return tok
 
