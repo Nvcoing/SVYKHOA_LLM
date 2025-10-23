@@ -78,19 +78,20 @@ def build_dataset(tokenizer):
         )
 
     # ==== Hàm tokenize an toàn ====
-    def tokenize_batch(batch):
-        texts = [t if isinstance(t, str) else "" for t in batch["text"]]
+    def tokenize_batch(example):
+        text = example["text"]
+        if text is None or not isinstance(text, str):
+            text = ""
         tok = tokenizer(
-            texts,
+            text,
             truncation=True,
             max_length=2048,
             padding="max_length",
-            return_attention_mask=True
+            return_attention_mask=True,
+            return_tensors="pt"  #  Đổi từ None sang "pt"
         )
-        tok["labels"] = [
-            [(l if l != tokenizer.pad_token_id else -100) for l in ids]
-            for ids in tok["input_ids"]
-        ]
+        tok = {k: v.squeeze(0) for k, v in tok.items()}  # Bỏ batch dim nếu chỉ có 1 mẫu
+        tok["labels"] = [(l if l != tokenizer.pad_token_id else -100) for l in tok["input_ids"].tolist()]
         return tok
 
 
