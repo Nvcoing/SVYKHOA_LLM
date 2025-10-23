@@ -12,7 +12,6 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    os.environ["TOKENIZERS_PARALLELISM"] = "false"
     # Load model & tokenizer
     model, tokenizer = load_model_tokenizer()
 

@@ -1,9 +1,14 @@
+import os
 import pandas as pd
 from datasets import Dataset, concatenate_datasets
 import json
 import random
 import torch
 from tqdm import tqdm
+
+# ⚙️ Tắt đa luồng để tránh crash trên Kaggle
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+torch.set_num_threads(1)
 
 def build_dataset(tokenizer):
     parquet_files = {
@@ -77,14 +82,15 @@ def build_dataset(tokenizer):
             f"<answer>\n{row.get('answer', '')}\n</answer>\n<|end_of_text|>"
         )
 
-    # ==== Hàm tokenize batched an toàn ====
+    # ==== Hàm tokenize theo batch ====
     def tokenize_batch(batch):
         texts = [t if isinstance(t, str) else "" for t in batch["text"]]
         tok = tokenizer(
             texts,
             truncation=True,
             max_length=2048,
-            padding="max_length"
+            padding="max_length",
+            return_attention_mask=True
         )
         tok["labels"] = [
             [(l if l != tokenizer.pad_token_id else -100) for l in ids]
@@ -106,26 +112,27 @@ def build_dataset(tokenizer):
         elif name == "medical_talk":
             df_proc = pd.DataFrame({"text": df.apply(format_prompt_medical_talk, axis=1)})
 
+        # Làm sạch dữ liệu lỗi / NaN
         df_proc = df_proc.dropna(subset=["text"])
         df_proc = df_proc[df_proc["text"].apply(lambda x: isinstance(x, str) and x.strip() != "")]
         print(f"Sau khi làm sạch: {len(df_proc)} mẫu còn lại")
 
         ds = Dataset.from_pandas(df_proc)
-        print(f"Tokenizing dataset: {name} ({len(ds)} mẫu) ...")
+        print(f"Tokenizing dataset: {name} ({len(ds)} mẫu)...")
 
-        ds_tok = ds.map(
-            tokenize_batch,
-            batched=True,                  # ✅ xử lý batch đúng cách
-            batch_size=32,
-            num_proc=1,
-            remove_columns=ds.column_names,
-            load_from_cache_file=False
-        )
+        # 🔹 Tokenize tuần tự, không dùng multiprocessing
+        ds_tok = []
+        for i in tqdm(range(0, len(ds), 32), desc=f"→ Tokenizing {name}"):
+            batch = ds[i : i + 32]
+            tok = tokenize_batch(batch)
+            ds_tok.append(Dataset.from_dict(tok))
 
+        ds_tok = concatenate_datasets(ds_tok)
         datasets_tokenized.append(ds_tok)
+
         print(f"Hoàn tất {name}: {len(ds_tok)} mẫu đã tokenize\n")
 
-    # ==== Gộp và xáo trộn ====
+    # ==== Gộp tất cả và xáo trộn ====
     dataset_all = concatenate_datasets(datasets_tokenized).shuffle(seed=random.randint(0, 9999))
     print(f"Đã gộp và xáo trộn toàn bộ dataset. Tổng mẫu: {len(dataset_all)}")
 
