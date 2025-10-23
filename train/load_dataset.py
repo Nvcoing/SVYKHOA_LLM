@@ -80,8 +80,8 @@ def build_dataset(tokenizer):
     # ==== Hàm tokenize an toàn ====
     def tokenize_batch(example):
         text = example["text"]
-        if text is None or not isinstance(text, str):
-            text = ""
+        if not isinstance(text, str):
+            text = str(text)
         tok = tokenizer(
             text,
             truncation=True,
@@ -90,10 +90,11 @@ def build_dataset(tokenizer):
             return_attention_mask=True,
         )
         tok["labels"] = [
-            [(l if l != tokenizer.pad_token_id else -100) for l in seq]
-            for seq in tok["input_ids"]
+            (l if l != tokenizer.pad_token_id else -100)
+            for l in tok["input_ids"]
         ]
         return tok
+
 
     # ==== Load và xử lý từng file ====
     for name, path in parquet_files.items():
@@ -119,8 +120,8 @@ def build_dataset(tokenizer):
 
         ds_tok = ds.map(
             tokenize_batch,
-            batched=True,
-            batch_size=32,
+            batched=False,
+            # batch_size=32,
             num_proc=1,                     # tránh multiprocessing crash
             remove_columns=ds.column_names,
             load_from_cache_file=False      # tránh dùng cache cũ lỗi
