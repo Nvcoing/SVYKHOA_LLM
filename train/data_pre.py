@@ -9,7 +9,7 @@ def map_dataset(dataset, tokenizer):
         tok = tokenizer(
             example["text"],
             truncation=True,
-            max_length=1563,
+            max_length=1536,
             padding="max_length"
         )
         # Gán nhãn (labels) cho mô hình language modeling

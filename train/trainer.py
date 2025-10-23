@@ -41,12 +41,10 @@ def find_last_checkpoint(local_dir: str):
                     continue
     return last_ckpt
 
-
 # ===== 3. Hàm tạo Trainer có upload + resume =====
 def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=None):
 
-
-    # === 3.2 Cấu hình huấn luyện ===
+    # === Cấu hình huấn luyện ===
     data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
     training_args = TrainingArguments(
@@ -74,7 +72,7 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         callbacks=[CheckpointPush(repo_id, hf_token, training_args.save_steps)]
     )
 
-    # === 3.3 Resume checkpoint từ repo HF nếu có ===
+    # === Resume checkpoint từ repo HF nếu có ===
     print("Đang kiểm tra checkpoint từ repo HF...")
     local_ckpt_dir = snapshot_download(repo_id=repo_id, token=hf_token)
     last_ckpt = find_last_checkpoint(local_ckpt_dir)
