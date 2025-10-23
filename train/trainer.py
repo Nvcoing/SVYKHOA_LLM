@@ -41,6 +41,9 @@ def find_last_checkpoint(local_dir: str):
 
 
 def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=None):
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.benchmark = True
+
     data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
     training_args = TrainingArguments(
@@ -49,12 +52,14 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         gradient_accumulation_steps=1,
         num_train_epochs=1,
         learning_rate=1e-3,
-        fp16=True,
+        bf16=True,
+        fp16=False,
         logging_steps=500,
         save_strategy="steps",
         save_steps=500,
         save_total_limit=1,
         remove_unused_columns=False,
+        gradient_checkpointing=True,
         warmup_ratio=0.1,
         report_to=["none"]
     )
