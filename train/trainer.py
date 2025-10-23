@@ -63,7 +63,7 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         tokenize_batch,
         batched=True,
         batch_size=32,              
-        num_proc=1,
+        num_proc=None,
         remove_columns=dataset.column_names,
         keep_in_memory=False,         
         load_from_cache_file=True,
