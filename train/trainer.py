@@ -50,11 +50,12 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         num_train_epochs=1,
         learning_rate=1e-3,
         fp16=True,
-        logging_steps=100,
+        logging_steps=500,
         save_strategy="steps",
         save_steps=500,
         save_total_limit=1,
         remove_unused_columns=False,
+        warmup_ratio=0.1,
         report_to=["none"]
     )
 
