@@ -41,25 +41,20 @@ def find_last_checkpoint(local_dir: str):
 
 
 def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=None):
-    torch.backends.cuda.matmul.allow_tf32 = True
-    torch.backends.cudnn.benchmark = True
+    data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
-    data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False, pad_to_multiple_of=8)
-    model.config.use_cache = False
     training_args = TrainingArguments(
         output_dir="SVYKHOA_Chatbox",
         per_device_train_batch_size=1,
         gradient_accumulation_steps=1,
         num_train_epochs=1,
         learning_rate=1e-3,
-        bf16=True,
-        fp16=False,
-        logging_steps=500,
+        fp16=True,
+        logging_steps=100,
         save_strategy="steps",
         save_steps=500,
         save_total_limit=1,
         remove_unused_columns=False,
-        gradient_checkpointing=True,
         report_to=["none"]
     )
 

@@ -12,6 +12,7 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
+
     # Load model & tokenizer
     model, tokenizer = load_model_tokenizer()
 
