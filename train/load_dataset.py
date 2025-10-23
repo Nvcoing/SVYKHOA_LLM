@@ -77,23 +77,21 @@ def build_dataset(tokenizer):
             f"<answer>\n{row.get('answer', '')}\n</answer>\n<|end_of_text|>"
         )
 
-    # ==== Hàm tokenize an toàn ====
-    def tokenize_batch(example):
-        text = example["text"]
-        if text is None or not isinstance(text, str):
-            text = ""
+    # ==== Hàm tokenize batched an toàn ====
+    def tokenize_batch(batch):
+        texts = [t if isinstance(t, str) else "" for t in batch["text"]]
         tok = tokenizer(
-            text,
+            texts,
             truncation=True,
             max_length=2048,
             padding="max_length",
-            return_attention_mask=True,
-            return_tensors="pt"  #  Đổi từ None sang "pt"
+            return_attention_mask=True
         )
-        tok = {k: v.squeeze(0) for k, v in tok.items()}  # Bỏ batch dim nếu chỉ có 1 mẫu
-        tok["labels"] = [(l if l != tokenizer.pad_token_id else -100) for l in tok["input_ids"].tolist()]
+        tok["labels"] = [
+            [(l if l != tokenizer.pad_token_id else -100) for l in ids]
+            for ids in tok["input_ids"]
+        ]
         return tok
-
 
     # ==== Load và xử lý từng file ====
     for name, path in parquet_files.items():
@@ -109,7 +107,6 @@ def build_dataset(tokenizer):
         elif name == "medical_talk":
             df_proc = pd.DataFrame({"text": df.apply(format_prompt_medical_talk, axis=1)})
 
-        # Làm sạch dữ liệu lỗi / NaN
         df_proc = df_proc.dropna(subset=["text"])
         df_proc = df_proc[df_proc["text"].apply(lambda x: isinstance(x, str) and x.strip() != "")]
         print(f"Sau khi làm sạch: {len(df_proc)} mẫu còn lại")
@@ -119,17 +116,17 @@ def build_dataset(tokenizer):
 
         ds_tok = ds.map(
             tokenize_batch,
-            batched=True,
+            batched=True,                  # ✅ xử lý batch đúng cách
             batch_size=32,
-            num_proc=1,                     # tránh multiprocessing crash
+            num_proc=1,
             remove_columns=ds.column_names,
-            load_from_cache_file=False      # tránh dùng cache cũ lỗi
+            load_from_cache_file=False
         )
 
         datasets_tokenized.append(ds_tok)
         print(f"Hoàn tất {name}: {len(ds_tok)} mẫu đã tokenize\n")
 
-    # ==== Gộp tất cả và xáo trộn ====
+    # ==== Gộp và xáo trộn ====
     dataset_all = concatenate_datasets(datasets_tokenized).shuffle(seed=random.randint(0, 9999))
     print(f"Đã gộp và xáo trộn toàn bộ dataset. Tổng mẫu: {len(dataset_all)}")
 
