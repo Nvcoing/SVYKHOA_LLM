@@ -78,23 +78,21 @@ def build_dataset(tokenizer):
         )
 
     # ==== Hàm tokenize an toàn ====
-    def tokenize_batch(example):
-        text = example["text"]
-        if text is None or not isinstance(text, str):
-            text = ""
+    def tokenize_batch(batch):
+        texts = [t if isinstance(t, str) else "" for t in batch["text"]]
         tok = tokenizer(
-            text,
+            texts,
             truncation=True,
             max_length=2048,
             padding="max_length",
-            return_attention_mask=True,
-            return_tensors=None
+            return_attention_mask=True
         )
         tok["labels"] = [
-            (l if l != tokenizer.pad_token_id else -100)
-            for l in tok["input_ids"]
+            [(l if l != tokenizer.pad_token_id else -100) for l in ids]
+            for ids in tok["input_ids"]
         ]
         return tok
+
 
     # ==== Load và xử lý từng file ====
     for name, path in parquet_files.items():
