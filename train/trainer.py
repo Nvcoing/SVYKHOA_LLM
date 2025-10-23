@@ -44,32 +44,7 @@ def find_last_checkpoint(local_dir: str):
 
 # ===== 3. Hàm tạo Trainer có upload + resume =====
 def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=None):
-    # === 3.1 Tokenize dữ liệu trước khi huấn luyện ===
-    def tokenize_batch(example):
-        tok = tokenizer(
-            example["text"],
-            truncation=True,
-            max_length=1500,
-            padding="max_length"
-        )
-        tok["labels"] = [
-            (l if l != tokenizer.pad_token_id else -100)
-            for l in tok["input_ids"]
-        ]
-        return tok
-    dataset.set_format(None)
-    # Xoá toàn bộ cột cũ, chỉ giữ tokenized fields
-    dataset_tokenized = dataset.map(
-        tokenize_batch,
-        batched=True,
-        batch_size=32,              
-        num_proc=None,
-        remove_columns=dataset.column_names,
-        keep_in_memory=False,         
-        load_from_cache_file=True,
-    )
 
-    print("Dataset sau khi tokenize:", dataset_tokenized.column_names)
 
     # === 3.2 Cấu hình huấn luyện ===
     data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
@@ -81,18 +56,19 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         num_train_epochs=1,
         learning_rate=1e-3,
         fp16=True,
-        logging_steps=100,
+        logging_steps=500,
         save_strategy="steps",
         save_steps=500,  # Lưu checkpoint mỗi 500 bước
         save_total_limit=1,
         remove_unused_columns=False,  #  Cần thiết cho causal LM
-        report_to=["none"]
+        report_to=["none"],
+        warmup_steps=9000
     )
 
     trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=dataset_tokenized,
+        train_dataset=dataset,
         data_collator=data_collator,
         tokenizer=tokenizer,
         callbacks=[CheckpointPush(repo_id, hf_token, training_args.save_steps)]

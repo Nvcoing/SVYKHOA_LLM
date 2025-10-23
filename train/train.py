@@ -2,6 +2,7 @@ import argparse
 from load_model import load_model_tokenizer
 from load_dataset import build_dataset
 from trainer import get_trainer
+from data_pre import map_dataset
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Fine-tune SVYKHOA Chatbox Model")
@@ -18,12 +19,12 @@ if __name__ == "__main__":
 
     # Load dataset
     dataset = build_dataset()
-
+    dataset_tokenized = map_dataset(dataset, tokenizer)
     # Gọi Trainer
     trainer = get_trainer(
         model=model,
         tokenizer=tokenizer,
-        dataset=dataset,
+        dataset=dataset_tokenized,
         repo_id=args.repo,
         hf_token=args.hf_token
     )

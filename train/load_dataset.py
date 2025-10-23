@@ -1,6 +1,7 @@
 import pandas as pd
 from datasets import Dataset
 import json
+import random
 
 def build_dataset():
     # Đọc dữ liệu từ HuggingFace Dataset
@@ -70,6 +71,7 @@ def build_dataset():
             f"<answer>\n{row['answer']}\n</answer>\n<|end_of_text|>"
         )
 
+    # Gộp tất cả lại thành một DataFrame duy nhất
     df_all = pd.concat([
         pd.DataFrame({"text": df_diagnosis.apply(format_prompt_diagnosis, axis=1)}),
         pd.DataFrame({"text": df_guide.apply(format_prompt_guide, axis=1)}),
@@ -77,5 +79,8 @@ def build_dataset():
         pd.DataFrame({"text": df_medical_talk.apply(format_prompt_medical_talk, axis=1)}),
     ], ignore_index=True)
 
+    # Chuyển thành Dataset và xáo trộn
     dataset = Dataset.from_pandas(df_all)
+    dataset = dataset.shuffle(seed=42)  # random seed để xáo ngẫu nhiên mỗi lần
+
     return dataset
