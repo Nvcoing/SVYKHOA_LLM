@@ -84,8 +84,7 @@ def build_dataset(tokenizer):
             texts,
             truncation=True,
             max_length=2048,
-            padding="max_length",
-            return_attention_mask=True
+            padding="max_length"
         )
         tok["labels"] = [
             [(l if l != tokenizer.pad_token_id else -100) for l in ids]

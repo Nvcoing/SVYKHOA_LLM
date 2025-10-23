@@ -60,7 +60,6 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         save_total_limit=1,
         remove_unused_columns=False,
         gradient_checkpointing=True,
-        warmup_ratio=0.1,
         report_to=["none"]
     )
 
