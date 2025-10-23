@@ -98,7 +98,7 @@ def build_dataset(tokenizer):
 
     # ==== Load và xử lý từng file ====
     for name, path in parquet_files.items():
-        print(f"\n🩺 Đang load file: {name}")
+        print(f"\nĐang load file: {name}")
         df = pd.read_parquet(path)
 
         if name == "diagnosis":
