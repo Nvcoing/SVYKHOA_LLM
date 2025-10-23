@@ -111,7 +111,8 @@ def build_dataset(tokenizer):
             batched=True,
             batch_size=32,
             num_proc=1,
-            remove_columns=ds.column_names
+            remove_columns=ds.column_names,
+            load_from_cache_file=False
         )
         datasets_tokenized.append(ds_tok)
         print(f"Hoàn tất {name}: {len(ds_tok)} mẫu đã tokenize\n")
