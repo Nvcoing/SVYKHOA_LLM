@@ -5,22 +5,22 @@ def build_dataset():
     # === 1. Load trực tiếp các file .parquet từ repo Hugging Face ===
     ds_diagnosis = load_dataset(
         "parquet",
-        data_files="hf://datasets/NV9523/SVYKHOA/diagnosis_aug/SVYKHOA_dataset_diagnosis.parquet",
+        data_files="hf://datasets/NV9523/SVYKHOA/diagnosis/SVYKHOA_dataset_diagnosis.parquet",
         split="train"
     )
     ds_guide = load_dataset(
         "parquet",
-        data_files="hf://datasets/NV9523/SVYKHOA/guide_aug/SVYKHOA_dataset_guide.parquet",
+        data_files="hf://datasets/NV9523/SVYKHOA/guide/SVYKHOA_dataset_guide.parquet",
         split="train"
     )
     ds_medical_talk = load_dataset(
         "parquet",
-        data_files="hf://datasets/NV9523/SVYKHOA/medical_talk_aug/SVYKHOA_dataset_medicaltalk.parquet",
+        data_files="hf://datasets/NV9523/SVYKHOA/medical_talk/SVYKHOA_dataset_medicaltalk.parquet",
         split="train"
     )
     ds_small_talk = load_dataset(
         "parquet",
-        data_files="hf://datasets/NV9523/SVYKHOA/small_talk_aug/SVYKHOA_dataset_smalltalk.parquet",
+        data_files="hf://datasets/NV9523/SVYKHOA/small_talk/SVYKHOA_dataset_smalltalk.parquet",
         split="train"
     )
 
