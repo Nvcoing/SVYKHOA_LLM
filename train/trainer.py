@@ -56,11 +56,12 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         fp16=True,
         logging_steps=500,
         save_strategy="steps",
-        save_steps=500,  # Lưu checkpoint mỗi 500 bước
+        save_steps=500,  
         save_total_limit=1,
-        remove_unused_columns=False,  #  Cần thiết cho causal LM
+        remove_unused_columns=False,  
         report_to=["none"],
-        warmup_steps=9000
+        warmup_steps=1000,
+        lr_scheduler_type="linear"  
     )
 
     trainer = Trainer(
