@@ -1,6 +1,3 @@
-# ===== map_dataset.py =====
-import torch
-
 def map_dataset(dataset, tokenizer):
     """
     Tokenize và chuẩn hóa dataset trước khi huấn luyện.
@@ -23,7 +20,7 @@ def map_dataset(dataset, tokenizer):
     dataset_tokenized = dataset.map(
         tokenize_batch,
         batched=True,
-        batch_size=32,
+        batch_size=512,
         num_proc=None,
         remove_columns=dataset.column_names,
         keep_in_memory=False,
