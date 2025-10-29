@@ -3,7 +3,7 @@ from load_model import load_model_tokenizer
 from load_dataset import build_dataset
 from trainer import get_trainer
 from data_pre import map_dataset
-import torch
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Fine-tune SVYKHOA Chatbox Model")
     parser.add_argument("--hf_token", type=str, required=True, help="Hugging Face access token")
@@ -16,11 +16,7 @@ if __name__ == "__main__":
     
     # Load model & tokenizer
     model, tokenizer = load_model_tokenizer()
-    model.gradient_checkpointing_enable()
-    model.enable_input_require_grads()
-    model.config.use_paged_attention = True
-    model.config.use_cache = False
-    torch.cuda.empty_cache()
+
     # Load dataset
     dataset = build_dataset()
     dataset_tokenized = map_dataset(dataset, tokenizer)
