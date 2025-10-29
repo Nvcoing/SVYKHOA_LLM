@@ -15,6 +15,13 @@ def augment_prompt(prompt: str, label: str = "medical talk", n_results: int = 1)
             "Symptom": symptom_list[0] if symptom_list else "",
             "loss_score": distance_list[0] if distance_list else ""
         }
+    elif label == "icd10":
+        id, name, desc = res
+        result = {
+            "MÃ BỆNH": id[0] if id else "",
+            "TÊN BỆNH": name[0] if name else "",
+            "mô tả": desc[0] if desc else ""
+        }
     else:
         intruction_list, answer_list, distance_list = res
         result = {

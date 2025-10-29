@@ -12,7 +12,15 @@ def handle_generate_request(model, tokenizer, device, prompt: str, labels: str =
     auguments_local = aug(prompt, labels, n_results=1)
     if auguments_local["loss_score"] >= 0.7:
         engine = SearchEngine()
-        search_results = engine.search_all(f"{prompt.strip()}(wikipedia - tiếng việt)", top_k=1)
+        search_results = None
+        if labels == "diagnosis":
+            icd = aug(prompt, "icd10", n_results=1)
+            id = icd["MÃ BỆNH"]
+            name = icd["TÊN BỆNH"]
+            dec = icd["mô tả"]
+            search_results = engine.search_all(f"{prompt.strip()}(wikipedia - tiếng việt) Mã ICD-10:{id} Bệnh: {name} Triệu chứng:{dec}", top_k=1)
+        else:
+            search_results = engine.search_all(f"{prompt.strip()}(wikipedia - tiếng việt)", top_k=1)
         selector = EmbeddingSelector()
         auguments_online = selector.search_no_embed(search_results["raw_results"], top_k=1)
         augment_answer = clean_tags(generate(model, tokenizer, device, prompt_summary(prompt, labels, auguments_local, auguments_online)))

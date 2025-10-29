@@ -15,6 +15,8 @@ def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
         collection_name = "guide"
     elif label == "diagnosis":
         collection_name = "diagnosis"
+    elif label == "icd10":
+        collection_name = "icd10"
     else:
         raise ValueError(f"Unknown label: {label}")
 

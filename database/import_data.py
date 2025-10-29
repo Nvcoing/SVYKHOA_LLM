@@ -54,6 +54,13 @@ def insert_all():
         meta_fields=["intruction", "question", "answer"]
     )
 
+    insert_dataframe(
+        datasets["icd10"],
+        collection_name="icd10",
+        text_fields=["mô tả"],
+        meta_fields=["MÃ BỆNH", "TÊN BỆNH", "mô tả"]
+    )
+
     print("Inserted ChromDB")
 if __name__ == "__main__":
     insert_all()

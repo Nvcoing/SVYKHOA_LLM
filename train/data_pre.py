@@ -20,7 +20,7 @@ def map_dataset(dataset, tokenizer):
     dataset_tokenized = dataset.map(
         tokenize_batch,
         batched=True,
-        batch_size=512,
+        batch_size=3072,
         num_proc=None,
         remove_columns=dataset.column_names,
         keep_in_memory=False,

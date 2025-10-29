@@ -16,4 +16,8 @@ python upload_data.py NV9523/SVYKHOA ../generate_dataset/SVYKHOA_dataset_medical
 echo "=== Upload dataset small_talk ==="
 python upload_data.py NV9523/SVYKHOA ../generate_dataset/SVYKHOA_dataset_smalltalk.xlsx small_talk
 
+echo "=== Upload dataset small_talk ==="
+python upload_data.py NV9523/SVYKHOA ../generate_dataset/SVYKHOA_dataset_icd10_mota.xlsx icd10
+
+
 echo "=== Done ==="

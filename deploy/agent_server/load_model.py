@@ -10,7 +10,7 @@ def load_model_tokenizer(model_path: str):
     config = PeftConfig.from_pretrained(model_path)
     base_model_path = config.base_model_name_or_path
     tokenizer = AutoTokenizer.from_pretrained(base_model_path)
-    model = AutoModelForCausalLM.from_pretrained(base_model_path, torch_dtype=type).to(device)
+    model = AutoModelForCausalLM.from_pretrained(base_model_path, dtype=type).to(device)
     # Áp dụng adapter PEFT vào model
     model = PeftModel.from_pretrained(model, model_path)
     model = model.to(device)
