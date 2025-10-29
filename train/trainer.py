@@ -44,9 +44,6 @@ def find_last_checkpoint(local_dir: str):
 # ===== 3. Hàm tạo Trainer có upload + resume =====
 def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=None):
 
-    # === Cấu hình huấn luyện ===
-    data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
-
     training_args = TrainingArguments(
         output_dir="SVYKHOA_Chatbox",
         per_device_train_batch_size=1,
@@ -60,15 +57,15 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         save_total_limit=1,
         remove_unused_columns=False,  
         report_to=["none"],
-        warmup_steps=1000,
-        lr_scheduler_type="linear"  
+        warmup_ratio=0.03,
+        lr_scheduler_type="cosine"  
     )
 
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=dataset,
-        data_collator=data_collator,
+        data_collator=None,
         tokenizer=tokenizer,
         callbacks=[CheckpointPush(repo_id, hf_token, training_args.save_steps)]
     )
