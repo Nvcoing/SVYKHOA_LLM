@@ -16,7 +16,7 @@ def load_model_tokenizer(model_name="meta-llama/Llama-3.2-1B-Instruct"):
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         quantization_config=bnb_config,
-        dtype=torch.bfloat16,
+        torch_dtype=torch.bfloat16,
     ).to("cuda")
 
     lora_config = LoraConfig(
