@@ -4,27 +4,25 @@ def map_dataset(dataset, tokenizer):
     """
 
     def tokenize_batch(example):
-        tok = tokenizer(
-            example["text"],
-            truncation=True,
-            max_length=2048,  # giảm từ 3072 để giữ phần cuối (end token)
-            padding=False,    # KHÔNG pad max_length để tránh -100 chiếm hết loss
-            return_tensors=None
-        )
+      tok = tokenizer(
+          example["text"],
+          truncation=True,
+          max_length=2048,
+          padding="max_length",  
+          return_tensors=None
+      )
 
-        input_ids = tok["input_ids"]
+      input_ids = tok["input_ids"]
 
-        # labels = copy input_ids
-        labels = input_ids.copy()
+      labels = input_ids.copy()
 
-        # Mask token PAD cho LM loss
-        labels = [
-            (token if token != tokenizer.pad_token_id else -100)
-            for token in labels
-        ]
+      labels = [
+          (token if token != tokenizer.pad_token_id else -100)
+          for token in labels
+      ]
 
-        tok["labels"] = labels
-        return tok
+      tok["labels"] = labels
+      return tok
 
     dataset.set_format(None)
 
