@@ -46,19 +46,21 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
 
     training_args = TrainingArguments(
         output_dir="SVYKHOA_Chatbox",
-        per_device_train_batch_size=1,
+        per_device_train_batch_size=2,
         gradient_accumulation_steps=1,
         num_train_epochs=1,
-        learning_rate=1e-3,
+        learning_rate=2e-5,
         fp16=True,
-        logging_steps=500,
+        logging_steps=1000,
         save_strategy="steps",
-        save_steps=500,  
+        save_steps=1000,  
         save_total_limit=1,
         remove_unused_columns=False,  
         report_to=["none"],
-        warmup_ratio=0.03,
-        lr_scheduler_type="cosine"  
+        warmup_ratio=0.1,
+        lr_scheduler_type="linear",
+        max_grad_norm = 1.0
+  
     )
 
     trainer = Trainer(
