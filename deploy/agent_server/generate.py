@@ -7,7 +7,7 @@ def generate_stream(model, tokenizer, device, prompt: str):
         prompt,
         return_tensors="pt",
         truncation=True,
-        max_length=1024
+        max_length=2048
     ).input_ids.to(device)
 
     model.eval()

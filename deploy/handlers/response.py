@@ -6,9 +6,25 @@ from rag.embedding_selector import EmbeddingSelector
 from rag.search_engine import SearchEngine
 from handlers.prompt import build_prompt, prompt_summary
 from nlp.process_augument import clean_special_tags as clean_tags
+import re
 
 def handle_generate_request(model, tokenizer, device, prompt: str, labels: str = "medical talk"):
     print(f"Received prompt: {prompt}")
+    keywords = [
+        r"chuan[\s\-]*doan",
+        r"ch[aăâ]n[\s\-]*do[aáàãạảăâ]*n",
+        r"diagnosis",
+        r"diagnose",
+        r"diagnostic",
+        r"medical\s+condition",
+        r"chuan doan benh",
+        r"chan doan benh"
+    ]
+
+    pattern = re.compile("|".join(keywords), re.IGNORECASE)
+
+    if pattern.search(prompt):
+        return labels =="diagnosis"
     auguments_local = aug(prompt, labels, n_results=1)
     if auguments_local["loss_score"] >= 0.7:
         engine = SearchEngine()

@@ -2,7 +2,7 @@ import os
 import torch
 from transformers import Trainer, TrainingArguments, DataCollatorForLanguageModeling, TrainerCallback
 from huggingface_hub import upload_folder, snapshot_download
-
+from plot import plot_training_logs
 # ===== 1. Callback tự động push checkpoint =====
 class CheckpointPush(TrainerCallback):
     def __init__(self, repo_id: str, token: str, save_steps: int):
@@ -13,6 +13,7 @@ class CheckpointPush(TrainerCallback):
     def on_save(self, args, state, control, **kwargs):
         if state.is_local_process_zero:
             ckpt_path = os.path.join(args.output_dir, f"checkpoint-{state.global_step}")
+            plot_training_logs(base_dir=args.output_dir)
             if os.path.isdir(ckpt_path):
                 upload_folder(
                     folder_path=ckpt_path,
@@ -65,7 +66,6 @@ def get_trainer(model, tokenizer, dataset, repo_id="NV9523/CHAT_SVY", hf_token=N
         max_grad_norm = 1.0
   
     )
-
     trainer = Trainer(
         model=model,
         args=training_args,

@@ -1,3 +1,3 @@
-MODEL = "NV9523/CHAT_SVY"  # Hoặc đường dẫn local nếu đã tải model
+MODEL = "NV9523/CHAT_SVY_train"  # Hoặc đường dẫn local nếu đã tải model
 EMBEDDING = "Qwen/Qwen3-Embedding-0.6B"  # Hoặc đường dẫn local nếu đã tải model
 ENV = "./../.env"

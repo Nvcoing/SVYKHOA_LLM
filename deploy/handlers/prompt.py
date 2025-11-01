@@ -10,7 +10,7 @@ def build_prompt(prompt: str, labels: str = "",auguments_local=None, auguments_o
         dec = icd["mô tả"]
         prompts = (
                 # f"<|begin_of_text|>\n{Intruction}\nCâu hỏi cần trả lời:{prompt.strip()}\nHãy trình bày câu hỏi dựa vào nội dung sau:\n**Đoạn trích ngắn**:{snippet}\n**Nội dung chính**:{highlight}\nHãy trình bày câu hỏi theo dạng dưới đây nhưng không được lấy theo nội dung:\n**Chuẩn đoán:**{Diagnosis}\n**Triệu chứng:**{Symptom}\n<label>{labels.strip()}</label>\n"
-                f"<|begin_of_text|>\n{Intruction}\nMã ICD-10:{id}\n Bệnh: {name}\n Triệu chứng:{dec}\n Hãy trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n{augment_answer}\nLưu ý: Bạn không được trả lời theo nội dung trên mà phải dựa vào kiến thức y khoa của bạn để trả lời đúng nội dung câu hỏi.\n<label>{labels.strip()}</label>\n",
+                f"<|begin_of_text|>\n{Intruction}\n ICD10:{id}-{name} \n Triệu chứng:{dec}\n Hãy trả lời câu hỏi **{prompt.strip()}** dựa vào nội dung sau:\n{augment_answer}\nLưu ý: Bạn không được trả lời theo nội dung trên mà phải dựa vào kiến thức y khoa của bạn để trả lời đúng nội dung câu hỏi.Đồng thời cho ra mã ICD 10 đã xác định\n<label>{labels.strip()}</label>\n",
         )
     elif labels == "small talk":
         Intruction = auguments_local["Intruction"]

@@ -38,12 +38,16 @@ def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
     # Debug xem có kết quả ko
     print("Raw results:", results)
 
-    intruction_list, answer_list, symptom_list, distance_list  = [], [], [], []
+    icd_list, name_list, dec_list, intruction_list, answer_list, symptom_list, distance_list  = [], [], [], [], [], [], []
     for meta in results.get("metadatas", [[]])[0]:
         if label == "diagnosis":
             intruction_list.append(meta.get("intruction", ""))
             answer_list.append(meta.get("diagnosis", ""))
             symptom_list.append(meta.get("symptom", ""))
+        elif label == "icd10":
+            icd_list.append(meta.get("MÃ BỆNH", ""))
+            name_list.append(meta.get("TÊN BỆNH", ""))
+            dec_list.append(meta.get("mô tả", ""))
         else:
             intruction_list.append(meta.get("intruction", ""))
             answer_list.append(meta.get("answer", ""))
@@ -52,4 +56,7 @@ def search_db(prompt: str, label: str = "medical talk", n_results: int = 3):
             distance_list.append(d)
     if label == "diagnosis":
         return intruction_list, answer_list, symptom_list, distance_list
+    if label == "icd10":
+        print("ICD10 Results:", icd_list, name_list, dec_list, distance_list)
+        return icd_list, name_list, dec_list, distance_list
     return intruction_list, answer_list, distance_list
